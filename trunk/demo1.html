@@ -11,7 +11,12 @@
 		$(function(){
 			$("h1").after(Html.div({style:"font-style:italic; color:#ccc;"}, "Powered by MoteJS v.", Mote.version));
 			
-			var screen = Mote.screen($("#paper"));
+			var screen = Mote.screen($("#paper"), function(screen, paper){
+				var ground = screen.gravity.groundPosition;
+				var width = paper.width;
+				paper.path(["M0,",ground,"L",width,",",ground]);
+			});
+			
 			screen.add(Mote.object([25, 85], function(paper, pos){
 				var set = paper.set();
 				set.push(
@@ -20,16 +25,20 @@
 					paper.circle(pos.x+5, pos.y+10, 5, 5).attr({fill:"#f00", stroke:"#800"})
 				);
 				return set;
-			})).fall(300);
+			})).fall();
+			
 			screen.add(Mote.object([65, 85], function(paper, pos){
 				return paper.rect(pos.x, pos.y, 20, 20).attr({fill:"#ffc", stroke:"#558"});
-			})).fall(300);
+			})).fall();
+			
 			screen.add(Mote.object([125, 115], function(paper, pos){
 				return paper.circle(pos.x, pos.y, 25).attr({fill:"#ccc", stroke:"#888"});
 			}).static());
+			
 			screen.add(Mote.object([225, 85], function(paper, pos){
 				return paper.circle(pos.x, pos.y, 9).attr({fill:"#faa", stroke:"#8cc"});
-			})).fall(250);
+			})).fall();
+			
 		});
 	</script>
 </head>
