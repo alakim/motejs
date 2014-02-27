@@ -5,21 +5,23 @@
 		var paper = new R(panel);
 		
 		return {
-			//canvas: paper,
 			add: function(obj){
 				var img = obj.template(paper, obj.position);
 				img.data("myset", img);
 				
 				img.drag(
 					function(dx, dy, x, y, e) {//dragmove
+						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.transform(this.data("mytransform")+'T'+dx+','+dy);
 					},
 					function(x, y, e) {//dragstart
+						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.data("mytransform", this.transform());
 					},
 					function(e) {//dragend
+						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.data("mytransform", this.transform());
 					}
@@ -41,7 +43,7 @@
 			position: pos,
 			template: template,
 			isStatic: false,
-			static: function(v){this.isStatic = v==null?true:v;}
+			"static": function(v){this.isStatic = v==null?true:v; return this;}
 		};
 	}
 
