@@ -5,8 +5,9 @@
 		var paper = new $R(panel);
 		
 		paper.customAttributes.gravityProgress = function (v) {
-			var y = this.attr("y");
-			this.attr({y:y+10*v});
+			var data = this.data("fallData");
+			var t = data.duration*v;
+			this.attr({y:data.pos0.y + data.acceleration*t*t/2});
 		}
 		
 		var instance = {
@@ -17,17 +18,17 @@
 				obj.screen = instance;
 				
 				icon.drag(
-					function(dx, dy, x, y, e) {//dragmove
+					function(dx, dy, x, y, e) {//move
 						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.transform(this.data("mytransform")+'T'+dx+','+dy);
 					},
-					function(x, y, e) {//dragstart
+					function(x, y, e) {//start
 						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.data("mytransform", this.transform());
 					},
-					function(e) {//dragend
+					function(e) {//end
 						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.data("mytransform", this.transform());
@@ -36,8 +37,17 @@
 				return obj;
 			},
 			gravity:{
-				fall: function(obj){
-					var duration = 1000;
+				acceleration: .0002,
+				fall: function(obj, height){
+					var a = obj.screen.gravity.acceleration;
+					var duration = Math.sqrt(height*2/a);
+					obj.icon.data("fallData", {
+						pos0:{x:obj.icon.attr("x"), y:obj.icon.attr("y")},
+						height: height,
+						duration: duration,
+						acceleration: a
+					});
+					
 					obj.icon.attr("gravityProgress", 0);
 					obj.icon.animate({ gravityProgress: 1 }, duration);
 				}
@@ -60,8 +70,8 @@
 			template: template,
 			isStatic: false,
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
-			fall: function(){
-				this.screen.gravity.fall(this);
+			fall: function(height){
+				this.screen.gravity.fall(this, height);
 			}
 		};
 	}
