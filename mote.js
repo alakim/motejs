@@ -7,7 +7,7 @@
 				["x","y"]
 	}
 
-	function screen(panel){
+	function screen(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var paper = new $R(panel);
 		
@@ -45,12 +45,17 @@
 			},
 			gravity:{
 				acceleration: .001,
-				fall: function(obj, height){
+				groundPosition: 450,
+				getHeight: function(obj){
+					var groundPos = obj.screen.gravity.groundPosition;
+					return groundPos - obj.icon.getBBox().y2;
+				},
+				fall: function(obj){
+					var height = obj.screen.gravity.getHeight(obj);
 					var a = obj.screen.gravity.acceleration;
 					var duration = Math.sqrt(height*2/a);
 					var attNames = getCoordAttrNames(obj.icon);
 					var bRect = obj.icon.getBBox();
-					console.log(bRect);
 					obj.icon.data("fallData", {
 						pos0:{x:bRect.x, y:bRect.y},
 						height: height,
@@ -63,6 +68,7 @@
 				}
 			}
 		};
+		template(instance, paper)
 		return instance;
 	}
 	
@@ -80,8 +86,8 @@
 			template: template,
 			isStatic: false,
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
-			fall: function(height){
-				this.screen.gravity.fall(this, height);
+			fall: function(){
+				this.screen.gravity.fall(this);
 			}
 		};
 	}
