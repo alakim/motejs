@@ -22,7 +22,7 @@
 			}));
 			screen.add(Mote.object([65, 85], function(paper, pos){
 				return paper.rect(pos.x, pos.y, 20, 20).attr({fill:"#ffc", stroke:"#558"});
-			}));
+			})).fall();
 			screen.add(Mote.object([125, 115], function(paper, pos){
 				return paper.circle(pos.x, pos.y, 25).attr({fill:"#ccc", stroke:"#888"});
 			}).static());

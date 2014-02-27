@@ -1,15 +1,22 @@
-﻿var Mote = (function($,H,R){
+﻿var Mote = (function($,$H,$R){
 
 	function screen(panel){
 		if(panel.jquery) panel = panel[0];
-		var paper = new R(panel);
+		var paper = new $R(panel);
 		
-		return {
+		paper.customAttributes.gravityProgress = function (v) {
+			var y = this.attr("y");
+			this.attr({y:y+10*v});
+		}
+		
+		var instance = {
 			add: function(obj){
-				var img = obj.template(paper, obj.position);
-				img.data("myset", img);
+				var icon = obj.template(paper, obj.position);
+				icon.data("myset", icon);
+				obj.icon = icon;
+				obj.screen = instance;
 				
-				img.drag(
+				icon.drag(
 					function(dx, dy, x, y, e) {//dragmove
 						if(obj.isStatic)return;
 						var myset = this.data("myset");
@@ -26,10 +33,19 @@
 						myset.data("mytransform", this.transform());
 					}
 				);
-
+				return obj;
+			},
+			gravity:{
+				fall: function(obj){
+					var duration = 1000;
+					obj.icon.attr("gravityProgress", 0);
+					obj.icon.animate({ gravityProgress: 1 }, duration);
+				}
 			}
-		}
+		};
+		return instance;
 	}
+	
 	
 	function moteObject(pos, template){
 		if(!pos) pos = {x:0, y:0};
@@ -43,7 +59,10 @@
 			position: pos,
 			template: template,
 			isStatic: false,
-			"static": function(v){this.isStatic = v==null?true:v; return this;}
+			"static": function(v){this.isStatic = v==null?true:v; return this;},
+			fall: function(){
+				this.screen.gravity.fall(this);
+			}
 		};
 	}
 
