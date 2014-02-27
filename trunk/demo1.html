@@ -9,11 +9,28 @@
 	<script type="text/javascript" src="mote.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			$("h1").after(Html.div("MoteJS v.", Mote.version));
+			$("h1").after(Html.div({style:"font-style:italic; color:#ccc;"}, "Powered by MoteJS v.", Mote.version));
+			
+			var screen = Mote.screen($("#paper"));
+			screen.add(Mote.object([25, 85], function(paper, pos){
+				var set = paper.set();
+				set.push(
+					paper.rect(pos.x, pos.y, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
+					paper.rect(pos.x+5, pos.y+5, 8, 8).attr({fill:"#ccf", stroke:"#558"})
+				);
+				return set;
+			}));
+			screen.add(Mote.object([65, 85], function(paper, pos){
+				return paper.rect(pos.x, pos.y, 20, 20).attr({fill:"#ffc", stroke:"#558"});
+			}));
+			screen.add(Mote.object([125, 115], function(paper, pos){
+				return paper.circle(pos.x, pos.y, 25).attr({fill:"#ccc", stroke:"#888"});
+			}));
 		});
 	</script>
 </head>
 <body>
 	<h1>MoteJS Demo Page</h1>
+	<div id="paper" style="border:1px solid #ccc; margin:5px; width:900px; height:500px;"></div>
 </body>
 </html>
