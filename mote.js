@@ -39,6 +39,7 @@
 						if(obj.isStatic)return;
 						var myset = this.data("myset");
 						myset.data("mytransform", this.transform());
+						obj.fall();
 					}
 				);
 				return obj;
@@ -51,6 +52,7 @@
 					return groundPos - obj.icon.getBBox().y2;
 				},
 				fall: function(obj){
+					if(obj.isStatic) return;
 					var height = obj.screen.gravity.getHeight(obj);
 					var a = obj.screen.gravity.acceleration;
 					var duration = Math.sqrt(height*2/a);
