@@ -1,5 +1,29 @@
 ﻿var Mote = (function($,$H,$R){
 	
+	function Transformation(Tx, Ty, R){
+		this.T = {x:Tx, y:Ty};
+		this.R = R;
+	}
+	$.extend(Transformation.prototype, {
+		toString: function(dx, dy){
+			dx = dx || 0;
+			dy = dy || 0;
+			return "Tx,yRr".replace("x", this.T.x + dx)
+				.replace("y", this.T.y + dy)
+				.replace("r", this.R);
+		}
+	});
+	Transformation.obtain = function(icon){
+		var Tx = 0, Ty = 0, R = 0;
+		var tAttr = icon.attr("transform");
+		$.each(tAttr, function(i, cmd){
+			if(cmd[0]!="T") return;
+			Tx+=cmd[1];
+			Ty+=cmd[2];
+		});
+		return new Transformation(Tx, Ty, R);
+	}
+	
 	function World(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var screen = new $R(panel);
@@ -7,7 +31,7 @@
 		screen.customAttributes.gravityProgress = function (v) {
 			var fallState = this.data("solid").fallState;
 			var t = fallState.duration*v;
-			this.attr({transform:"t0,"+(fallState.acceleration*t*t/2)});
+			this.attr({transform:"T0,"+(fallState.acceleration*t*t/2)});
 		}
 		
 		var worldInstance = {
@@ -22,17 +46,23 @@
 					function(dx, dy, x, y, e) {//move
 						if(solid.isStatic)return;
 						var iconSet = this.data("iconSet");
-						iconSet.transform(this.data("mytransform")+'T'+dx+','+dy);
+						iconSet.transform(solid.drag.baseTransform.toString(dx, dy));
 					},
 					function(x, y, e) {//start
 						if(solid.isStatic)return;
 						var iconSet = this.data("iconSet");
+						solid.drag = {
+							baseTransform: Transformation.obtain(this)
+						};
 						iconSet.data("mytransform", this.transform());
 					},
 					function(e) {//end
 						if(solid.isStatic)return;
 						var iconSet = this.data("iconSet");
 						iconSet.data("mytransform", this.transform());
+						
+						solid.drag = null;
+						
 						solid.fall();
 					}
 				);
