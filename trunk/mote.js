@@ -1,29 +1,23 @@
 ﻿var Mote = (function($,$H,$R){
 	
-	function getCoordAttrNames(icon){
-		if(!icon.attrs) return ["x", "y"];
-		return icon.attrs.y?["x","y"]:
-				icon.attrs.cy?["cx","cy"]:
-				["x","y"]
-	}
-
 	function World(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var screen = new $R(panel);
 		
 		screen.customAttributes.gravityProgress = function (v) {
-			var data = this.data("fallData");
-			var t = data.duration*v;
-			this.attr({transform:"t0,"+(data.acceleration*t*t/2)});
+			var fallState = this.data("solid").fallState;
+			var t = fallState.duration*v;
+			this.attr({transform:"t0,"+(fallState.acceleration*t*t/2)});
 		}
 		
 		var worldInstance = {
 			add: function(solid){
 				var icon = solid.template(screen, solid.spawnPosition);
-				icon.data("iconSet", icon);
+				icon.data("solid", solid);
 				solid.icon = icon;
 				solid.world = worldInstance;
 				
+				icon.data("iconSet", icon);
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
 						if(solid.isStatic)return;
@@ -53,17 +47,18 @@
 				},
 				fall: function(solid){
 					if(solid.isStatic) return;
-					var height = solid.world.gravity.getHeight(solid);
-					var a = solid.world.gravity.acceleration(height);
-					var duration = Math.sqrt(height*2/a);
-					var attNames = getCoordAttrNames(solid.icon);
-					var bRect = solid.icon.getBBox();
-					solid.icon.data("fallData", {
+					
+					var height = solid.world.gravity.getHeight(solid),
+						a = solid.world.gravity.acceleration(height),
+						duration = Math.sqrt(height*2/a),
+						bRect = solid.icon.getBBox();
+						
+					solid.fallState = {
 						pos0:{x:bRect.x, y:bRect.y},
 						height: height,
 						duration: duration,
 						acceleration: a
-					});
+					};
 					
 					solid.icon.attr("gravityProgress", 0);
 					solid.icon.animate({ gravityProgress: 1 }, duration);
