@@ -17,35 +17,35 @@
 			this.attr({transform:"t0,"+(data.acceleration*t*t/2)});
 		}
 		
-		var instance = {
+		var worldInstance = {
 			add: function(solid){
 				var icon = solid.template(screen, solid.spawnPosition);
-				icon.data("myset", icon);
+				icon.data("iconSet", icon);
 				solid.icon = icon;
-				solid.world = instance;
+				solid.world = worldInstance;
 				
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
 						if(solid.isStatic)return;
-						var myset = this.data("myset");
-						myset.transform(this.data("mytransform")+'T'+dx+','+dy);
+						var iconSet = this.data("iconSet");
+						iconSet.transform(this.data("mytransform")+'T'+dx+','+dy);
 					},
 					function(x, y, e) {//start
 						if(solid.isStatic)return;
-						var myset = this.data("myset");
-						myset.data("mytransform", this.transform());
+						var iconSet = this.data("iconSet");
+						iconSet.data("mytransform", this.transform());
 					},
 					function(e) {//end
 						if(solid.isStatic)return;
-						var myset = this.data("myset");
-						myset.data("mytransform", this.transform());
+						var iconSet = this.data("iconSet");
+						iconSet.data("mytransform", this.transform());
 						solid.fall();
 					}
 				);
 				return solid;
 			},
 			gravity:{
-				acceleration: .001,
+				acceleration: function(height){return .001;},
 				groundPosition: 450,
 				getHeight: function(solid){
 					var groundPos = solid.world.gravity.groundPosition;
@@ -54,7 +54,7 @@
 				fall: function(solid){
 					if(solid.isStatic) return;
 					var height = solid.world.gravity.getHeight(solid);
-					var a = solid.world.gravity.acceleration;
+					var a = solid.world.gravity.acceleration(height);
 					var duration = Math.sqrt(height*2/a);
 					var attNames = getCoordAttrNames(solid.icon);
 					var bRect = solid.icon.getBBox();
@@ -70,8 +70,8 @@
 				}
 			}
 		};
-		template(instance, screen)
-		return instance;
+		template(worldInstance, screen)
+		return worldInstance;
 	}
 	
 	
