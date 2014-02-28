@@ -29,9 +29,10 @@
 		var screen = new $R(panel);
 		
 		screen.customAttributes.gravityProgress = function (v) {
-			var fallState = this.data("solid").fallState;
-			var t = fallState.duration*v;
-			this.attr({transform:"T0,"+(fallState.acceleration*t*t/2)});
+			var fallState = this.data("solid").fallState,
+				t = fallState.duration*v,
+				dy = fallState.acceleration*t*t/2;
+			this.attr({transform:fallState.baseTransform.toString(0, dy)});
 		}
 		
 		var worldInstance = {
@@ -84,7 +85,7 @@
 						bRect = solid.icon.getBBox();
 						
 					solid.fallState = {
-						pos0:{x:bRect.x, y:bRect.y},
+						baseTransform: Transformation.obtain(solid.icon),
 						height: height,
 						duration: duration,
 						acceleration: a
