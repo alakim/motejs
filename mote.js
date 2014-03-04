@@ -1,12 +1,5 @@
 ﻿var Mote = (function($,$H,$R){
 	
-	var getUID = (function(){
-		var counter = 0;
-		return function(){
-			return counter++;
-		}
-	})();
-	
 	function Transformation(Tx, Ty, R){
 		this.T = {x:Tx||0, y:Ty||0};
 		this.R = R||0;
@@ -43,40 +36,25 @@
 			this.dx = dx;
 			this.dy = dy;
 		},
-		accelerate: function(dVx, dVy){
-			this.dx+=dVx;
-			this.dy+=dVy;
-		},
 		toString: function(){
 			return [this.dx, this.dy].join();
-		}
-	});
-	
-	function FallState(solid, velocity){
-		this.solid = solid;
-		this.baseTransform = solid.transformation;
-		this.velocity = velocity || new Velocity();
-		this.acceleration = solid.world.gravity.acceleration(/*height*/);
-	}
-	$.extend(FallState.prototype, {
-		doStep: function(){var _=this;
-			var dt = 1;
-			_.solid.transformation = _.solid.transformation.shift(_.velocity.dx*dt, _.velocity.dy*dt);
-			//console.log(_.solid.transformation+"");
-			var absPos = _.solid.transformation.T.y + _.solid.spawnPosition.y;
-			if(absPos>=_.solid.world.gravity.groundPosition){
-				var bbox = _.solid.icon.getBBox();
-				_.solid.transformation.T.y = _.solid.world.gravity.groundPosition - _.solid.spawnPosition.y - bbox.height;
-				_.solid.fallState = null;
-			}
-			_.velocity.accelerate(0, _.acceleration*dt);
-			_.solid.icon.attr({transform:_.solid.transformation});
 		}
 	});
 	
 	function World(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var screen = new $R(panel);
+		
+		screen.customAttributes.gravityProgress = function (v) {
+			var solid = this.data("solid"),
+				fallState = solid.fallState,
+				t = fallState.duration*v,
+				dy = fallState.acceleration*t*t/2;
+			//console.log(solid.velocity.dx);
+			//solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy+solid.velocity.dy*t);
+			solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy);
+			solid.icon.attr({transform:solid.transformation});
+		}
 		
 		var worldInstance = {
 			add: function(solid){
@@ -96,6 +74,7 @@
 							(solid.transformation.T.x - x0)*kVel,
 							(solid.transformation.T.y - y0)*kVel
 						);
+						//console.log(solid.velocity+"");
 						solid.icon.attr({transform: solid.transformation});
 					},
 					function(x, y, e) {//start
@@ -112,38 +91,8 @@
 				);
 				return solid;
 			},
-			time:{
-				slice: 100,
-				animatedSolids:[],
-				animationStarted: false,
-				startAnimation: function(){var _=this;
-					function step(){
-						if(!_.animationStarted) return;
-						for(var i=0; i<_.animatedSolids.length; i++){
-							var solid = _.animatedSolids[i];
-							if(solid.fallState) solid.fallState.doStep();
-						}
-						setTimeout(step, _.slice);
-					}
-					
-					_.animationStarted = true;
-					step();
-				},
-				stopAnimation: function(){
-					this.animationStarted = false;
-				},
-				excludeSolid: function(solid){var _=this;
-					var solids = [];
-					for(var i=0; i<_.animatedSolids; i++){
-						var sld = _.animatedSolids[i];
-						if(sld!==solid)
-							solids.push(sld);
-						_.animatedSolids = sld;
-					}
-				}
-			},
 			gravity:{
-				acceleration: function(height){return 5;},
+				acceleration: function(height){return .001;},
 				groundPosition: 450,
 				getHeight: function(solid){
 					var groundPos = solid.world.gravity.groundPosition;
@@ -152,16 +101,32 @@
 				fall: function(solid){
 					if(solid.isStatic) return;
 					
-					solid.fallState = new FallState(solid);
-					solid.world.time.animatedSolids.push(solid);
+					var height = solid.world.gravity.getHeight(solid),
+						a = solid.world.gravity.acceleration(height),
+						duration = Math.sqrt(height*2/a),
+						//%%%% a*t*t/2 + u*t - s = 0
+						//%%%% t = (-u + Math.sqrt(u*u + 4*a*s))/(2*a)
+						// u = solid.velocity.dy;
+						// duration = (-u + Math.sqrt(u*u + 4*a*height))/(2*a);
+						bRect = solid.icon.getBBox();
+						
+					solid.fallState = {
+						baseTransform: solid.transformation,
+						height: height,
+						duration: duration,
+						acceleration: a
+					};
+					
+					solid.icon.attr("gravityProgress", 0);
+					solid.icon.animate({ gravityProgress: 1 }, duration, function(){
+						solid.velocity.set(0, 0);
+					});
 				}
 			}
 		};
-		template(worldInstance, screen);
-		worldInstance.time.startAnimation();
+		template(worldInstance, screen)
 		return worldInstance;
 	}
-	
 	
 	
 	function Solid(pos, template){
@@ -177,7 +142,6 @@
 			transformation: new Transformation(),
 			velocity: new Velocity(),
 			template: template,
-			fallState: null,
 			isStatic: false,
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
 			fall: function(){
@@ -187,7 +151,7 @@
 	}
 
 	return {
-		version:"2.0",
+		version:"1.0",
 		world: World,
 		solid: Solid
 	};
