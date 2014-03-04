@@ -4,8 +4,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>160</x>
-      <y>160</y>
+      <x>170</x>
+      <y>190</y>
       <w>160</w>
       <h>170</h>
     </coordinates>
@@ -19,8 +19,8 @@ template()</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>560</x>
-      <y>160</y>
+      <x>570</x>
+      <y>190</y>
       <w>100</w>
       <h>100</h>
     </coordinates>
@@ -36,19 +36,22 @@ fall()</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>890</x>
-      <y>110</y>
+      <x>900</x>
+      <y>140</y>
       <w>130</w>
-      <h>30</h>
+      <h>50</h>
     </coordinates>
-    <panel_attributes>Transformation</panel_attributes>
+    <panel_attributes>Transformation
+--
+--
+shift(dx, dy)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>630</x>
-      <y>90</y>
+      <x>640</x>
+      <y>120</y>
       <w>284</w>
       <h>140</h>
     </coordinates>
@@ -59,19 +62,23 @@ r2=transformation</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>890</x>
-      <y>190</y>
+      <x>900</x>
+      <y>220</y>
       <w>100</w>
-      <h>30</h>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>Velocity</panel_attributes>
+    <panel_attributes>Velocity
+--
+--
+set(dx, dy)
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>630</x>
-      <y>180</y>
+      <x>640</x>
+      <y>210</y>
       <w>280</w>
       <h>70</h>
     </coordinates>
@@ -82,8 +89,8 @@ r2=velocity</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>440</x>
-      <y>400</y>
+      <x>450</x>
+      <y>430</y>
       <w>100</w>
       <h>70</h>
     </coordinates>
@@ -96,8 +103,8 @@ fall(solid)</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>300</x>
-      <y>470</y>
+      <x>310</x>
+      <y>500</y>
       <w>100</w>
       <h>90</h>
     </coordinates>
@@ -110,8 +117,8 @@ slice
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>290</x>
-      <y>220</y>
+      <x>300</x>
+      <y>250</y>
       <w>190</w>
       <h>200</h>
     </coordinates>
@@ -122,8 +129,8 @@ r2=gravity</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>240</x>
-      <y>300</y>
+      <x>250</x>
+      <y>330</y>
       <w>110</w>
       <h>190</h>
     </coordinates>
@@ -134,8 +141,8 @@ r2=time</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>290</x>
-      <y>190</y>
+      <x>300</x>
+      <y>220</y>
       <w>290</w>
       <h>50</h>
     </coordinates>
@@ -146,8 +153,8 @@ r1=world</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>550</x>
-      <y>30</y>
+      <x>560</x>
+      <y>60</y>
       <w>150</w>
       <h>70</h>
     </coordinates>
@@ -158,8 +165,8 @@ r1=world</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>590</x>
-      <y>70</y>
+      <x>600</x>
+      <y>100</y>
       <w>50</w>
       <h>110</h>
     </coordinates>
@@ -169,8 +176,8 @@ r1=world</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>370</x>
-      <y>230</y>
+      <x>380</x>
+      <y>260</y>
       <w>298</w>
       <h>310</h>
     </coordinates>
@@ -178,5 +185,37 @@ r1=world</panel_attributes>
 r1=animatedSolids
 m1=0..n</panel_attributes>
     <additional_attributes>240;30;240;290;30;290</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>760</x>
+      <y>400</y>
+      <w>150</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>FallState
+--
+solid
+baseTransform
+height
+duration
+acceleration
+--
+doStep()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>640</x>
+      <y>250</y>
+      <w>200</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=fallState
+m2=0..1</panel_attributes>
+    <additional_attributes>30;30;180;150</additional_attributes>
   </element>
 </diagram>
