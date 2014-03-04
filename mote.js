@@ -45,37 +45,28 @@
 		}
 	});
 	
-	function FallState(solid, acceleration, velocity){
+	function FallState(solid, velocity){
 		this.solid = solid;
 		this.baseTransform = solid.transformation;
 		this.velocity = velocity || new Velocity();
-		this.acceleration = acceleration;
+		this.acceleration = solid.world.gravity.acceleration(/*height*/);
 	}
 	$.extend(FallState.prototype, {
 		doStep: function(){var _=this;
-			var dt = 1;// _.solid.world.time.slice;
-			//console.log(_.velocity);
+			var dt = 1;
 			_.solid.transformation = _.solid.transformation.shift(_.velocity.dx*dt, _.velocity.dy*dt);
-			//console.log(_.solid.transformation+'');
 			_.velocity.accelerate(0, _.acceleration*dt);
 			_.solid.icon.attr({transform:_.solid.transformation});
+			
+			var bbox = _.solid.icon.getBBox();
+			if(bbox.y2 > _.solid.world.gravity.groundPosition)
+				_.solid.fallState = null;
 		}
 	});
 	
 	function World(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var screen = new $R(panel);
-		
-		screen.customAttributes.gravityProgress = function (v) {
-			var solid = this.data("solid"),
-				fallState = solid.fallState,
-				t = fallState.duration*v,
-				dy = fallState.acceleration*t*t/2;
-			//console.log(solid.velocity.dx);
-			//solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy+solid.velocity.dy*t);
-			solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy);
-			solid.icon.attr({transform:solid.transformation});
-		}
 		
 		var worldInstance = {
 			add: function(solid){
@@ -95,7 +86,6 @@
 							(solid.transformation.T.x - x0)*kVel,
 							(solid.transformation.T.y - y0)*kVel
 						);
-						//console.log(solid.velocity+"");
 						solid.icon.attr({transform: solid.transformation});
 					},
 					function(x, y, e) {//start
@@ -113,7 +103,7 @@
 				return solid;
 			},
 			time:{
-				slice: 1000,
+				slice: 50,
 				animatedSolids:[],
 				animationStarted: false,
 				startAnimation: function(){var _=this;
@@ -121,7 +111,7 @@
 						if(!_.animationStarted) return;
 						for(var i=0; i<_.animatedSolids.length; i++){
 							var solid = _.animatedSolids[i];
-							solid.fallState.doStep();
+							if(solid.fallState) solid.fallState.doStep();
 						}
 						setTimeout(step, _.slice);
 					}
@@ -131,10 +121,20 @@
 				},
 				stopAnimation: function(){
 					this.animationStarted = false;
+				},
+				excludeSolid: function(solid){var _=this;
+					console.log("excluded");
+					var solids = [];
+					for(var i=0; i<_.animatedSolids; i++){
+						var sld = _.animatedSolids[i];
+						if(sld!==solid)
+							solids.push(sld);
+						_.animatedSolids = sld;
+					}
 				}
 			},
 			gravity:{
-				acceleration: function(height){return 10;},
+				acceleration: function(height){return 5;},
 				groundPosition: 450,
 				getHeight: function(solid){
 					var groundPos = solid.world.gravity.groundPosition;
@@ -143,30 +143,8 @@
 				fall: function(solid){
 					if(solid.isStatic) return;
 					
-					var height = solid.world.gravity.getHeight(solid),
-						a = solid.world.gravity.acceleration(height),
-						duration = Math.sqrt(height*2/a),
-						//%%%% a*t*t/2 + u*t - s = 0
-						//%%%% t = (-u + Math.sqrt(u*u + 4*a*s))/(2*a)
-						// u = solid.velocity.dy;
-						// duration = (-u + Math.sqrt(u*u + 4*a*height))/(2*a);
-						bRect = solid.icon.getBBox();
-						
-					// solid.fallState = {
-					// 	baseTransform: solid.transformation,
-					// 	height: height,
-					// 	duration: duration,
-					// 	acceleration: a
-					// };
-					
-					solid.fallState = new FallState(solid, a);
+					solid.fallState = new FallState(solid);
 					solid.world.time.animatedSolids.push(solid);
-					
-					
-					// solid.icon.attr("gravityProgress", 0);
-					// solid.icon.animate({ gravityProgress: 1 }, duration, function(){
-					// 	solid.velocity.set(0, 0);
-					// });
 				}
 			}
 		};
@@ -200,7 +178,7 @@
 	}
 
 	return {
-		version:"1.0",
+		version:"2.0",
 		world: World,
 		solid: Solid
 	};
