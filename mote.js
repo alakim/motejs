@@ -54,14 +54,43 @@
 			//solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy+solid.velocity.dy*t);
 			solid.transformation = fallState.baseTransform.shift(solid.velocity.dx*t, dy);
 			solid.icon.attr({transform:solid.transformation});
+			solid.bbox = solid.icon.getBBox();
+			//console.log(solid.bbox);
+			if(getNearest(solid)) {
+				console.log("nearest found");
+				solid.icon.stop();
+			}
+			// if(v>.5) solid.icon.stop();
+		}
+		
+		// var xx = {collection:[1,2,3,4]};
+		// for(var i=0,C=xx.collection,Itm; Itm=C[i],i<C.length; i++){
+		// 	console.log(Itm);
+		// }
+		
+		
+		function getNearest(solid){
+			var x = (solid.bbox.x2 - solid.bbox.x)/2,
+				y = solid.bbox.y2;
+			for(var sld,C=solid.world.solids,i=0; sld=C[i],i<C.length; i++){
+				if(!sld.bbox) continue;
+				if(sld===solid) continue;
+				// console.log(x, y, sld.bbox.x, sld.bbox.y);
+				if(x>sld.bbox.x && x<sld.bbox.x2 &&
+					y>sld.bbox.y - 50
+					)
+					return sld;
+			}
 		}
 		
 		var worldInstance = {
+			solids: [],
 			add: function(solid){
 				var icon = solid.template(screen, solid.spawnPosition);
 				icon.data("solid", solid);
 				solid.icon = icon;
 				solid.world = worldInstance;
+				this.solids.push(solid);
 				
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
@@ -120,7 +149,11 @@
 					solid.icon.attr("gravityProgress", 0);
 					solid.icon.animate({ gravityProgress: 1 }, duration, function(){
 						solid.velocity.set(0, 0);
+						solid.bbox = solid.icon.getBBox();
 					});
+					// setTimeout(function(){ 
+					// 	solid.icon.stop();
+					// }, 800);
 				}
 			}
 		};
