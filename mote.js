@@ -1,5 +1,12 @@
 ﻿var Mote = (function($,$H,$R){
 	
+	var getUID = (function(){
+		var counter = 0;
+		return function(){
+			return counter++;
+		}
+	})();
+	
 	function Transformation(Tx, Ty, R){
 		this.T = {x:Tx||0, y:Ty||0};
 		this.R = R||0;
@@ -55,12 +62,15 @@
 		doStep: function(){var _=this;
 			var dt = 1;
 			_.solid.transformation = _.solid.transformation.shift(_.velocity.dx*dt, _.velocity.dy*dt);
+			//console.log(_.solid.transformation+"");
+			var absPos = _.solid.transformation.T.y + _.solid.spawnPosition.y;
+			if(absPos>=_.solid.world.gravity.groundPosition){
+				var bbox = _.solid.icon.getBBox();
+				_.solid.transformation.T.y = _.solid.world.gravity.groundPosition - _.solid.spawnPosition.y - bbox.height;
+				_.solid.fallState = null;
+			}
 			_.velocity.accelerate(0, _.acceleration*dt);
 			_.solid.icon.attr({transform:_.solid.transformation});
-			
-			var bbox = _.solid.icon.getBBox();
-			if(bbox.y2 > _.solid.world.gravity.groundPosition)
-				_.solid.fallState = null;
 		}
 	});
 	
@@ -103,7 +113,7 @@
 				return solid;
 			},
 			time:{
-				slice: 50,
+				slice: 100,
 				animatedSolids:[],
 				animationStarted: false,
 				startAnimation: function(){var _=this;
@@ -123,7 +133,6 @@
 					this.animationStarted = false;
 				},
 				excludeSolid: function(solid){var _=this;
-					console.log("excluded");
 					var solids = [];
 					for(var i=0; i<_.animatedSolids; i++){
 						var sld = _.animatedSolids[i];
