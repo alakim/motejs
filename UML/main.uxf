@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>160</x>
+      <y>160</y>
+      <w>160</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>World
+--
+--
+add(solid)
+template()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>560</x>
+      <y>160</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Solid
+--
+spawnPosition
+template
+isStatic
+--
+fall()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>890</x>
+      <y>110</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Transformation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>630</x>
+      <y>90</y>
+      <w>284</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=transformation</panel_attributes>
+    <additional_attributes>30;120;260;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>890</x>
+      <y>190</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Velocity</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>630</x>
+      <y>180</y>
+      <w>280</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=velocity</panel_attributes>
+    <additional_attributes>30;50;260;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>440</x>
+      <y>400</y>
+      <w>100</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Gravity
+--
+--
+fall(solid)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>300</x>
+      <y>470</y>
+      <w>100</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Time
+--
+slice
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>290</x>
+      <y>220</y>
+      <w>190</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=gravity</panel_attributes>
+    <additional_attributes>30;30;170;180</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>240</x>
+      <y>300</y>
+      <w>110</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=time</panel_attributes>
+    <additional_attributes>30;30;90;170</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>290</x>
+      <y>190</y>
+      <w>290</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+r1=world</panel_attributes>
+    <additional_attributes>30;30;270;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>550</x>
+      <y>30</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Icon
+&lt;&lt;Raphael Object&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>590</x>
+      <y>70</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>30;90;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>370</x>
+      <y>230</y>
+      <w>298</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+r1=animatedSolids
+m1=0..n</panel_attributes>
+    <additional_attributes>240;30;240;290;30;290</additional_attributes>
+  </element>
+</diagram>

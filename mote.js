@@ -91,6 +91,26 @@
 				);
 				return solid;
 			},
+			time:{
+				slice: 1000,
+				animatedSolids:[],
+				animationStarted: false,
+				startAnimation: function(){var _=this;
+					function step(){
+						if(!_.animationStarted) return;
+						for(var i=0; i<_.animatedSolids.length; i++){
+							var sld = _.animatedSolids[i];
+						}
+						setTimeout(step, _.slice);
+					}
+					
+					_.animationStarted = true;
+					step();
+				},
+				stopAnimation: function(){
+					this.animationStarted = false;
+				}
+			},
 			gravity:{
 				acceleration: function(height){return .001;},
 				groundPosition: 450,
@@ -124,7 +144,8 @@
 				}
 			}
 		};
-		template(worldInstance, screen)
+		template(worldInstance, screen);
+		worldInstance.time.startAnimation();
 		return worldInstance;
 	}
 	
