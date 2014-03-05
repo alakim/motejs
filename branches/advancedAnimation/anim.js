@@ -1,10 +1,12 @@
 ﻿var Anim = (function($, $R){
+	
 	var animationElements = [];
-	var requestAnimFrame = window.requestAnimationFrame	   ||
+	
+	var requestAnimFrame = window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame	||
-		window.oRequestAnimationFrame	  ||
-		window.msRequestAnimationFrame	 ||
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
 		function (callback) {setTimeout(callback, 16);};
 
 	function getPosition(elem){
