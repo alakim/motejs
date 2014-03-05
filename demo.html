@@ -1,0 +1,22 @@
+﻿<html>
+<head>
+	<title>Advanced Animation Demo</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script type="text/javascript" src="lib/html.js"></script>
+	<script type="text/javascript" src="lib/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="lib/raphael-min.js"></script>
+	<script type="text/javascript" src="anim.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var paper = Raphael($("#screen")[0]);
+			var elem = paper.rect(10,10,20,20).attr({fill:"#ffe", stroke:"#f00"});
+			Anim.animate(elem);
+		});
+	</script>
+</head>
+<body>
+	<h1>Advanced Animation Demo</h1>
+	<div id="screen" style="border:1px solid #ccc; margin:5px; width:900px; height:500px;"></div>
+</body>
+</html>
