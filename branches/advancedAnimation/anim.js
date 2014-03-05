@@ -24,10 +24,12 @@
 				el.elem.attr({x:pos.x+step.dx, y:pos.y+step.dy});
 			}
 			else{
+				//console.log(1, i, animationElements.length);
 				animationElements.splice(i--, 1);
+				//console.log(2, i, animationElements.length);
 			}
 		}
-		animationElements.length==1 && requestAnimFrame(doStep);
+		animationElements.length && requestAnimFrame(doStep);
 	}
 	
 	function animate(elem){
@@ -35,7 +37,8 @@
 			elem:elem
 		};
 		animationElements.push(e);
-		animationElements.length==1 && requestAnimFrame(doStep);
+		//console.log(3, animationElements.length);
+		animationElements.length && requestAnimFrame(doStep);
 	}
 	
 	return {

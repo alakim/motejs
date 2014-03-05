@@ -10,8 +10,10 @@
 	<script type="text/javascript">
 		$(function(){
 			var paper = Raphael($("#screen")[0]);
-			var elem = paper.rect(10,10,20,20).attr({fill:"#ffe", stroke:"#f00"});
-			Anim.animate(elem);
+			var elem1 = paper.rect(10,10,20,20).attr({fill:"#ffe", stroke:"#f00"});
+			var elem2 = paper.rect(110,10,20,20).attr({fill:"#eff", stroke:"#f00"});
+			Anim.animate(elem1);
+			Anim.animate(elem2);
 		});
 	</script>
 </head>
