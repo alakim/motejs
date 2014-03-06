@@ -44,21 +44,21 @@
 		}
 	});
 	
-	function Velocity(dx, dy){
-		this.dx = dx||0;
-		this.dy = dy||0;
+	function Velocity(vx, vy){
+		this.vx = vx||0;
+		this.vy = vy||0;
 	}
 	$.extend(Velocity.prototype, {
-		set: function(dx, dy){
-			this.dx = dx;
-			this.dy = dy;
+		set: function(vx, vy){
+			this.vx = vx;
+			this.vy = vy;
 		},
 		accelerate: function(dVx, dVy){
-			this.dx+=dVx;
-			this.dy+=dVy;
+			this.vx+=dVx;
+			this.vy+=dVy;
 		},
 		toString: function(){
-			return [this.dx, this.dy].join();
+			return [this.vx, this.vy].join();
 		}
 	});
 	
@@ -66,7 +66,7 @@
 		this.time = +new Date;
 		this.solid = solid;
 		this.baseTransform = solid.transformation;
-		this.velocity = velocity || new Velocity();
+		this.velocity = velocity || solid.velocity || new Velocity();
 		this.acceleration = solid.world.gravity.acceleration(/*height*/);
 	}
 	
@@ -81,7 +81,7 @@
 					dt = now - state.time;
 				state.time = now;
 					
-				solid.transformation.shift(state.velocity.dx*dt, state.velocity.dy*dt);
+				solid.transformation.shift(state.velocity.vx*dt, state.velocity.vy*dt);
 				
 				state.velocity.accelerate(0, state.acceleration*dt);
 				solid.icon.attr({transform:solid.transformation});
@@ -104,7 +104,6 @@
 			},
 			fall: function(solid){
 				if(solid.isStatic) return;
-				
 				solid.fallState = new FallState(solid);
 				fallingSolids.push(solid);
 				fallingSolids.length && requestAnimFrame(animationStep);
@@ -125,22 +124,28 @@
 				
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
-						if(solid.isStatic)return;
-						var kVel = .03;
+						if(solid.isStatic || !solid.drag)return;
+						var now = +new Date
+							dt = now - solid.drag.time;
+						solid.drag.time = now;
+						
+						var kVel = .5;
 						var x0 = solid.transformation.T.x,
 							y0 = solid.transformation.T.y;
 						
-						solid.velocity.set(
-							(solid.transformation.T.x - x0)*kVel,
-							(solid.transformation.T.y - y0)*kVel
-						);
 						solid.transformation = solid.drag.baseTransform.clone().shift(dx, dy);
 						solid.icon.attr({transform: solid.transformation});
+
+						solid.velocity.set(
+							(solid.transformation.T.x - x0)*kVel/dt,
+							(solid.transformation.T.y - y0)*kVel/dt
+						);
 					},
 					function(x, y, e) {//start
 						if(solid.isStatic)return;
 						solid.drag = {
-							baseTransform: Transformation.obtain(this)
+							baseTransform: Transformation.obtain(this),
+							time: +new Date
 						};
 					},
 					function(e) {//end
