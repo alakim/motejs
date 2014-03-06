@@ -81,16 +81,25 @@
 					dt = now - state.time;
 				state.time = now;
 					
-				solid.transformation.shift(state.velocity.vx*dt, state.velocity.vy*dt);
+				var dx = state.velocity.vx*dt,
+					dy = state.velocity.vy*dt;
+				solid.transformation.shift(dx, dy);
 				
 				state.velocity.accelerate(0, state.acceleration*dt);
 				
+				var ground = solid.getGroundPos();
+				
 				var absPos = solid.transformation.T.y + solid.spawnPosition.y + solid.bbox.height;
-				if(absPos>=solid.world.gravity.groundPosition){
-					solid.transformation.T.y = solid.world.gravity.groundPosition - solid.spawnPosition.y - solid.bbox.height;
+				if(absPos>=ground){
+					solid.transformation.T.y = ground - solid.spawnPosition.y - solid.bbox.height;
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
+					
+					solid.icon.attr({transform:solid.transformation});
+					solid.updateBBox();
 				}
-				solid.icon.attr({transform:solid.transformation});
+				else{
+					solid.icon.attr({transform:solid.transformation});
+				}
 			}
 			fallingSolids.length && requestAnimFrame(animationStep);
 		}
@@ -105,6 +114,7 @@
 			fall: function(solid){
 				if(solid.isStatic) return;
 				solid.fallState = new FallState(solid);
+				solid.updateBBox();
 				fallingSolids.push(solid);
 				fallingSolids.length && requestAnimFrame(animationStep);
 			}
@@ -116,12 +126,15 @@
 		var screen = new $R(panel);
 		
 		var worldInstance = {
+			getScreen: function(){return screen;},
+			solids: [],
 			add: function(solid){
 				var icon = solid.template(screen, solid.spawnPosition);
 				icon.data("solid", solid);
 				solid.icon = icon;
 				solid.world = worldInstance;
-				solid.bbox = icon.getBBox();
+				solid.updateBBox();
+				solid.world.solids.push(solid);
 				
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
@@ -152,6 +165,7 @@
 					function(e) {//end
 						if(solid.isStatic)return;
 						solid.drag = null;
+						solid.updateBBox();
 						solid.fall();
 					}
 				);
@@ -174,6 +188,7 @@
 				return screen.rect(pos.x, pos.y, 10, 10).attr({fill:"#ffc", stroke:"#448"});
 			}
 		return {
+			id: getUID(),
 			spawnPosition: pos,
 			transformation: new Transformation(),
 			velocity: new Velocity(),
@@ -185,6 +200,37 @@
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
 			fall: function(){
 				this.world.gravity.fall(this);
+			},
+			updateBBox: function(){
+				var b = this.icon.getBBox();
+				this.bbox = {
+					x: b.x,
+					x2: b.x2,
+					y: b.y,
+					y2: b.y2,
+					width: b.width,
+					height: b.height
+				}
+			},
+			getGroundPos: function(){var _=this;
+				var cx = (_.bbox.x2 + _.bbox.x)/2,
+					groundY = _.world.gravity.groundPosition;
+				for(var sld,C=_.world.solids,i=0; sld=C[i],i<C.length; i++){
+					if(sld===_ || !sld.bbox) continue;
+					if(cx>sld.bbox.x && cx<sld.bbox.x2){
+						if(sld.bbox.y<groundY)
+							groundY = sld.bbox.y;
+					}
+				}
+				return groundY;
+			},
+			traceBBox: function(color){var _=this;
+				var box = _.bbox,
+					color = color || "#f00",
+					screen = _.world.getScreen(),
+					attr = {stroke:color};
+				screen.rect(box.x, box.y, box.width, box.height).attr(attr);
+				screen.circle(box.x2, box.y2, 4).attr(attr);
 			}
 		};
 	}
