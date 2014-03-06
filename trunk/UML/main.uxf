@@ -11,7 +11,6 @@
     </coordinates>
     <panel_attributes>World
 --
-gravity
 --
 add(solid)
 template()</panel_attributes>
@@ -38,12 +37,14 @@ fall()</panel_attributes>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>948</x>
-      <y>312</y>
+      <y>252</y>
       <w>156</w>
-      <h>120</h>
+      <h>180</h>
     </coordinates>
     <panel_attributes>Transformation
 --
+T
+R
 --
 shift(dx, dy)
 clone()
@@ -68,13 +69,15 @@ r2=transformation</panel_attributes>
     <coordinates>
       <x>960</x>
       <y>468</y>
-      <w>120</w>
-      <h>108</h>
+      <w>192</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>Velocity
 --
+vx
+vy
 --
-set(dx, dy)
+set(vx, vy)
 accelerate(dVx, dVy)
 toString()
 </panel_attributes>
