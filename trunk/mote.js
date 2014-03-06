@@ -84,6 +84,8 @@
 				var dx = state.velocity.vx*dt,
 					dy = state.velocity.vy*dt;
 				solid.transformation.shift(dx, dy);
+				solid.bbox.x+=dx; solid.bbox.x2+=dx; solid.bbox.cx+=dx; 
+				solid.bbox.y+=dy; solid.bbox.y2+=dy; 
 				
 				state.velocity.accelerate(0, state.acceleration*dt);
 				
@@ -107,10 +109,6 @@
 		return {
 			acceleration: function(height){return .001;},
 			groundPosition: 450,
-			getHeight: function(solid){
-				var groundPos = solid.world.gravity.groundPosition;
-				return groundPos - solid.icon.getBBox().y2;
-			},
 			fall: function(solid){
 				if(solid.isStatic) return;
 				solid.fallState = new FallState(solid);
@@ -206,6 +204,7 @@
 				this.bbox = {
 					x: b.x,
 					x2: b.x2,
+					cx: (b.x2+b.x)/2,
 					y: b.y,
 					y2: b.y2,
 					width: b.width,
@@ -213,7 +212,7 @@
 				}
 			},
 			getGroundPos: function(){var _=this;
-				var cx = (_.bbox.x2 + _.bbox.x)/2,
+				var cx = _.bbox.cx,
 					groundY = _.world.gravity.groundPosition;
 				for(var sld,C=_.world.solids,i=0; sld=C[i],i<C.length; i++){
 					if(sld===_ || !sld.bbox) continue;
