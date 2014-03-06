@@ -22,13 +22,15 @@ template()</panel_attributes>
       <x>552</x>
       <y>372</y>
       <w>120</w>
-      <h>120</h>
+      <h>168</h>
     </coordinates>
     <panel_attributes>Solid
 --
 spawnPosition
 template
 isStatic
+icon
+bbox
 --
 fall()</panel_attributes>
     <additional_attributes/>

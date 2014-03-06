@@ -36,7 +36,8 @@
 			}).static());
 			
 			world.add(Mote.solid([225, 85], function(screen, pos){
-				return screen.circle(pos.x, pos.y, 9).attr({fill:"#faa", stroke:"#8cc"});
+				var d = 10;
+				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
 			})).fall();
 			
 		});

@@ -84,13 +84,13 @@
 				solid.transformation.shift(state.velocity.vx*dt, state.velocity.vy*dt);
 				
 				state.velocity.accelerate(0, state.acceleration*dt);
-				solid.icon.attr({transform:solid.transformation});
-					
 				
-				var absPos = solid.transformation.T.y + solid.spawnPosition.y;
+				var absPos = solid.transformation.T.y + solid.spawnPosition.y + solid.bbox.height;
 				if(absPos>=solid.world.gravity.groundPosition){
+					solid.transformation.T.y = solid.world.gravity.groundPosition - solid.spawnPosition.y - solid.bbox.height;
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
 				}
+				solid.icon.attr({transform:solid.transformation});
 			}
 			fallingSolids.length && requestAnimFrame(animationStep);
 		}
@@ -121,6 +121,7 @@
 				icon.data("solid", solid);
 				solid.icon = icon;
 				solid.world = worldInstance;
+				solid.bbox = icon.getBBox();
 				
 				icon.drag(
 					function(dx, dy, x, y, e) {//move
@@ -178,6 +179,8 @@
 			velocity: new Velocity(),
 			template: template,
 			fallState: null,
+			icon:null,
+			bbox:null,
 			isStatic: false,
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
 			fall: function(){
