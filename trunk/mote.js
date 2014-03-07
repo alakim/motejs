@@ -119,6 +119,43 @@
 		};
 	})();
 	
+		
+	function Mouse(solid){
+		return {drag:{
+			move: function(dx, dy, x, y, e) {
+				if(solid.isStatic || !solid.drag)return;
+				var now = +new Date
+					dt = now - solid.drag.time;
+				solid.drag.time = now;
+				
+				var rate = .5;
+				var x0 = solid.transformation.T.x,
+					y0 = solid.transformation.T.y;
+				
+				solid.transformation = solid.drag.baseTransform.clone().shift(dx, dy);
+				solid.icon.attr({transform: solid.transformation});
+
+				solid.velocity.set(
+					(solid.transformation.T.x - x0)*rate/dt,
+					(solid.transformation.T.y - y0)*rate/dt
+				);
+			},
+			start:function(x, y, e) {
+				if(solid.isStatic)return;
+				solid.drag = {
+					baseTransform: Transformation.obtain(this),
+					time: +new Date
+				};
+			},
+			end: function(e) {
+				if(solid.isStatic)return;
+				solid.drag = null;
+				solid.updateBBox();
+				solid.fall();
+			}
+		}};
+	}
+	
 	function World(panel, template){
 		if(panel.jquery) panel = panel[0];
 		var screen = new $R(panel);
@@ -133,49 +170,23 @@
 				solid.world = worldInstance;
 				solid.updateBBox();
 				solid.world.solids.push(solid);
-				
-				icon.drag(
-					function(dx, dy, x, y, e) {//move
-						if(solid.isStatic || !solid.drag)return;
-						var now = +new Date
-							dt = now - solid.drag.time;
-						solid.drag.time = now;
-						
-						var kVel = .5;
-						var x0 = solid.transformation.T.x,
-							y0 = solid.transformation.T.y;
-						
-						solid.transformation = solid.drag.baseTransform.clone().shift(dx, dy);
-						solid.icon.attr({transform: solid.transformation});
-
-						solid.velocity.set(
-							(solid.transformation.T.x - x0)*kVel/dt,
-							(solid.transformation.T.y - y0)*kVel/dt
-						);
-					},
-					function(x, y, e) {//start
-						if(solid.isStatic)return;
-						solid.drag = {
-							baseTransform: Transformation.obtain(this),
-							time: +new Date
-						};
-					},
-					function(e) {//end
-						if(solid.isStatic)return;
-						solid.drag = null;
-						solid.updateBBox();
-						solid.fall();
-					}
-				);
+				with(Mouse(solid)){
+					icon.drag(drag.move, drag.start, drag.end);
+				}
 				return solid;
 			},
 			gravity: Gravity
 		};
 		template(worldInstance, screen);
+
+
 		return worldInstance;
 	}
 	
-	
+	function Collision(solid1, solid2, angle, decrement){
+		angle = angle || 0;
+		decrement = decrement || .5;
+	}
 	
 	function Solid(pos, template){
 		if(!pos) pos = {x:0, y:0};
