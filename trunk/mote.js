@@ -120,8 +120,8 @@
 	})();
 	
 		
-	function Mouse(solid){
-		return {drag:{
+	function draggable(solid){
+		var drag = {
 			move: function(dx, dy, x, y, e) {
 				if(solid.isStatic || !solid.drag)return;
 				var now = +new Date
@@ -153,7 +153,8 @@
 				solid.updateBBox();
 				solid.fall();
 			}
-		}};
+		};
+		solid.icon.drag(drag.move, drag.start, drag.end);
 	}
 	
 	function World(panel, template){
@@ -170,9 +171,7 @@
 				solid.world = worldInstance;
 				solid.updateBBox();
 				solid.world.solids.push(solid);
-				with(Mouse(solid)){
-					icon.drag(drag.move, drag.start, drag.end);
-				}
+				draggable(solid);
 				return solid;
 			},
 			gravity: Gravity
