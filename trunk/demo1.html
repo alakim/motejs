@@ -19,7 +19,7 @@
 				screen.path(["M0,",ground,"L",width,",",ground]);
 			});
 			
-			world.add(Mote.solid([25, 85], function(screen, pos){
+			world.add(Mote.solid([25, 85], 10, function(screen, pos){
 				var set = screen.set();
 				set.push(
 					screen.rect(pos.x, pos.y, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
@@ -29,16 +29,16 @@
 				return set;
 			})).fall();
 			
-			world.add(Mote.solid([65, 85], function(screen, pos){
+			world.add(Mote.solid([65, 85], 5, function(screen, pos){
 				return screen.rect(pos.x, pos.y, 20, 20).attr({fill:"#ffc", stroke:"#558"});
 			})).fall();
 			
-			world.add(Mote.solid([125, world.gravity.groundPosition], function(screen, pos){
+			world.add(Mote.solid([125, world.gravity.groundPosition], 50, function(screen, pos){
 				var size = 50;
 				return screen.rect(pos.x, pos.y-size, size, size).attr({fill:"#ccc", stroke:"#888"});
 			}).static());
 			
-			world.add(Mote.solid([225, 85], function(screen, pos){
+			world.add(Mote.solid([225, 85], 8, function(screen, pos){
 				var d = 10;
 				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
 			})).fall();

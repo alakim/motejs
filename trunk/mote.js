@@ -91,13 +91,43 @@
 				
 				var ground = solid.getGroundPos();
 				
-				var absPos = solid.transformation.T.y + solid.spawnPosition.y + solid.bbox.height;
-				if(absPos>=ground){
-					solid.transformation.T.y = ground - solid.spawnPosition.y - solid.bbox.height;
+				var screenWidth = solid.world.getScreen().width;
+				
+				var absPos = {
+					x: solid.transformation.T.x + solid.spawnPosition.x,
+					y: solid.transformation.T.y + solid.spawnPosition.y + solid.bbox.height
+				};
+				
+				function terminate(){
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
-					
 					solid.icon.attr({transform:solid.transformation});
 					solid.updateBBox();
+				}
+				
+				if(absPos.y>=ground && solid.velocity.vy>0){
+					solid.transformation.T.y = ground - solid.spawnPosition.y - solid.bbox.height;
+					terminate();
+				}
+				else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.vy<0){
+					solid.transformation.T.y = 0;
+					terminate();
+					solid.velocity.vx = state.velocity.vx;
+					solid.velocity.vy = -state.velocity.vy;
+					solid.fall();
+				}
+				else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.vx<0){
+					solid.transformation.T.x = -solid.spawnPosition.x;
+					terminate();
+					solid.velocity.vx = -state.velocity.vx;
+					solid.velocity.vy = state.velocity.vy;
+					solid.fall();
+				}
+				else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.vx>0){
+					solid.transformation.T.x = screenWidth - solid.spawnPosition.x - solid.bbox.width;
+					terminate();
+					solid.velocity.vx = -state.velocity.vx;
+					solid.velocity.vy = state.velocity.vy;
+					solid.fall();
 				}
 				else{
 					solid.icon.attr({transform:solid.transformation});
@@ -164,6 +194,7 @@
 		var worldInstance = {
 			getScreen: function(){return screen;},
 			solids: [],
+			reflect:{top:1, left:1, right:1},
 			add: function(solid){
 				var icon = solid.template(screen, solid.spawnPosition);
 				icon.data("solid", solid);
@@ -182,12 +213,44 @@
 		return worldInstance;
 	}
 	
-	function Collision(solid1, solid2, angle, decrement){
-		angle = angle || 0;
-		decrement = decrement || .5;
+	function deg2Rad (deg) { return deg / 180 * Math.PI; }
+	function rad2Deg (rad) { return rad / Math.PI * 180; }
+
+	// Возвращает разложение вектора в системе координат, 
+	// развернутой на угол angle (в градусах)
+	function vector(vx, vy, angle){
+		var abs = Math.sqrt(vx*vx + vy*vy),
+			vAngle = Math.atan(vx/vy) + deg2rad(angle); // угол вектора относительно новой системы координат
+		
+		return {
+			vx: vx, vy: vy,
+			// модуль вектора
+			abs: abs,
+			// нормальная составляющая
+			n: Math.sin(vAngle)*abs,
+			// продольная составляющая
+			t: Math.cos(vAngle)*abs
+		}
 	}
 	
-	function Solid(pos, template){
+	function Collision(solid1, solid2, decrement){
+		var pos1 = solid1.getPosition(),
+			pos2 = solid2.getPosition();
+		var angle = $R.angle(pos1.x, pos1.y, pos2.x, pos2.y);
+
+		decrement = decrement || .5;
+		// var v = {
+		// 	vx: (solid1.velocity.vx + solid2.velocity.vx)*decrement,
+		// 	vy: (solid1.velocity.vy + solid2.velocity.vy)*decrement
+		// };
+		
+		var v1 = vector(solid1.velocity.vx, solid1.velocity.vy, angle),
+			v2 = vector(solid2.velocity.vx, solid2.velocity.vy, angle);
+			
+		
+	}
+	
+	function Solid(pos, mass, template){
 		if(!pos) pos = {x:0, y:0};
 		else if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		
@@ -198,7 +261,14 @@
 		return {
 			id: getUID(),
 			spawnPosition: pos,
+			mass: mass,
 			transformation: new Transformation(),
+			getPosition: function(){
+				return {
+					x: this.spawnPosition.x + this.transformation.T.x,
+					x: this.spawnPosition.y + this.transformation.T.y
+				};
+			},
 			velocity: new Velocity(),
 			template: template,
 			fallState: null,
