@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>12</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>72</x>
+      <y>372</y>
+      <w>192</w>
+      <h>204</h>
+    </coordinates>
+    <panel_attributes>World
+--
+--
+add(solid)
+template()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>552</x>
+      <y>372</y>
+      <w>120</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>Solid
+--
+spawnPosition
+template
+isStatic
+icon
+bbox
+--
+fall()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>948</x>
+      <y>252</y>
+      <w>156</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Transformation
+--
+T
+R
+--
+shift(dx, dy)
+clone()
+toString()
+_obtain(icon)_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>288</y>
+      <w>336</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=transformation</panel_attributes>
+    <additional_attributes>36;144;312;36</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>960</x>
+      <y>468</y>
+      <w>192</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Velocity
+--
+vx
+vy
+--
+set(vx, vy)
+accelerate(dVx, dVy)
+toString()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>420</y>
+      <w>348</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=velocity</panel_attributes>
+    <additional_attributes>36;36;324;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>408</x>
+      <y>660</y>
+      <w>120</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Gravity
+--
+acceleration
+--
+fall(solid)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>228</x>
+      <y>444</y>
+      <w>228</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=gravity</panel_attributes>
+    <additional_attributes>36;36;204;216</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>228</x>
+      <y>408</y>
+      <w>348</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+r1=world</panel_attributes>
+    <additional_attributes>36;36;324;36</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>540</x>
+      <y>216</y>
+      <w>180</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Icon
+&lt;&lt;Raphael Object&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>588</x>
+      <y>264</y>
+      <w>60</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>36;108;36;36</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>780</x>
+      <y>624</y>
+      <w>180</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>FallState
+--
+solid
+baseTransform
+height
+duration
+acceleration</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>444</y>
+      <w>240</w>
+      <h>204</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+r2=fallState
+m2=0..1</panel_attributes>
+    <additional_attributes>36;36;216;180</additional_attributes>
+  </element>
+</diagram>
