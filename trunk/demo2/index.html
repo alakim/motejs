@@ -21,42 +21,58 @@
 			});
 			world.reflect.top = false;
 
-			for(var i=0; i<3; i++){
+			for(var i=0; i<1; i++){
 				world.add(Mote.solid([100 + i*80, 100], 19, function(screen, pos){
 					return screen.image("creeper.png", pos.x, pos.y, 57, 164);
 				})).fall();
 			}
 
-			world.add(Mote.solid([500, 100], 19, function(screen, pos){
+			/*world.add(Mote.solid([500, 100], 19, function(screen, pos){
 				return screen.image("steve.png", pos.x, pos.y, 113, 249);
+			})).fall();*/
+
+			world.add(Mote.solid([700, 100], 19, function(screen, pos){
+				return screen.circle(0, 0, 8).attr({fill:"#f00"});
 			})).fall();
-			
-		
-			/*
-			world.add(Mote.solid([35, 85], 10, function(screen, pos){
+
+			/*world.add(Mote.solid([700, 100], 19, function(screen, pos){
+				return screen.circle(0, 0, 8).attr({fill:"#f00"});
+
 				var set = screen.set();
 				set.push(
-					screen.rect(pos.x, pos.y, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
-					screen.rect(pos.x+5, pos.y+5, 8, 8).attr({fill:"#ccf", stroke:"#558"}),
-					screen.circle(pos.x+5, pos.y+10, 5, 5).attr({fill:"#f00", stroke:"#800"})
+					screen.rect(29, 5, 81, 79).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(39, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+					screen.rect(77, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+					screen.rect(46, 33, 10, 8).attr({fill:"#000", "stroke-width":0}),
+					screen.rect(82, 34, 10, 8).attr({fill:"#000", "stroke-width":0}),
+
+					screen.rect(48, 67, 40, 6).attr({fill:"#000", "stroke-width":0}),
+					screen.rect(29, 5, 81, 16).attr({fill:"#7e461f", "stroke-width":0}),
+					screen.rect(29, 83, 81, 118).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(50, 82, 37, 14).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(108, 81, 26, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(2, 82, 27, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(77, 202, 35, 98).attr({fill:"#0000ff", "stroke-width":0}),
+					screen.rect(28, 202, 36, 100).attr({fill:"#0000ff", "stroke-width":0}),
+					screen.rect(108, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(2, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(27, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+					screen.rect(76, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+					screen.rect(29, 172, 82, 35).attr({fill:"#0000ff", "stroke-width":0}),
+
+					screen.circle(0, 0, 8).attr({fill:"#f00"})
 				);
 				return set;
-			})).fall();
+			})).fall();*/
+
+
+
+
+
+			/*world.add(Mote.solid([900, 100], 19, function(screen, pos){
+				return screen.image("zombie.png", pos.x, pos.y, 113, 249);
+			})).fall();*/
 			
-			world.add(Mote.solid([65, 85], 5, function(screen, pos){
-				return screen.rect(pos.x, pos.y, 20, 20).attr({fill:"#00f", stroke:"#558"});
-			})).fall();
-			
-			world.add(Mote.solid([125, world.gravity.groundPosition], 50, function(screen, pos){
-				var size = 50;
-				return screen.rect(pos.x, pos.y-size, size, size).attr({fill:"#ccc", stroke:"#888"});
-			}).static());
-			
-			world.add(Mote.solid([225, 85], 8, function(screen, pos){
-				var d = 10;
-				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
-			})).fall();
-			*/
 			
 		});
 	</script>
