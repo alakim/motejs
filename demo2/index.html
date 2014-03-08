@@ -27,51 +27,44 @@
 				})).fall();
 			}
 
-			/*world.add(Mote.solid([500, 100], 19, function(screen, pos){
+			world.add(Mote.solid([500, 100], 19, function(screen, pos){
 				return screen.image("steve.png", pos.x, pos.y, 113, 249);
-			})).fall();*/
-
-			world.add(Mote.solid([700, 100], 19, function(screen, pos){
-				return screen.circle(0, 0, 8).attr({fill:"#f00"});
 			})).fall();
 
-			/*world.add(Mote.solid([700, 100], 19, function(screen, pos){
-				return screen.circle(0, 0, 8).attr({fill:"#f00"});
 
+			world.add(Mote.solid([700, 100], 19, function(screen, pos){
 				var set = screen.set();
 				set.push(
-					screen.rect(29, 5, 81, 79).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(39, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
-					screen.rect(77, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
-					screen.rect(46, 33, 10, 8).attr({fill:"#000", "stroke-width":0}),
-					screen.rect(82, 34, 10, 8).attr({fill:"#000", "stroke-width":0}),
+					screen.rect(pos.x+29, pos.y+5, 81, 79).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(pos.x+39, pos.y+30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+					screen.rect(pos.x+77, pos.y+30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+					screen.rect(pos.x+46, pos.y+33, 10, 8).attr({fill:"#000", "stroke-width":0}),
+					screen.rect(pos.x+82, pos.y+34, 10, 8).attr({fill:"#000", "stroke-width":0}),
 
-					screen.rect(48, 67, 40, 6).attr({fill:"#000", "stroke-width":0}),
-					screen.rect(29, 5, 81, 16).attr({fill:"#7e461f", "stroke-width":0}),
-					screen.rect(29, 83, 81, 118).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(50, 82, 37, 14).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(108, 81, 26, 94).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(2, 82, 27, 94).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(77, 202, 35, 98).attr({fill:"#0000ff", "stroke-width":0}),
-					screen.rect(28, 202, 36, 100).attr({fill:"#0000ff", "stroke-width":0}),
-					screen.rect(108, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(2, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(27, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
-					screen.rect(76, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
-					screen.rect(29, 172, 82, 35).attr({fill:"#0000ff", "stroke-width":0}),
-
-					screen.circle(0, 0, 8).attr({fill:"#f00"})
+					screen.rect(pos.x+48, pos.y+67, 40, 6).attr({fill:"#000", "stroke-width":0}),
+					screen.rect(pos.x+29, pos.y+5, 81, 16).attr({fill:"#7e461f", "stroke-width":0}),
+					screen.rect(pos.x+29, pos.y+83, 81, 118).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(pos.x+50, pos.y+82, 37, 14).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(pos.x+108, pos.y+81, 26, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(pos.x+2, pos.y+82, 27, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+					screen.rect(pos.x+77, pos.y+202, 35, 98).attr({fill:"#0000ff", "stroke-width":0}),
+					screen.rect(pos.x+28, pos.y+202, 36, 100).attr({fill:"#0000ff", "stroke-width":0}),
+					screen.rect(pos.x+108, pos.y+81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(pos.x+2, pos.y+81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+					screen.rect(pos.x+27, pos.y+288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+					screen.rect(pos.x+76, pos.y+288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+					screen.rect(pos.x+29, pos.y+172, 82, 35).attr({fill:"#0000ff", "stroke-width":0})
 				);
 				return set;
-			})).fall();*/
+			})).fall();
 
 
 
 
 
-			/*world.add(Mote.solid([900, 100], 19, function(screen, pos){
+			world.add(Mote.solid([900, 100], 19, function(screen, pos){
 				return screen.image("zombie.png", pos.x, pos.y, 113, 249);
-			})).fall();*/
+			})).fall();
 			
 			
 		});
