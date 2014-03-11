@@ -318,6 +318,9 @@
 		version:"2.2",
 		world: World,
 		solid: Solid,
-		Transformation: Transformation
+		getUID: getUID,
+		Transformation: Transformation,
+		Velocity: Velocity,
+		requestAnimFrame: function(){return requestAnimFrame;}
 	};
 })(jQuery, Html, Raphael);
