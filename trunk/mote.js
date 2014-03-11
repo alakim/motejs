@@ -317,6 +317,7 @@
 	return {
 		version:"2.2",
 		world: World,
-		solid: Solid
+		solid: Solid,
+		Transformation: Transformation
 	};
 })(jQuery, Html, Raphael);
