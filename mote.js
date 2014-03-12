@@ -36,9 +36,14 @@
 			var Tx = 0, Ty = 0, R = 0;
 			var tAttr = icon.attr("transform");
 			$.each(tAttr, function(i, cmd){
-				if(cmd[0]!="T") return;
-				Tx+=cmd[1];
-				Ty+=cmd[2];
+				if(cmd[0]=="T"){ 
+					Tx+=cmd[1];
+					Ty+=cmd[2];
+				}
+				else if(cmd[0]=="R"){
+					if(cmd.length==2) R = cmd[1]
+					else if(cmd.length==4) R = [cmd[1], cmd[2], cmd[3]];
+				}
 			});
 			return new Transformation(Tx, Ty, R);
 		}

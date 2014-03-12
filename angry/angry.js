@@ -4,7 +4,7 @@
 		width = 100,
 		basketSize = 15,
 		basketWidth = basketSize*2,
-		elasticModulus = .02;
+		elasticModulus = .0002;
 		
 	var basket, tape;
 	
@@ -13,28 +13,56 @@
 			var dt = +new Date - data("time"),
 				tension = data("tension"),
 				angle = data("angle"),
+				angleRad = $R.rad(angle);
 				velocity = data("velocity");
 		}
 		var m = 1,
 			a = tension/m,
 			dx = dt*velocity.vx,
 			dy = dt*velocity.vy,
-			dVx = a*dt*Math.cos(angle),
-			dVy = a*dt*Math.sin(angle)
+			dVx = a*dt*Math.cos(angleRad),
+			dVy = a*dt*Math.sin(angleRad),
+			targetPoint = basket.data("targetPoint");
 			
 		velocity.accelerate(dVx, dVy);
 		var tapePath = tape.attr("path");
-		tapePath[1][1] -= dx;
-		tapePath[1][2] -= dy;
+		
+		tapePath[1][1] += dx;
+		tapePath[1][2] += dy;
+		if(tapePath[1][1]>targetPoint.x || tapePath[1][2]<targetPoint.y){
+			tapePath[1][1] = targetPoint.x;
+			tapePath[1][2] = targetPoint.y;
+		}
 		tape.attr("path", tapePath);
 		
-		tension = ($R.getTotalLength(tapePath) - width)*elasticModulus;
-		console.log(tension);
+		moveBasketToTape(dx, dy, angle);
 		
-		if(tension>0){
+		tension = ($R.getTotalLength(tapePath) - width)*elasticModulus;
+		
+		if(tapePath[1][1]<targetPoint.x && tension>0){
 			basket.data("tension", tension);
 			$M.requestAnimFrame()(animate);
 		}
+	}
+	
+	function moveBasketToTape(dx, dy, angle){
+		var tapePath = tape.attr("path"),
+			tapeEnd = {
+				x: tapePath[1][1],
+				y: tapePath[1][2]
+			};
+		var bPos = {
+				x: basket.attr("x"),
+				y: basket.attr("y")
+			},
+			bTr = $M.Transformation.obtain(basket);
+		
+		bTr.T.x = tapeEnd.x - bPos.x - basketWidth;
+		bTr.T.y = tapeEnd.y - bPos.y - basketSize/2;
+		bTr.R = [angle, tapeEnd.x, tapeEnd.y];
+		basket.transform(bTr);
+
+		
 	}
 		
 	function draggable(basket){
@@ -67,6 +95,9 @@
 				var tension = this.data("tension");
 				this.data("time", +new Date);
 				this.data("velocity", new $M.Velocity);
+				var targetPoint = $R.getPointAtLength(tape.attr("path"), width);
+				this.data("targetPoint", targetPoint);
+				//this.data("screen").circle(targetPoint.x, targetPoint.y, 2).attr({fill:"red"});
 				$M.requestAnimFrame()(animate);
 			}
 		};
@@ -81,6 +112,7 @@
 			basket = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
 			basket.data("basePoint", {x:pos.x, y:pos.y-height});
+			//basket.data("screen", screen);
 			draggable(basket);
 			
 			return support;
