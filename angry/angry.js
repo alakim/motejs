@@ -6,7 +6,7 @@
 		basketWidth = basketSize*2,
 		elasticModulus = .0002;
 		
-	var basketIcon, tape;
+	var basket, basketIcon, tape;
 	
 	function animate(){
 		with(basketIcon){
@@ -63,10 +63,10 @@
 		basketIcon.transform(bTr);
 	}
 		
-	function draggable(basketIcon){
-		var drag = {
+	function draggableBasket(basket){
+		var drag2 = {
 			move: function(dx, dy, x, y, e) {
-				var trf = this.data("current_transform").clone().shift(dx, dy);
+				var trf = $M.Transformation.obtain(this);
 				
 				var basePoint = this.data("basePoint"),
 					x0 = this.attr("x"),
@@ -87,7 +87,7 @@
 				this.data("angle", alpha);
 			},
 			start:function(x, y, e) {
-				this.data("current_transform", $M.Transformation.obtain(this));
+				//this.data("current_transform", $M.Transformation.obtain(this));
 			},
 			end: function(e) {
 				var tension = this.data("tension");
@@ -99,24 +99,40 @@
 				$M.requestAnimFrame()(animate);
 			}
 		};
-		basketIcon.drag(drag.move, drag.start, drag.end);
-		return basketIcon;
+		var drag1 = {
+			start: function(){console.log("start dragging basket");},
+			move: function(){console.log("move dragging basket");},
+			end: function(){console.log("end dragging basket");},
+		};
+		// basket.icon.drag(drag.move, drag.start, drag.end);
+		// return basket.icon;
+		$.extend(basket.drag, drag2);
 	}
 	
 	
-	function Gun(pos, template){
+	function Gun(world, pos, template){
+		if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		template = template || function(screen, pos){
 			var support = screen.rect(pos.x, pos.y-height, 5, height).attr(attColor);
-			basketIcon = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
+			//basketIcon = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
-			basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
 			//basket.data("screen", screen);
-			draggable(basketIcon);
+			//draggable(basketIcon);
 			
 			return support;
 		};
 		var gun = $M.solid(pos, 1e7, template).static();
-		return gun;
+		world.add(gun);
+		basket = world.add($M.solid(pos, 1, function(screen, pos){
+			return screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"});
+		}));
+		basket.falling = false;
+		draggableBasket(basket);
+		basketIcon = basket.icon;
+		basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
+		basket.accept = function(solid){
+			console.log("basket accepts "+solid.id);
+		}
 	}
 	
 	return {

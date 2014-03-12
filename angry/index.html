@@ -32,7 +32,7 @@
 				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
 			})).fall();
 			
-			world.add(Angry.gun([250, world.gravity.groundPosition]));
+			Angry.gun(world, [250, world.gravity.groundPosition]);
 		});
 	</script>
 </head>

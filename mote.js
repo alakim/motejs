@@ -158,39 +158,44 @@
 	function draggable(solid){
 		var drag = {
 			move: function(dx, dy, x, y, e) {
-				if(solid.isStatic || !solid.drag)return;
+				if(solid.isStatic || !solid.drag.state)return;
 				var now = +new Date
-					dt = now - solid.drag.time;
-				solid.drag.time = now;
+					dt = now - solid.drag.state.time;
+				solid.drag.state.time = now;
 				
 				var rate = .5;
 				var x0 = solid.transformation.T.x,
 					y0 = solid.transformation.T.y;
 				
-				solid.transformation = solid.drag.baseTransform.clone().shift(dx, dy);
+				solid.transformation = solid.drag.state.baseTransform.clone().shift(dx, dy);
 				solid.icon.attr({transform: solid.transformation});
 
 				solid.velocity.set(
 					(solid.transformation.T.x - x0)*rate/dt,
 					(solid.transformation.T.y - y0)*rate/dt
 				);
+				solid.drag.move.call(solid.icon, dx, dy, x, y, e);
 			},
 			start:function(x, y, e) {
 				if(solid.isStatic)return;
-				solid.drag = {
+				solid.drag.state = {
 					baseTransform: Transformation.obtain(this),
 					time: +new Date
 				};
+				solid.drag.start.call(solid.icon, x, y, e);
 			},
 			end: function(e) {
 				if(solid.isStatic)return;
-				solid.drag = null;
+				solid.drag.state = null;
 				solid.updateBBox();
 				for(var sld,C=solid.world.solids,i=0; sld=C[i],i<C.length; i++){
 					if(sld===solid) continue;
-					if($R.isBBoxIntersect(solid.bbox, sld.bbox))
+					if($R.isBBoxIntersect(solid.bbox, sld.bbox)){
 						solid.connect(sld);
+						sld.accept(solid);
+					}
 				}
+				solid.drag.end.call(solid.icon, e);
 				solid.fall();
 			}
 		};
@@ -286,7 +291,9 @@
 			bbox:null,
 			isStatic: false,
 			"static": function(v){this.isStatic = v==null?true:v; return this;},
+			falling: true,
 			fall: function(){
+				if(!this.falling) return;
 				this.world.gravity.fall(this);
 			},
 			updateBBox: function(){
@@ -323,6 +330,14 @@
 			},
 			connect: function(solid){
 				// console.log([this.id, " connected to ", solid.id]);
+			},
+			accept: function(solid){
+				// console.log([this.id, " accepts ", solid.id]);
+			},
+			drag:{
+				start: function(){},
+				move: function(){},
+				end: function(){}
 			}
 		};
 	}
