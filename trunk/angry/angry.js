@@ -28,10 +28,6 @@
 		tapePath[1][2] -= dy;
 		tape.attr("path", tapePath);
 		
-		// console.log(dx, dy);
-		// console.log(tapePath);
-		// console.log($R.getTotalLength(tapePath));
-		
 		tension = ($R.getTotalLength(tapePath) - width)*elasticModulus;
 		console.log(tension);
 		
@@ -53,10 +49,9 @@
 					y1 = y0 + trf.T.y + basketSize/2,
 					alpha = $R.angle(basePoint.x, basePoint.y, x1, y1);
 					
-				trf.R = alpha;
+				trf.R = [alpha, x1, y1];
 				this.transform(trf);
 				
-				// var tape = this.data("tape");
 				var path = tape.attr("path");
 				path[1][1] = x1;
 				path[1][2] = y1;
@@ -85,7 +80,6 @@
 			var support = screen.rect(pos.x, pos.y-height, 5, height).attr(attColor);
 			basket = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
-			//basket.data("tape", tape);
 			basket.data("basePoint", {x:pos.x, y:pos.y-height});
 			draggable(basket);
 			

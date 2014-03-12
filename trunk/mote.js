@@ -28,7 +28,7 @@
 		toString: function(){
 			return "Tx,yRr".replace("x", this.T.x)
 				.replace("y", this.T.y)
-				.replace("r", this.R);
+				.replace("r", this.R instanceof Array?this.R.join(","):this.R);
 		}
 	});
 	$.extend(Transformation, {
