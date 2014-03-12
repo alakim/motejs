@@ -77,6 +77,10 @@
 					
 				trf.R = [alpha, x1, y1];
 				this.transform(trf);
+				var accepted = this.data("solid").accepted;
+				if(accepted){
+					accepted.icon.transform(trf);
+				}
 				
 				var path = tape.attr("path");
 				path[1][1] = x1;
@@ -132,6 +136,10 @@
 		basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
 		basket.accept = function(solid){
 			console.log("basket accepts "+solid.id);
+			solid.falling = false;
+			//var trf = $M.Transformation.obtain(solid);
+			solid.icon.attr({fill:"orange"});
+			basket.accepted = solid;
 		}
 	}
 	
