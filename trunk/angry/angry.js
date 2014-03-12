@@ -6,10 +6,10 @@
 		basketWidth = basketSize*2,
 		elasticModulus = .0002;
 		
-	var basket, tape;
+	var basketIcon, tape;
 	
 	function animate(){
-		with(basket){
+		with(basketIcon){
 			var dt = +new Date - data("time"),
 				tension = data("tension"),
 				angle = data("angle"),
@@ -22,7 +22,7 @@
 			dy = dt*velocity.vy,
 			dVx = a*dt*Math.cos(angleRad),
 			dVy = a*dt*Math.sin(angleRad),
-			targetPoint = basket.data("targetPoint");
+			targetPoint = basketIcon.data("targetPoint");
 			
 		velocity.accelerate(dVx, dVy);
 		var tapePath = tape.attr("path");
@@ -35,37 +35,35 @@
 		}
 		tape.attr("path", tapePath);
 		
-		moveBasketToTape(dx, dy, angle);
+		moveBasketToTape(angle);
 		
 		tension = ($R.getTotalLength(tapePath) - width)*elasticModulus;
 		
 		if(tapePath[1][1]<targetPoint.x && tension>0){
-			basket.data("tension", tension);
+			basketIcon.data("tension", tension);
 			$M.requestAnimFrame()(animate);
 		}
 	}
 	
-	function moveBasketToTape(dx, dy, angle){
+	function moveBasketToTape(angle){
 		var tapePath = tape.attr("path"),
 			tapeEnd = {
 				x: tapePath[1][1],
 				y: tapePath[1][2]
 			};
 		var bPos = {
-				x: basket.attr("x"),
-				y: basket.attr("y")
+				x: basketIcon.attr("x"),
+				y: basketIcon.attr("y")
 			},
-			bTr = $M.Transformation.obtain(basket);
+			bTr = $M.Transformation.obtain(basketIcon);
 		
 		bTr.T.x = tapeEnd.x - bPos.x - basketWidth;
 		bTr.T.y = tapeEnd.y - bPos.y - basketSize/2;
 		bTr.R = [angle, tapeEnd.x, tapeEnd.y];
-		basket.transform(bTr);
-
-		
+		basketIcon.transform(bTr);
 	}
 		
-	function draggable(basket){
+	function draggable(basketIcon){
 		var drag = {
 			move: function(dx, dy, x, y, e) {
 				var trf = this.data("current_transform").clone().shift(dx, dy);
@@ -101,19 +99,19 @@
 				$M.requestAnimFrame()(animate);
 			}
 		};
-		basket.drag(drag.move, drag.start, drag.end);
-		return basket;
+		basketIcon.drag(drag.move, drag.start, drag.end);
+		return basketIcon;
 	}
 	
 	
 	function Gun(pos, template){
 		template = template || function(screen, pos){
 			var support = screen.rect(pos.x, pos.y-height, 5, height).attr(attColor);
-			basket = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
+			basketIcon = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
-			basket.data("basePoint", {x:pos.x, y:pos.y-height});
+			basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
 			//basket.data("screen", screen);
-			draggable(basket);
+			draggable(basketIcon);
 			
 			return support;
 		};

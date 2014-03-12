@@ -186,6 +186,11 @@
 				if(solid.isStatic)return;
 				solid.drag = null;
 				solid.updateBBox();
+				for(var sld,C=solid.world.solids,i=0; sld=C[i],i<C.length; i++){
+					if(sld===solid) continue;
+					if($R.isBBoxIntersect(solid.bbox, sld.bbox))
+						solid.connect(sld);
+				}
 				solid.fall();
 			}
 		};
@@ -315,6 +320,9 @@
 					attr = {stroke:color};
 				screen.rect(box.x, box.y, box.width, box.height).attr(attr);
 				screen.circle(box.x2, box.y2, 4).attr(attr);
+			},
+			connect: function(solid){
+				// console.log([this.id, " connected to ", solid.id]);
 			}
 		};
 	}
