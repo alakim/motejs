@@ -133,11 +133,10 @@
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
 			return support;
 		};
-		var gun = $M.solid(pos, 1e7, template).static();
-		world.add(gun);
-		basket = world.add($M.solid(pos, 1, function(screen, pos){
+		var gun = $M.solid(world, pos, 1e7, template).static();
+		basket = $M.solid(world, pos, 1, function(screen, pos){
 			return screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"});
-		}));
+		});
 		basket.falling = false;
 		draggableBasket(basket);
 		basketIcon = basket.icon;
@@ -149,7 +148,7 @@
 	}
 	
 	return {
-		version: "1.1",
+		version: "1.2",
 		gun: Gun
 	};
 })(jQuery, Raphael, Mote);

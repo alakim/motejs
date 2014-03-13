@@ -20,7 +20,7 @@
 			});
 			world.reflect.top = false;
 			
-			world.add(Mote.solid([35, 85], 10, function(screen, pos){
+			Mote.solid(world, [35, 85], 10, function(screen, pos){
 				var set = screen.set();
 				set.push(
 					screen.rect(pos.x, pos.y, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
@@ -28,21 +28,21 @@
 					screen.circle(pos.x+5, pos.y+10, 5, 5).attr({fill:"#f00", stroke:"#800"})
 				);
 				return set;
-			})).fall();
+			}).fall();
 			
-			world.add(Mote.solid([65, 85], 5, function(screen, pos){
+			Mote.solid(world, [65, 85], 5, function(screen, pos){
 				return screen.rect(pos.x, pos.y, 20, 20).attr({fill:"#00f", stroke:"#558"});
-			})).fall();
+			}).fall();
 			
-			world.add(Mote.solid([125, world.gravity.groundPosition], 50, function(screen, pos){
+			Mote.solid(world, [125, world.gravity.groundPosition], 50, function(screen, pos){
 				var size = 50;
 				return screen.rect(pos.x, pos.y-size, size, size).attr({fill:"#ccc", stroke:"#888"});
-			}).static());
+			}).static();
 			
-			world.add(Mote.solid([225, 85], 8, function(screen, pos){
+			Mote.solid(world, [225, 85], 8, function(screen, pos){
 				var d = 10;
 				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
-			})).fall();
+			}).fall();
 			
 		});
 	</script>

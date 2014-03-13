@@ -265,7 +265,7 @@
 		
 	}
 	
-	function Solid(pos, mass, template){
+	function Solid(world, pos, mass, template){
 		if(!pos) pos = {x:0, y:0};
 		else if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		
@@ -273,7 +273,7 @@
 			template = function(screen, pos){
 				return screen.rect(pos.x, pos.y, 10, 10).attr({fill:"#ffc", stroke:"#448"});
 			}
-		return {
+		var solidInstance = {
 			id: getUID(),
 			spawnPosition: pos,
 			mass: mass,
@@ -340,10 +340,11 @@
 				end: function(){}
 			}
 		};
+		return world.add(solidInstance);
 	}
 
 	return {
-		version:"2.3",
+		version:"3.0",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
