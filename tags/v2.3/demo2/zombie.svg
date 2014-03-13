@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="zombie.svg"
+   inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/creeper.png"
+   inkscape:export-xdpi="75"
+   inkscape:export-ydpi="75">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective3822" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="214.97662"
+     inkscape:cy="741.36815"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="742"
+     inkscape:window-x="-3"
+     inkscape:window-y="35"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       y="135.14368"
+       x="169.70563"
+       height="79.802055"
+       width="81.822357"
+       id="rect3762"
+       style="fill:#008000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="160.39751"
+       x="179.80714"
+       height="8.0812244"
+       width="22.223358"
+       id="rect3770"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="166.45842"
+       x="179.80714"
+       height="8.0812244"
+       width="22.223358"
+       id="rect3772"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="168.47873"
+       x="217.18279"
+       height="8.0812244"
+       width="22.223358"
+       id="rect3774"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="161.40765"
+       x="217.18279"
+       height="8.0812244"
+       width="22.223358"
+       id="rect3764"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="164.67795"
+       x="192.64851"
+       height="8.0812244"
+       width="10.101527"
+       id="rect3766"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="rect2992"
+       width="10.101527"
+       height="8.0812244"
+       x="216.88167"
+       y="163.1881"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       inkscape:export-ydpi="75"
+       inkscape:export-xdpi="75"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="rect3003"
+       width="40.406101"
+       height="15.152288"
+       x="188.89854"
+       y="188.68176" />
+    <rect
+       y="189.69191"
+       x="197.98991"
+       height="5.0507631"
+       width="8.0812197"
+       id="rect3015"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="189.69191"
+       x="213.1422"
+       height="5.0507631"
+       width="8.0812197"
+       id="rect3017"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       inkscape:export-ydpi="75"
+       inkscape:export-xdpi="75"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/steve.png"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3013"
+       width="8.0812197"
+       height="6.0609155"
+       x="379.81738"
+       y="422.02701" />
+    <rect
+       inkscape:export-ydpi="75"
+       inkscape:export-xdpi="75"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3019"
+       width="8.0812197"
+       height="5.0507631"
+       x="188.89851"
+       y="197.77315" />
+    <rect
+       inkscape:export-ydpi="75"
+       inkscape:export-xdpi="75"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3021"
+       width="8.0812197"
+       height="5.0507631"
+       x="204.0508"
+       y="197.77315" />
+    <rect
+       inkscape:export-ydpi="75"
+       inkscape:export-xdpi="75"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3023"
+       width="8.0812197"
+       height="5.0507631"
+       x="220.21324"
+       y="196.76299" />
+    <rect
+       y="213.93558"
+       x="169.70564"
+       height="118.18785"
+       width="81.82235"
+       id="rect3784"
+       style="fill:#00ffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="212.92542"
+       x="190.91884"
+       height="14.142138"
+       width="37.375641"
+       id="rect3786"
+       style="fill:#008000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="211.91527"
+       x="250.51785"
+       height="94.954338"
+       width="26.263962"
+       id="rect3788"
+       style="fill:#008000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="212.92542"
+       x="142.43152"
+       height="94.954338"
+       width="27.274117"
+       id="rect3790"
+       style="fill:#008000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="332.12341"
+       x="217.18282"
+       height="98.994949"
+       width="35.355335"
+       id="rect3792"
+       style="fill:#0000ff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="332.12341"
+       x="168.69548"
+       height="100.0051"
+       width="36.365486"
+       id="rect3794"
+       style="fill:#0000ff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="211.91527"
+       x="248.49753"
+       height="30.304575"
+       width="29.29442"
+       id="rect3796"
+       style="fill:#00ffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="211.91527"
+       x="142.4315"
+       height="30.304575"
+       width="29.29442"
+       id="rect3798"
+       style="fill:#00ffff;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="418.99652"
+       x="167.68533"
+       height="15.152289"
+       width="38.385796"
+       id="rect3804"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       y="418.99652"
+       x="216.17265"
+       height="15.152289"
+       width="38.385796"
+       id="rect3806"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+    <rect
+       style="fill:#0000ff;fill-opacity:1;stroke:none"
+       id="rect3812"
+       width="82.832504"
+       height="35.355339"
+       x="169.70563"
+       y="302.82901"
+       inkscape:export-filename="/home/alakim/Projects/_SvnRepositories/GoogleCode/motejs/trunk/trunk/demo2/zombie.png"
+       inkscape:export-xdpi="75"
+       inkscape:export-ydpi="75" />
+  </g>
+</svg>
