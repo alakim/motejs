@@ -43,6 +43,16 @@
 			basketIcon.data("tension", tension);
 			$M.requestAnimFrame()(animate);
 		}
+		else{
+			basket.updateBBox();
+			if(basket.accepted){with(basket){
+				var v = icon.data("maxTension")*m*50;
+				accepted.velocity.set(v*Math.cos(angleRad), v*Math.sin(angleRad));
+				accepted.falling = true;
+				accepted.fall();
+				accepted = null;
+			}}
+		}
 	}
 	
 	function moveBasketToTape(angle){
@@ -96,11 +106,12 @@
 				path[1][2] = y1;
 				tape.attr({path:path});
 				
-				this.data("tension", ($R.getTotalLength(path) - width)*elasticModulus);
+				var tension = ($R.getTotalLength(path) - width)*elasticModulus
+				this.data("maxTension", tension);
+				this.data("tension", tension);
 				this.data("angle", alpha);
 			},
 			start:function(x, y, e) {
-				//this.data("current_transform", $M.Transformation.obtain(this));
 			},
 			end: function(e) {
 				var tension = this.data("tension");
@@ -108,17 +119,9 @@
 				this.data("velocity", new $M.Velocity);
 				var targetPoint = $R.getPointAtLength(tape.attr("path"), width);
 				this.data("targetPoint", targetPoint);
-				//this.data("screen").circle(targetPoint.x, targetPoint.y, 2).attr({fill:"red"});
 				$M.requestAnimFrame()(animate);
 			}
 		};
-		var drag1 = {
-			start: function(){console.log("start dragging basket");},
-			move: function(){console.log("move dragging basket");},
-			end: function(){console.log("end dragging basket");},
-		};
-		// basket.icon.drag(drag.move, drag.start, drag.end);
-		// return basket.icon;
 		$.extend(basket.drag, drag2);
 	}
 	
@@ -127,11 +130,7 @@
 		if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		template = template || function(screen, pos){
 			var support = screen.rect(pos.x, pos.y-height, 5, height).attr(attColor);
-			//basketIcon = screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"})
 			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
-			//basket.data("screen", screen);
-			//draggable(basketIcon);
-			
 			return support;
 		};
 		var gun = $M.solid(pos, 1e7, template).static();
@@ -144,16 +143,13 @@
 		basketIcon = basket.icon;
 		basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
 		basket.accept = function(solid){
-			console.log("basket accepts "+solid.id);
 			solid.falling = false;
-			//var trf = $M.Transformation.obtain(solid);
-			solid.icon.attr({fill:"orange"});
 			basket.accepted = solid;
 		}
 	}
 	
 	return {
-		version: "1.0",
+		version: "1.1",
 		gun: Gun
 	};
 })(jQuery, Raphael, Mote);
