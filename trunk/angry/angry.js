@@ -62,6 +62,14 @@
 		bTr.R = [angle, tapeEnd.x, tapeEnd.y];
 		basketIcon.transform(bTr);
 	}
+	
+	function moveAccepted(solid, x, y, angle){
+		var trf = $M.Transformation.obtain(solid.icon);
+		var dx = x - solid.spawnPosition.x,
+			dy = y - solid.spawnPosition.y;
+		trf = new $M.Transformation(dx, dy, angle);
+		solid.icon.transform(trf);
+	}
 		
 	function draggableBasket(basket){
 		var drag2 = {
@@ -79,7 +87,8 @@
 				this.transform(trf);
 				var accepted = this.data("solid").accepted;
 				if(accepted){
-					accepted.icon.transform(trf);
+					var bbox = this.getBBox();
+					moveAccepted(accepted, bbox.x, bbox.y - basketSize/2, [alpha, bbox.x, bbox.y - basketSize/2]);
 				}
 				
 				var path = tape.attr("path");
