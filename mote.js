@@ -236,15 +236,10 @@
 				break;
 			default: this.x = 0; this.y = 0; break;
 		}
-		if(arguments.length==2){
-			this.x = x;
-			this.y = y;
-		}
+		if(arguments.length==2){this.x = x; this.y = y;}
 	}
 	$.extend(Vector, {
-		scalarProd: function(v1, v2){
-			return v1.x*v2.x + v1.y*v2.y;
-		}
+		scalarProd: function(v1, v2){return v1.x*v2.x + v1.y*v2.y;}
 	});
 	$.extend(Vector.prototype, {
 		add: function(x, y){
@@ -252,33 +247,24 @@
 				if(x instanceof Array){this.x+=x[0]; this.y+=x[1];}
 				else if(x instanceof Vector){this.x+=x.x; this.y+=x.y;}
 			}
-			else{
-				this.x+=x;
-				this.y+=y;
-			}
+			else{this.x+=x; this.y+=y;}
 		},
-		mul: function(rate){
-			this.x*=rate;
-			this.y*=rate;
-		},
+		mul: function(rate){this.x*=rate;this.y*=rate;},
 		getAngle: function(degreeMode){
-			degreeMode = degreeMode || true;
+			degreeMode = degreeMode==null?true:degreeMode;
 			var angle = Math.atan(this.y/this.x);
-			if(degreeMode) angle = angle/Math.PI*180;
-			return angle;
+			return degreeMode?angle/Math.PI*180:angle;
 		},
-		getLength: function(){
-			return Math.sqrt(this.x*this.x + this.y*this.y);
-		},
+		getLength: function(){return Math.sqrt(this.x*this.x + this.y*this.y);},
 		getPolar: function(degreeMode){
-			degreeMode = degreeMode || true;
+			degreeMode = degreeMode==null?true:degreeMode;
 			return {
 				mod:this.getLength(), 
 				angle:this.getAngle(degreeMode)
 			};
 		},
 		setPolar: function(mod, angle, degreeMode){
-			degreeMode = degreeMode || true;
+			degreeMode = degreeMode==null?true:degreeMode;
 			if(degreeMode) angle = angle/180*Math.PI;
 			this.x = Math.cos(angle)*mod;
 			this.y = Math.sin(angle)*mod;
