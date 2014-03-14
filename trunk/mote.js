@@ -49,29 +49,11 @@
 		}
 	});
 	
-	function Velocity(vx, vy){
-		this.vx = vx||0;
-		this.vy = vy||0;
-	}
-	$.extend(Velocity.prototype, {
-		set: function(vx, vy){
-			this.vx = vx;
-			this.vy = vy;
-		},
-		accelerate: function(dVx, dVy){
-			this.vx+=dVx;
-			this.vy+=dVy;
-		},
-		toString: function(){
-			return [this.vx, this.vy].join();
-		}
-	});
-	
 	function FallState(solid, velocity){
 		this.time = +new Date;
 		this.solid = solid;
 		this.baseTransform = solid.transformation;
-		this.velocity = velocity || solid.velocity || new Velocity();
+		this.velocity = velocity || solid.velocity || new Vector();
 		this.acceleration = solid.world.gravity.acceleration(/*height*/);
 	}
 	
@@ -86,13 +68,12 @@
 					dt = now - state.time;
 				state.time = now;
 					
-				var dx = state.velocity.vx*dt,
-					dy = state.velocity.vy*dt;
-				solid.transformation.shift(dx, dy);
-				solid.bbox.x+=dx; solid.bbox.x2+=dx; solid.bbox.cx+=dx; 
-				solid.bbox.y+=dy; solid.bbox.y2+=dy; 
+				var d = new Vector(state.velocity).mul(dt);
+				solid.transformation.shift(d.x, d.y);
+				solid.bbox.x+=d.x; solid.bbox.x2+=d.x; solid.bbox.cx+=d.x; 
+				solid.bbox.y+=d.y; solid.bbox.y2+=d.y; 
 				
-				state.velocity.accelerate(0, state.acceleration*dt);
+				state.velocity.add(0, state.acceleration*dt);
 				
 				var ground = solid.getGroundPos();
 				
@@ -109,29 +90,29 @@
 					solid.updateBBox();
 				}
 				
-				if(absPos.y>=ground && solid.velocity.vy>0){
+				if(absPos.y>=ground && solid.velocity.y>0){
 					solid.transformation.T.y = ground - solid.bbox.height;
 					terminate();
 				}
-				else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.vy<0){
+				else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.y<0){
 					solid.transformation.T.y = 0;
 					terminate();
-					solid.velocity.vx = state.velocity.vx;
-					solid.velocity.vy = -state.velocity.vy;
+					solid.velocity.x = state.velocity.x;
+					solid.velocity.y = -state.velocity.y;
 					solid.fall();
 				}
-				else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.vx<0){
+				else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.x<0){
 					solid.transformation.T.x = 0;
 					terminate();
-					solid.velocity.vx = -state.velocity.vx;
-					solid.velocity.vy = state.velocity.vy;
+					solid.velocity.x = -state.velocity.x;
+					solid.velocity.y = state.velocity.y;
 					solid.fall();
 				}
-				else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.vx>0){
+				else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.x>0){
 					solid.transformation.T.x = screenWidth - solid.bbox.width;
 					terminate();
-					solid.velocity.vx = -state.velocity.vx;
-					solid.velocity.vy = state.velocity.vy;
+					solid.velocity.x = -state.velocity.x;
+					solid.velocity.y = state.velocity.y;
 					solid.fall();
 				}
 				else{
@@ -250,8 +231,9 @@
 				else if(x instanceof Vector){this.x+=x.x; this.y+=x.y;}
 			}
 			else{this.x+=x; this.y+=y;}
+			return this;
 		},
-		mul: function(rate){this.x*=rate;this.y*=rate;},
+		mul: function(rate){this.x*=rate;this.y*=rate; return this;},
 		getAngle: function(degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
 			var angle = Math.atan(this.y/this.x);
@@ -265,11 +247,16 @@
 				angle:this.getAngle(degreeMode)
 			};
 		},
+		set: function(x, y){this.x = x; this.y = y; return this;},
 		setPolar: function(mod, angle, degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
 			if(degreeMode) angle = angle/180*Math.PI;
 			this.x = Math.cos(angle)*mod;
 			this.y = Math.sin(angle)*mod;
+			return this;
+		},
+		toString: function(){
+			return [this.x, this.y].join();
 		}
 	});
 	
@@ -328,7 +315,7 @@
 					x: this.transformation.T.y
 				};
 			},
-			velocity: new Velocity(),
+			velocity: new Vector(),
 			template: options.template,
 			fallState: null,
 			icon:null,
@@ -394,12 +381,11 @@
 	};
 
 	return {
-		version:"3.2",
+		version:"3.3",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
 		Transformation: Transformation,
-		Velocity: Velocity,
 		Vector: Vector,
 		requestAnimFrame: function(){return requestAnimFrame;}
 	};
