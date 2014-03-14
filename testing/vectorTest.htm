@@ -1,0 +1,115 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<script type="text/javascript" src="lib/jsUnit.js"></script>
+<script type="text/javascript" src="../lib/html.js"></script>
+<script type="text/javascript" src="../lib/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../lib/raphael-min.js"></script>
+<script type="text/javascript" src="../mote.js"></script>
+<script type="text/javascript">
+new JSUnit.Test("MoteJS connections").run = function(){
+	this.assert(Mote.version!=null, true, "Не подключен модуль MoteJS");
+}
+
+new JSUnit.Test("Basic", "Construction").run = function(){
+	var v = new Mote.Vector(2, 3);
+	this.assert(v.x, 2);
+	this.assert(v.y, 3);
+	var v = new Mote.Vector();
+	this.assert(v.x, 0);
+	this.assert(v.y, 0);
+}
+new JSUnit.Test("From Array", "Construction").run = function(){
+	var v = new Mote.Vector([2, 3]);
+	this.assert(v.x, 2);
+	this.assert(v.y, 3);
+}
+new JSUnit.Test("From Vector", "Construction").run = function(){
+	var v0 = new Mote.Vector(2, 3);
+	var v = new Mote.Vector(v0);
+	this.assert(v.x, 2);
+	this.assert(v.y, 3);
+}
+
+new JSUnit.Test("Basic", "Addition").run = function(){
+	var v = new Mote.Vector(2, 3);
+	v.add(1, 3);
+	this.assert(v.x, 3);
+	this.assert(v.y, 6);
+}
+
+new JSUnit.Test("With Array", "Addition").run = function(){
+	var v = new Mote.Vector(2, 3);
+	v.add([1, 3]);
+	this.assert(v.x, 3);
+	this.assert(v.y, 6);
+}
+
+new JSUnit.Test("With Vector", "Addition").run = function(){
+	var v = new Mote.Vector(2, 3);
+	v.add(new Mote.Vector(1, 3));
+	this.assert(v.x, 3);
+	this.assert(v.y, 6);
+}
+
+new JSUnit.Test("Multiplication", "Simple Operations").run = function(){
+	var v = new Mote.Vector(2, 3);
+	v.mul(2);
+	this.assert(v.x, 4);
+	this.assert(v.y, 6);
+}
+
+new JSUnit.Test("Scalar Product", "Simple Operations").run = function(){
+	var v1 = new Mote.Vector(2, 0);
+	var v2 = new Mote.Vector(0, 2);
+	this.assert(Mote.Vector.scalarProd(v1, v2), 0);
+	var v1 = new Mote.Vector(2, 0);
+	var v2 = new Mote.Vector(3, 0);
+	this.assert(Mote.Vector.scalarProd(v1, v2), 6);
+}
+
+new JSUnit.Test("Get 1", "Polar System").run = function(){
+	var v = new Mote.Vector(2, 0);
+	var pol = v.getPolar();
+	this.assert(pol.mod, 2);
+	this.assert(pol.angle, 0);
+}
+new JSUnit.Test("Get 2", "Polar System").run = function(){
+	var v = new Mote.Vector(2, 2);
+	var pol = v.getPolar();
+	this.assert(pol.mod, Math.sqrt(8));
+	this.assert(pol.angle, 45);
+}
+new JSUnit.Test("Get 3", "Polar System").run = function(){
+	var v = new Mote.Vector(0, 2);
+	var pol = v.getPolar();
+	this.assert(pol.mod, 2);
+	this.assert(pol.angle, 90);
+}
+
+new JSUnit.Test("Set 1", "Polar System").run = function(){
+	var v = new Mote.Vector();
+	v.setPolar(2, 0);
+	this.assert(v.x, 2, "Bad x");
+	this.assert(v.y, 0, "Bad y");
+}
+
+new JSUnit.Test("Set 2", "Polar System").run = function(){
+	var v = new Mote.Vector();
+	v.setPolar(2, 45);
+	this.assert(Math.abs(v.x-v.y)<1e5, true, "Not equal");
+}
+
+
+
+function init(){
+	document.getElementById("sversion").innerHTML = JSUnit.version;
+	JSUnit.init();
+}
+</script>
+</head>
+<body onload="init()">
+	<h1>Тесты векторной алгебры модуля MoteJS</h1>
+	<div>JSUnit v.<span id="sversion"></span></div>
+</body>
+</html>

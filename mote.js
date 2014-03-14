@@ -228,42 +228,99 @@
 		return worldInstance;
 	}
 	
-	function deg2Rad (deg) { return deg / 180 * Math.PI; }
-	function rad2Deg (rad) { return rad / Math.PI * 180; }
-
-	// Возвращает разложение вектора в системе координат, 
-	// развернутой на угол angle (в градусах)
-	function vector(vx, vy, angle){
-		var abs = Math.sqrt(vx*vx + vy*vy),
-			vAngle = Math.atan(vx/vy) + deg2rad(angle); // угол вектора относительно новой системы координат
-		
-		return {
-			vx: vx, vy: vy,
-			// модуль вектора
-			abs: abs,
-			// нормальная составляющая
-			n: Math.sin(vAngle)*abs,
-			// продольная составляющая
-			t: Math.cos(vAngle)*abs
+	function Vector(x, y){
+		switch(arguments.length){
+			case 2: this.x = x; this.y = y; break;
+			case 1: if(x instanceof Array){this.x = x[0]; this.y = x[1];}
+					else if(x instanceof Vector){this.x = x.x; this.y = x.y}
+				break;
+			default: this.x = 0; this.y = 0; break;
+		}
+		if(arguments.length==2){
+			this.x = x;
+			this.y = y;
 		}
 	}
+	$.extend(Vector, {
+		scalarProd: function(v1, v2){
+			return v1.x*v2.x + v1.y*v2.y;
+		}
+	});
+	$.extend(Vector.prototype, {
+		add: function(x, y){
+			if(arguments.length==1){
+				if(x instanceof Array){this.x+=x[0]; this.y+=x[1];}
+				else if(x instanceof Vector){this.x+=x.x; this.y+=x.y;}
+			}
+			else{
+				this.x+=x;
+				this.y+=y;
+			}
+		},
+		mul: function(rate){
+			this.x*=rate;
+			this.y*=rate;
+		},
+		getAngle: function(degreeMode){
+			degreeMode = degreeMode || true;
+			var angle = Math.atan(this.y/this.x);
+			if(degreeMode) angle = angle/Math.PI*180;
+			return angle;
+		},
+		getLength: function(){
+			return Math.sqrt(this.x*this.x + this.y*this.y);
+		},
+		getPolar: function(degreeMode){
+			degreeMode = degreeMode || true;
+			return {
+				mod:this.getLength(), 
+				angle:this.getAngle(degreeMode)
+			};
+		},
+		setPolar: function(mod, angle, degreeMode){
+			degreeMode = degreeMode || true;
+			if(degreeMode) angle = angle/180*Math.PI;
+			this.x = Math.cos(angle)*mod;
+			this.y = Math.sin(angle)*mod;
+		}
+	});
 	
-	function Collision(solid1, solid2, decrement){
-		var pos1 = solid1.getPosition(),
-			pos2 = solid2.getPosition();
-		var angle = $R.angle(pos1.x, pos1.y, pos2.x, pos2.y);
+	// function deg2Rad (deg) { return deg / 180 * Math.PI; }
+	// function rad2Deg (rad) { return rad / Math.PI * 180; }
 
-		decrement = decrement || .5;
-		// var v = {
-		// 	vx: (solid1.velocity.vx + solid2.velocity.vx)*decrement,
-		// 	vy: (solid1.velocity.vy + solid2.velocity.vy)*decrement
-		// };
-		
-		var v1 = vector(solid1.velocity.vx, solid1.velocity.vy, angle),
-			v2 = vector(solid2.velocity.vx, solid2.velocity.vy, angle);
-			
-		
-	}
+	// // Возвращает разложение вектора в системе координат, 
+	// // развернутой на угол angle (в градусах)
+	// function vector(vx, vy, angle){
+	// 	var abs = Math.sqrt(vx*vx + vy*vy),
+	// 		vAngle = Math.atan(vx/vy) + deg2rad(angle); // угол вектора относительно новой системы координат
+	// 	
+	// 	return {
+	// 		vx: vx, vy: vy,
+	// 		// модуль вектора
+	// 		abs: abs,
+	// 		// нормальная составляющая
+	// 		n: Math.sin(vAngle)*abs,
+	// 		// продольная составляющая
+	// 		t: Math.cos(vAngle)*abs
+	// 	}
+	// }
+	// 
+	// function Collision(solid1, solid2, decrement){
+	// 	var pos1 = solid1.getPosition(),
+	// 		pos2 = solid2.getPosition();
+	// 	var angle = $R.angle(pos1.x, pos1.y, pos2.x, pos2.y);
+    // 
+	// 	decrement = decrement || .5;
+	// 	// var v = {
+	// 	// 	vx: (solid1.velocity.vx + solid2.velocity.vx)*decrement,
+	// 	// 	vy: (solid1.velocity.vy + solid2.velocity.vy)*decrement
+	// 	// };
+	// 	
+	// 	var v1 = vector(solid1.velocity.vx, solid1.velocity.vy, angle),
+	// 		v2 = vector(solid2.velocity.vx, solid2.velocity.vy, angle);
+	// 		
+	// 	
+	// }
 	
 	function Solid(world, pos, mass, template){
 		if(!pos) pos = {x:0, y:0};
@@ -350,6 +407,7 @@
 		getUID: getUID,
 		Transformation: Transformation,
 		Velocity: Velocity,
+		Vector: Vector,
 		requestAnimFrame: function(){return requestAnimFrame;}
 	};
 })(jQuery, Html, Raphael);
