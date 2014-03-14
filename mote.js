@@ -145,7 +145,7 @@
 			acceleration: function(height){return .001;},
 			groundPosition: 450,
 			fall: function(solid){
-				if(solid.isStatic) return;
+				if(solid.static) return;
 				solid.fallState = new FallState(solid);
 				solid.updateBBox();
 				fallingSolids.push(solid);
@@ -158,7 +158,7 @@
 	function draggable(solid){
 		var drag = {
 			move: function(dx, dy, x, y, e) {
-				if(solid.isStatic || !solid.drag.state)return;
+				if(!solid.draggable || !solid.drag.state)return;
 				var now = +new Date
 					dt = now - solid.drag.state.time;
 				solid.drag.state.time = now;
@@ -177,7 +177,7 @@
 				solid.drag.move.call(solid.icon, dx, dy, x, y, e);
 			},
 			start:function(x, y, e) {
-				if(solid.isStatic)return;
+				if(!solid.draggable)return;
 				solid.drag.state = {
 					baseTransform: Transformation.obtain(this),
 					time: +new Date
@@ -185,7 +185,7 @@
 				solid.drag.start.call(solid.icon, x, y, e);
 			},
 			end: function(e) {
-				if(solid.isStatic)return;
+				if(!solid.draggable)return;
 				solid.drag.state = null;
 				solid.updateBBox();
 				for(var sld,C=solid.world.solids,i=0; sld=C[i],i<C.length; i++){
@@ -219,6 +219,7 @@
 				solid.updateBBox();
 				solid.world.solids.push(solid);
 				draggable(solid);
+				if(!solid.static) solid.fall();
 				return solid;
 			},
 			gravity: Gravity
@@ -309,18 +310,17 @@
 	// 	
 	// }
 	
-	function Solid(world, pos, mass, template){
+	function Solid(world, pos, param){
+		var options = {};
+		$.extend(options, Solid.defaultOptions);
+		$.extend(options, param);
+		
 		if(!pos) pos = {x:0, y:0};
 		else if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		
-		if(!template || typeof(template)!="function") 
-			template = function(screen){
-				return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});
-			}
 		var solidInstance = {
 			id: getUID(),
-			// spawnPosition: pos,
-			mass: mass,
+			mass: options.mass,
 			transformation: new Transformation(pos.x, pos.y),
 			getPosition: function(){
 				return {
@@ -329,12 +329,12 @@
 				};
 			},
 			velocity: new Velocity(),
-			template: template,
+			template: options.template,
 			fallState: null,
 			icon:null,
 			bbox:null,
-			isStatic: false,
-			"static": function(v){this.isStatic = v==null?true:v; return this;},
+			static: options.static,
+			draggable: options.draggable,
 			falling: true,
 			fall: function(){
 				if(!this.falling) return;
@@ -386,9 +386,15 @@
 		};
 		return world.add(solidInstance);
 	}
+	Solid.defaultOptions = {
+		draggable: true,
+		"static": false,
+		mass: 1,
+		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});}
+	};
 
 	return {
-		version:"3.1",
+		version:"3.2",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
