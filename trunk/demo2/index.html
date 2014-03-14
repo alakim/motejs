@@ -22,45 +22,57 @@
 			world.reflect.top = false;
 
 			for(var i=0; i<1; i++){
-				Mote.solid(world, [100 + i*80, 100], 19, function(screen){
-					return screen.image("creeper.png", 0, 0, 57, 164);
-				}).fall();
+				Mote.solid(world, [100 + i*80, 100], {
+					mass: 19,
+					template: function(screen){
+						return screen.image("creeper.png", 0, 0, 57, 164);
+					}
+				});
 			}
 
-			Mote.solid(world, [500, 100], 19, function(screen){
-				return screen.image("steve.png", 0, 0, 113, 249);
-			}).fall();
+			Mote.solid(world, [500, 100], {
+				mass: 19,
+				template: function(screen){
+					return screen.image("steve.png", 0, 0, 113, 249);
+				}
+			});
 
 
-			Mote.solid(world, [700, 100], 19, function(screen){
-				var set = screen.set();
-				set.push(
-					screen.rect(29, 5, 81, 79).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(39, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
-					screen.rect(77, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
-					screen.rect(46, 33, 10, 8).attr({fill:"#000", "stroke-width":0}),
-					screen.rect(82, 34, 10, 8).attr({fill:"#000", "stroke-width":0}),
+			Mote.solid(world, [700, 100], {
+				mass: 19,
+				template: function(screen){
+					var set = screen.set();
+					set.push(
+						screen.rect(29, 5, 81, 79).attr({fill:"#e5ce84", "stroke-width":0}),
+						screen.rect(39, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+						screen.rect(77, 30, 22, 16).attr({fill:"#fff", "stroke-width":0}),
+						screen.rect(46, 33, 10, 8).attr({fill:"#000", "stroke-width":0}),
+						screen.rect(82, 34, 10, 8).attr({fill:"#000", "stroke-width":0}),
 
-					screen.rect(48, 67, 40, 6).attr({fill:"#000", "stroke-width":0}),
-					screen.rect(29, 5, 81, 16).attr({fill:"#7e461f", "stroke-width":0}),
-					screen.rect(29, 83, 81, 118).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(50, 82, 37, 14).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(108, 81, 26, 94).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(2, 82, 27, 94).attr({fill:"#e5ce84", "stroke-width":0}),
-					screen.rect(77, 202, 35, 98).attr({fill:"#0000ff", "stroke-width":0}),
-					screen.rect(28, 202, 36, 100).attr({fill:"#0000ff", "stroke-width":0}),
-					screen.rect(108, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(2, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
-					screen.rect(27, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
-					screen.rect(76, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
-					screen.rect(29, 172, 82, 35).attr({fill:"#0000ff", "stroke-width":0})
-				);
-				return set;
-			}).fall();
+						screen.rect(48, 67, 40, 6).attr({fill:"#000", "stroke-width":0}),
+						screen.rect(29, 5, 81, 16).attr({fill:"#7e461f", "stroke-width":0}),
+						screen.rect(29, 83, 81, 118).attr({fill:"#00ffff", "stroke-width":0}),
+						screen.rect(50, 82, 37, 14).attr({fill:"#e5ce84", "stroke-width":0}),
+						screen.rect(108, 81, 26, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+						screen.rect(2, 82, 27, 94).attr({fill:"#e5ce84", "stroke-width":0}),
+						screen.rect(77, 202, 35, 98).attr({fill:"#0000ff", "stroke-width":0}),
+						screen.rect(28, 202, 36, 100).attr({fill:"#0000ff", "stroke-width":0}),
+						screen.rect(108, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+						screen.rect(2, 81, 29, 30).attr({fill:"#00ffff", "stroke-width":0}),
+						screen.rect(27, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+						screen.rect(76, 288, 38, 15).attr({fill:"#000000", "stroke-width":0}),
+						screen.rect(29, 172, 82, 35).attr({fill:"#0000ff", "stroke-width":0})
+					);
+					return set;
+				}
+			});
 
-			Mote.solid(world, [900, 100], 19, function(screen){
-				return screen.image("zombie.png", 0, 0, 113, 249);
-			}).fall();
+			Mote.solid(world, [900, 100], {
+				mass: 19,
+				template: function(screen){
+					return screen.image("zombie.png", 0, 0, 113, 249);
+				}
+			});
 			
 			
 		});

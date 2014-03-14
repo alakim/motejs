@@ -20,29 +20,63 @@
 			});
 			world.reflect.top = false;
 			
-			Mote.solid(world, [35, 85], 10, function(screen){
-				var set = screen.set();
-				set.push(
-					screen.rect(0, 0, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
-					screen.rect(5, 5, 8, 8).attr({fill:"#ccf", stroke:"#558"}),
-					screen.circle(5, 10, 5, 5).attr({fill:"#f00", stroke:"#800"})
-				);
-				return set;
-			}).fall();
+			Mote.solid(world, [35, 85], {
+				mass:10, 
+				template: function(screen){
+					var set = screen.set();
+					set.push(
+						screen.rect(0, 0, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
+						screen.rect(5, 5, 8, 8).attr({fill:"#ccf", stroke:"#558"}),
+						screen.circle(5, 10, 5, 5).attr({fill:"#f00", stroke:"#800"})
+					);
+					return set;
+				}
+			});
 			
-			Mote.solid(world, [65, 85], 5, function(screen){
-				return screen.rect(0, 0, 20, 20).attr({fill:"#00f", stroke:"#558"});
-			}).fall();
+			Mote.solid(world, [65, 85], {
+				mass: 5,
+				template: function(screen){
+					return screen.rect(0, 0, 20, 20).attr({fill:"#00f", stroke:"#558"});
+				}
+			});
 			
-			Mote.solid(world, [125, world.gravity.groundPosition], 50, function(screen){
-				var size = 50;
-				return screen.rect(0, -size, size, size).attr({fill:"#ccc", stroke:"#888"});
-			}).static();
+			Mote.solid(world, [125, world.gravity.groundPosition], {
+				mass: 50,
+				static: true,
+				draggable: false,
+				template: function(screen){
+					var size = 50;
+					return screen.rect(0, -size, size, size).attr({fill:"#ccc", stroke:"#888"});
+				}
+			});
 			
-			Mote.solid(world, [225, 85], 8, function(screen){
-				var d = 10;
-				return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
-			}).fall();
+			Mote.solid(world, [425, world.gravity.groundPosition-40], {
+				mass: 50,
+				static: true,
+				draggable: false,
+				template: function(screen){
+					var size = 80;
+					return screen.rect(0, -size, size/4, size).attr({fill:"#ccc", stroke:"#888"});
+				}
+			});
+			
+			Mote.solid(world, [525, world.gravity.groundPosition-40], {
+				mass: 50,
+				static: true,
+				draggable: true,
+				template: function(screen){
+					var size = 80;
+					return screen.rect(0, -size, size/4, size).attr({fill:"#afa", stroke:"#8a8"});
+				}
+			});
+			
+			Mote.solid(world, [225, 85], {
+				mass: 8,
+				template: function(screen){
+					var d = 10;
+					return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
+				}
+			});
 			
 		});
 	</script>

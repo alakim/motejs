@@ -65,7 +65,7 @@
 		
 		basketIcon.transform(new $M.Transformation(
 			tapeTr.T.x + tapeEnd.x + width - basketWidth,
-			tapeTr.T.y + tapeEnd.y + height,
+			tapeTr.T.y + tapeEnd.y + height - basketSize,
 			[angle, tapeTr.T.x + tapeEnd.x, tapeTr.T.y + tapeEnd.y]
 		));
 	}
@@ -85,11 +85,12 @@
 				
 				var basePoint = this.data("basePoint"),
 					x1 = -width + trf.T.x + basketWidth,
-					y1 = -height + trf.T.y,
+					y1 = -height + trf.T.y + basketSize,
 					alpha = $R.angle(basePoint.x, basePoint.y, x1, y1);
 					
 				trf.R = [alpha, x1, y1];
 				this.transform(trf);
+				
 				var accepted = this.data("solid").accepted;
 				if(accepted){
 					var bbox = this.getBBox();
@@ -124,17 +125,18 @@
 	
 	function Gun(world, pos, template){
 		if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
-		//console.log(pos);
 		template = template || function(screen){
 			var support = screen.rect(0, -height, 5, height).attr(attColor);
 			tape = screen.path(["M", 0, -height, "l", -width+basketWidth, 0]);
 			return support;
 		};
-		var gun = $M.solid(world, pos, 1e7, template).static();
+		var gun = $M.solid(world, pos, {mass:1e7, template:template, static:true, draggable:false});
 		tape.transform(gun.transformation);
-		basket = $M.solid(world, pos, 1, function(screen){
-			return screen.rect(-width, -height-basketSize/2, basketWidth, basketSize)
-				.attr({fill:"#ccc", stroke:"#888"});
+		basket = $M.solid(world, pos, {
+			template: function(screen){
+				return screen.rect(-width, -height+basketSize/2, basketWidth, basketSize)
+					.attr({fill:"#ccc", stroke:"#888"});
+			}
 		});
 		basket.falling = false;
 		draggableBasket(basket);
@@ -147,7 +149,7 @@
 	}
 	
 	return {
-		version: "1.2",
+		version: "1.3",
 		gun: Gun
 	};
 })(jQuery, Raphael, Mote);
