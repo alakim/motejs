@@ -86,6 +86,12 @@ new JSUnit.Test("Get 3", "Polar System").run = function(){
 	this.assert(pol.mod, 2);
 	this.assert(pol.angle, 90);
 }
+new JSUnit.Test("Get 4", "Polar System").run = function(){
+	var v = new Mote.Vector(0, 2);
+	var pol = v.getPolar(false);
+	this.assert(pol.mod, 2);
+	this.assert(pol.angle, Math.PI/2);
+}
 
 new JSUnit.Test("Set 1", "Polar System").run = function(){
 	var v = new Mote.Vector();
