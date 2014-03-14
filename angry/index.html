@@ -22,7 +22,7 @@
 				screen.path(["M0,",ground,"L",width,",",ground]);
 			});
 			
-			Mote.solid(world, [365, 85], {
+			Mote.solid(world, [465, 85], {
 				mass: 5,
 				template: function(screen){
 					return screen.rect(0, 0, 20, 20).attr({fill:"#00f", stroke:"#558"});
@@ -30,11 +30,30 @@
 			});
 			
 			
-			Mote.solid(world, [425, 85], {
+			Mote.solid(world, [525, 85], {
 				mass: 8,
 				template: function(screen){
 					var d = 10;
 					return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
+				}
+			});
+			
+			(function(){
+				var r = 12;
+				for(var i=0; i<4; i++){
+					Mote.solid(world, [290+i*(r*2+2), ], {
+						template: function(screen){
+							return screen.circle(r, r, r).attr({fill:"#888"});
+						}
+					});
+				}
+			})();
+			
+			Mote.solid(world, [1000, world.gravity.groundPosition - 220], {
+				static: true,
+				draggable: true,
+				template: function(screen){
+					return screen.rect(0, 0, 10, 120).attr({fill:"#ccc", stroke:"#888"});
 				}
 			});
 			
