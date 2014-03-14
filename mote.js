@@ -99,8 +99,8 @@
 				var screenWidth = solid.world.getScreen().width;
 				
 				var absPos = {
-					x: solid.transformation.T.x + solid.spawnPosition.x,
-					y: solid.transformation.T.y + solid.spawnPosition.y + solid.bbox.height
+					x: solid.transformation.T.x,
+					y: solid.transformation.T.y + solid.bbox.height
 				};
 				
 				function terminate(){
@@ -110,7 +110,7 @@
 				}
 				
 				if(absPos.y>=ground && solid.velocity.vy>0){
-					solid.transformation.T.y = ground - solid.spawnPosition.y - solid.bbox.height;
+					solid.transformation.T.y = ground - solid.bbox.height;
 					terminate();
 				}
 				else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.vy<0){
@@ -121,14 +121,14 @@
 					solid.fall();
 				}
 				else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.vx<0){
-					solid.transformation.T.x = -solid.spawnPosition.x;
+					solid.transformation.T.x = 0;
 					terminate();
 					solid.velocity.vx = -state.velocity.vx;
 					solid.velocity.vy = state.velocity.vy;
 					solid.fall();
 				}
 				else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.vx>0){
-					solid.transformation.T.x = screenWidth - solid.spawnPosition.x - solid.bbox.width;
+					solid.transformation.T.x = screenWidth - solid.bbox.width;
 					terminate();
 					solid.velocity.vx = -state.velocity.vx;
 					solid.velocity.vy = state.velocity.vy;
@@ -211,7 +211,8 @@
 			solids: [],
 			reflect:{top:1, left:1, right:1},
 			add: function(solid){
-				var icon = solid.template(screen, solid.spawnPosition);
+				var icon = solid.template(screen);
+				icon.transform(solid.transformation);
 				icon.data("solid", solid);
 				solid.icon = icon;
 				solid.world = worldInstance;
@@ -313,18 +314,18 @@
 		else if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		
 		if(!template || typeof(template)!="function") 
-			template = function(screen, pos){
-				return screen.rect(pos.x, pos.y, 10, 10).attr({fill:"#ffc", stroke:"#448"});
+			template = function(screen){
+				return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});
 			}
 		var solidInstance = {
 			id: getUID(),
-			spawnPosition: pos,
+			// spawnPosition: pos,
 			mass: mass,
-			transformation: new Transformation(),
+			transformation: new Transformation(pos.x, pos.y),
 			getPosition: function(){
 				return {
-					x: this.spawnPosition.x + this.transformation.T.x,
-					x: this.spawnPosition.y + this.transformation.T.y
+					x: this.transformation.T.x,
+					x: this.transformation.T.y
 				};
 			},
 			velocity: new Velocity(),
@@ -387,7 +388,7 @@
 	}
 
 	return {
-		version:"3.0",
+		version:"3.1",
 		world: World,
 		solid: Solid,
 		getUID: getUID,

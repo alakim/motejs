@@ -20,28 +20,28 @@
 			});
 			world.reflect.top = false;
 			
-			Mote.solid(world, [35, 85], 10, function(screen, pos){
+			Mote.solid(world, [35, 85], 10, function(screen){
 				var set = screen.set();
 				set.push(
-					screen.rect(pos.x, pos.y, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
-					screen.rect(pos.x+5, pos.y+5, 8, 8).attr({fill:"#ccf", stroke:"#558"}),
-					screen.circle(pos.x+5, pos.y+10, 5, 5).attr({fill:"#f00", stroke:"#800"})
+					screen.rect(0, 0, 15, 25).attr({fill:"#fcc", stroke:"#855"}),
+					screen.rect(5, 5, 8, 8).attr({fill:"#ccf", stroke:"#558"}),
+					screen.circle(5, 10, 5, 5).attr({fill:"#f00", stroke:"#800"})
 				);
 				return set;
 			}).fall();
 			
-			Mote.solid(world, [65, 85], 5, function(screen, pos){
-				return screen.rect(pos.x, pos.y, 20, 20).attr({fill:"#00f", stroke:"#558"});
+			Mote.solid(world, [65, 85], 5, function(screen){
+				return screen.rect(0, 0, 20, 20).attr({fill:"#00f", stroke:"#558"});
 			}).fall();
 			
-			Mote.solid(world, [125, world.gravity.groundPosition], 50, function(screen, pos){
+			Mote.solid(world, [125, world.gravity.groundPosition], 50, function(screen){
 				var size = 50;
-				return screen.rect(pos.x, pos.y-size, size, size).attr({fill:"#ccc", stroke:"#888"});
+				return screen.rect(0, -size, size, size).attr({fill:"#ccc", stroke:"#888"});
 			}).static();
 			
-			Mote.solid(world, [225, 85], 8, function(screen, pos){
+			Mote.solid(world, [225, 85], 8, function(screen){
 				var d = 10;
-				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
+				return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
 			}).fall();
 			
 		});
