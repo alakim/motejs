@@ -57,26 +57,31 @@
 	
 	function moveBasketToTape(angle){
 		var tapePath = tape.attr("path"),
+			tapeBgn = {
+				x: tapePath[0][1],
+				y: tapePath[0][2]
+			},
 			tapeEnd = {
 				x: tapePath[1][1],
 				y: tapePath[1][2]
-			};
+			},
+			tapeTr = $M.Transformation.obtain(tape);
 		var bPos = {
 				x: basketIcon.attr("x"),
 				y: basketIcon.attr("y")
 			},
 			bTr = $M.Transformation.obtain(basketIcon);
 		
-		bTr.T.x = tapeEnd.x - bPos.x - basketWidth;
-		bTr.T.y = tapeEnd.y - bPos.y - basketSize/2;
-		bTr.R = [angle, tapeEnd.x, tapeEnd.y];
+		bTr.T.x = tapeTr.T.x + tapeEnd.x + width - basketWidth;// - basketWidth*0 - bPos.x;
+		bTr.T.y = tapeTr.T.y + tapeEnd.y + height;// - bPos.y;
+		bTr.R = [angle, tapeTr.T.x + tapeEnd.x, tapeTr.T.y + tapeEnd.y];
 		basketIcon.transform(bTr);
 	}
 	
 	function moveAccepted(solid, x, y, angle){
 		var trf = $M.Transformation.obtain(solid.icon);
-		var dx = x - solid.spawnPosition.x,
-			dy = y - solid.spawnPosition.y;
+		var dx = x,
+			dy = y;
 		trf = new $M.Transformation(dx, dy, angle);
 		solid.icon.transform(trf);
 	}
@@ -87,10 +92,8 @@
 				var trf = $M.Transformation.obtain(this);
 				
 				var basePoint = this.data("basePoint"),
-					x0 = this.attr("x"),
-					y0 = this.attr("y"),
-					x1 = x0 + trf.T.x + basketWidth,
-					y1 = y0 + trf.T.y + basketSize/2,
+					x1 = -width + trf.T.x + basketWidth,
+					y1 = -height + trf.T.y,
 					alpha = $R.angle(basePoint.x, basePoint.y, x1, y1);
 					
 				trf.R = [alpha, x1, y1];
@@ -102,8 +105,9 @@
 				}
 				
 				var path = tape.attr("path");
-				path[1][1] = x1;
-				path[1][2] = y1;
+				path[1][0] = "L";
+				path[1][1] = x1 - basePoint.x;
+				path[1][2] = y1 - basePoint.y - height;
 				tape.attr({path:path});
 				
 				var tension = ($R.getTotalLength(path) - width)*elasticModulus
@@ -128,14 +132,17 @@
 	
 	function Gun(world, pos, template){
 		if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
-		template = template || function(screen, pos){
-			var support = screen.rect(pos.x, pos.y-height, 5, height).attr(attColor);
-			tape = screen.path(["M", pos.x, pos.y-height, "l", -width+basketWidth, 0]);
+		//console.log(pos);
+		template = template || function(screen){
+			var support = screen.rect(0, -height, 5, height).attr(attColor);
+			tape = screen.path(["M", 0, -height, "l", -width+basketWidth, 0]);
 			return support;
 		};
 		var gun = $M.solid(world, pos, 1e7, template).static();
-		basket = $M.solid(world, pos, 1, function(screen, pos){
-			return screen.rect(pos.x-width, pos.y-height-basketSize/2, basketWidth, basketSize).attr({fill:"#ccc", stroke:"#888"});
+		tape.transform(gun.transformation);
+		basket = $M.solid(world, pos, 1, function(screen){
+			return screen.rect(-width, -height-basketSize/2, basketWidth, basketSize)
+				.attr({fill:"#ccc", stroke:"#888"});
 		});
 		basket.falling = false;
 		draggableBasket(basket);

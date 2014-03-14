@@ -22,14 +22,14 @@
 				screen.path(["M0,",ground,"L",width,",",ground]);
 			});
 			
-			Mote.solid(world, [365, 85], 5, function(screen, pos){
-				return screen.rect(pos.x, pos.y, 20, 20).attr({fill:"#00f", stroke:"#558"});
+			Mote.solid(world, [365, 85], 5, function(screen){
+				return screen.rect(0, 0, 20, 20).attr({fill:"#00f", stroke:"#558"});
 			}).fall();
 			
 			
-			Mote.solid(world, [425, 85], 8, function(screen, pos){
+			Mote.solid(world, [425, 85], 8, function(screen){
 				var d = 10;
-				return screen.circle(pos.x+d, pos.y+d, d).attr({fill:"#faa", stroke:"#8cc"});
+				return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
 			}).fall();
 			
 			Angry.gun(world, [250, world.gravity.groundPosition]);
