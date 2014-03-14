@@ -57,25 +57,17 @@
 	
 	function moveBasketToTape(angle){
 		var tapePath = tape.attr("path"),
-			tapeBgn = {
-				x: tapePath[0][1],
-				y: tapePath[0][2]
-			},
 			tapeEnd = {
 				x: tapePath[1][1],
 				y: tapePath[1][2]
 			},
 			tapeTr = $M.Transformation.obtain(tape);
-		var bPos = {
-				x: basketIcon.attr("x"),
-				y: basketIcon.attr("y")
-			},
-			bTr = $M.Transformation.obtain(basketIcon);
 		
-		bTr.T.x = tapeTr.T.x + tapeEnd.x + width - basketWidth;// - basketWidth*0 - bPos.x;
-		bTr.T.y = tapeTr.T.y + tapeEnd.y + height;// - bPos.y;
-		bTr.R = [angle, tapeTr.T.x + tapeEnd.x, tapeTr.T.y + tapeEnd.y];
-		basketIcon.transform(bTr);
+		basketIcon.transform(new $M.Transformation(
+			tapeTr.T.x + tapeEnd.x + width - basketWidth,
+			tapeTr.T.y + tapeEnd.y + height,
+			[angle, tapeTr.T.x + tapeEnd.x, tapeTr.T.y + tapeEnd.y]
+		));
 	}
 	
 	function moveAccepted(solid, x, y, angle){
