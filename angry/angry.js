@@ -18,17 +18,18 @@
 		}
 		var m = 1,
 			a = tension/m,
-			dx = dt*velocity.vx,
-			dy = dt*velocity.vy,
-			dVx = a*dt*Math.cos(angleRad),
-			dVy = a*dt*Math.sin(angleRad),
+			d = new $M.Vector(velocity).mul(dt),
+			dV = new $M.Vector(
+				a*dt*Math.cos(angleRad),
+				a*dt*Math.sin(angleRad)
+			),
 			targetPoint = basketIcon.data("targetPoint");
 			
-		velocity.accelerate(dVx, dVy);
+		velocity.add(dV);
 		var tapePath = tape.attr("path");
 		
-		tapePath[1][1] += dx;
-		tapePath[1][2] += dy;
+		tapePath[1][1] += d.x;
+		tapePath[1][2] += d.y;
 		if(tapePath[1][1]>targetPoint.x || tapePath[1][2]<targetPoint.y){
 			tapePath[1][1] = targetPoint.x;
 			tapePath[1][2] = targetPoint.y;
@@ -113,7 +114,7 @@
 			end: function(e) {
 				var tension = this.data("tension");
 				this.data("time", +new Date);
-				this.data("velocity", new $M.Velocity);
+				this.data("velocity", new $M.Vector());
 				var targetPoint = $R.getPointAtLength(tape.attr("path"), width);
 				this.data("targetPoint", targetPoint);
 				$M.requestAnimFrame()(animate);
@@ -141,7 +142,7 @@
 		basket.falling = false;
 		draggableBasket(basket);
 		basketIcon = basket.icon;
-		basketIcon.data("basePoint", {x:pos.x, y:pos.y-height});
+		basketIcon.data("basePoint", new $M.Vector(pos.x, pos.y-height));
 		basket.accept = function(solid){
 			solid.falling = false;
 			basket.accepted = solid;
@@ -149,7 +150,7 @@
 	}
 	
 	return {
-		version: "1.3",
+		version: "1.4",
 		gun: Gun
 	};
 })(jQuery, Raphael, Mote);
