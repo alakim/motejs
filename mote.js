@@ -15,13 +15,12 @@
 		function (callback) {setTimeout(callback, 16);};
 	
 	function Transformation(Tx, Ty, R){
-		this.T = {x:Tx||0, y:Ty||0};
+		this.T = new Vector(Tx, Ty);
 		this.R = R||0;
 	}
 	$.extend(Transformation.prototype, {
 		shift: function(dx, dy){
-			this.T.x+=dx;
-			this.T.y+=dy;
+			this.T.add(dx, dy);
 			return this;
 		},
 		clone: function(){return new Transformation(this.T.x, this.T.y, this.R)},
@@ -79,10 +78,7 @@
 				
 				var screenWidth = solid.world.getScreen().width;
 				
-				var absPos = {
-					x: solid.transformation.T.x,
-					y: solid.transformation.T.y + solid.bbox.height
-				};
+				var absPos = new Vector(solid.transformation.T).add(0, solid.bbox.height);
 				
 				function terminate(){
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
@@ -247,7 +243,16 @@
 				angle:this.getAngle(degreeMode)
 			};
 		},
-		set: function(x, y){this.x = x; this.y = y; return this;},
+		set: function(x, y){
+			if(arguments.length==1){
+				if(x instanceof Array){this.x = x[0]; this.y = x[1];}
+				else if(x instanceof Vector){this.x = x.x; this.y = x.y}
+			}
+			else{
+				this.x = x; this.y = y;
+			}
+			return this;
+		},
 		setPolar: function(mod, angle, degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
 			if(degreeMode) angle = angle/180*Math.PI;
