@@ -83,8 +83,11 @@
 				
 				var posD = new Vector(pos0).add(d);
 				var fMotion = getSegmentFunc(pos0, posD);
-				// solid.world.getScreen().path(["M",pos0.x, pos0.y, "L", posD.x, posD.y]).attr({stroke:"green"});
-				// solid.world.getScreen().circle(posD.x, posD.y, 2).attr({fill:"green", "stroke-width":0});
+				
+				if(solid.world.trace.falling){
+					solid.world.getScreen().path(["M",pos0.x, pos0.y, "L", posD.x, posD.y]).attr({stroke:"green"});
+					solid.world.getScreen().circle(posD.x, posD.y, 2).attr({fill:"green", "stroke-width":0});
+				}
 				
 				var collision;
 				for(var sld,All=solid.world.solids,j=0; sld=All[j],j<All.length; j++){
@@ -190,7 +193,11 @@
 				if(!solid.static) solid.fall();
 				return solid;
 			},
-			gravity: Gravity
+			gravity: Gravity,
+			trace:{
+				falling: false,
+				collisions: false
+			}
 		};
 		template(worldInstance, screen);
 
@@ -281,7 +288,8 @@
 		this.passive = sld2;
 		this.direction = direction;
 		this.pos = pos;
-		//sld1.world.getScreen().circle(pos.x, pos.y, 2).attr({fill:"red"});
+		if(sld1.world.trace.collisions)
+			sld1.world.getScreen().circle(pos.x, pos.y, 2).attr({fill:"red"});
 	}
 	$.extend(Collision.prototype, {
 		activate: function(){var _=this;
