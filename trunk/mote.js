@@ -66,7 +66,9 @@
 				var state = solid.fallState,
 					dt = now - state.time;
 				state.time = now;
-					
+				
+				//var pos0 = new Vector(solid.transformation.T);
+				//console.log("pos0: "+pos0);
 				var d = new Vector(state.velocity).mul(dt);
 				solid.transformation.shift(d.x, d.y);
 				solid.bbox.x+=d.x; solid.bbox.x2+=d.x; solid.bbox.cx+=d.x; 
@@ -74,47 +76,67 @@
 				
 				state.velocity.add(0, state.acceleration*dt);
 				
-				var ground = solid.getGroundPos();
+				var pos0 = new Vector(
+					state.velocity.x>0? solid.bbox.x2: solid.bbox.x,
+					state.velocity.y>0? solid.bbox.y2: solid.bbox.y
+				);
+				var posD = new Vector(pos0).add(d);
+				var fMotion = getSegmentFunc(pos0, posD);
+				//console.log(fMotion);
+				//solid.world.getScreen().path(["M",pos0.x, pos0.y, "L", posD.x, posD.y]).attr({stroke:"green"});
 				
-				var screenWidth = solid.world.getScreen().width;
-				
-				var absPos = new Vector(solid.transformation.T).add(0, solid.bbox.height);
-				
-				function terminate(){
-					fallingSolids.splice(i--, 1); // TERMINATE FALLING
-					solid.icon.attr({transform:solid.transformation});
-					solid.updateBBox();
+				var collision;
+				for(var sld,All=solid.world.solids,j=0; sld=All[j],j<All.length; j++){
+					if(sld===solid) continue;
+					collision = Collision.check(solid, fMotion, pos0, posD, sld);
+					if(collision) break;
 				}
-				
-				var clipField = 10;
-				if(absPos.y>=ground-clipField && solid.velocity.y>0){
-					solid.transformation.T.y = ground - solid.bbox.height;
-					terminate();
-				}
-				else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.y<0){
-					solid.transformation.T.y = 0;
-					terminate();
-					solid.velocity.x = state.velocity.x;
-					solid.velocity.y = -state.velocity.y;
-					solid.fall();
-				}
-				else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.x<0){
-					solid.transformation.T.x = 0;
-					terminate();
-					solid.velocity.x = -state.velocity.x;
-					solid.velocity.y = state.velocity.y;
-					solid.fall();
-				}
-				else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.x>0){
-					solid.transformation.T.x = screenWidth - solid.bbox.width;
-					terminate();
-					solid.velocity.x = -state.velocity.x;
-					solid.velocity.y = state.velocity.y;
-					solid.fall();
+				if(collision){
+					collision.activate();
 				}
 				else{
-					solid.icon.attr({transform:solid.transformation});
-				}
+					var ground = solid.getGroundPos();
+					
+					var screenWidth = solid.world.getScreen().width;
+					
+					var absPos = new Vector(solid.transformation.T).add(0, solid.bbox.height);
+					
+					function terminate(){
+						fallingSolids.splice(i--, 1); // TERMINATE FALLING
+						solid.icon.attr({transform:solid.transformation});
+						solid.updateBBox();
+					}
+					
+					var clipField = 10;
+					if(absPos.y>=ground-clipField && solid.velocity.y>0){
+						solid.transformation.T.y = ground - solid.bbox.height;
+						terminate();
+					}
+					else if(solid.world.reflect.top && absPos.y<0 && solid.velocity.y<0){
+						solid.transformation.T.y = 0;
+						terminate();
+						solid.velocity.x = state.velocity.x;
+						solid.velocity.y = -state.velocity.y;
+						solid.fall();
+					}
+					else if(solid.world.reflect.left && absPos.x<0 && solid.velocity.x<0){
+						solid.transformation.T.x = 0;
+						terminate();
+						solid.velocity.x = -state.velocity.x;
+						solid.velocity.y = state.velocity.y;
+						solid.fall();
+					}
+					else if(solid.world.reflect.right && absPos.x>screenWidth && solid.velocity.x>0){
+						solid.transformation.T.x = screenWidth - solid.bbox.width;
+						terminate();
+						solid.velocity.x = -state.velocity.x;
+						solid.velocity.y = state.velocity.y;
+						solid.fall();
+					}
+					else{
+						solid.icon.attr({transform:solid.transformation});
+					}
+				};
 			}
 			fallingSolids.length && requestAnimFrame(animationStep);
 		}
@@ -262,7 +284,7 @@
 			return this;
 		},
 		toString: function(){
-			return [this.x, this.y].join();
+			return "("+[this.x, this.y].join()+")";
 		}
 	});
 	
@@ -302,6 +324,59 @@
 	// 		
 	// 	
 	// }
+	
+	function between(x, a, b){
+		var arr = [a, x, b];
+		arr = arr.sort(function(x1,x2){return x1==x2?0:x1<x2?-1:1;});
+		return arr[1]===x;
+	}	
+	function getSegmentFunc(p1, p2){
+		/**********************************************
+			y = ax+b
+			p1.y = a*p1.x+b
+			p2.y = a*p2[0]+b
+			b = p1.y - a*p1.x = p2.y - a*p2.x
+			a*(p2.x - p1.x) = p2.y - p1.y
+			a = (p2.y - p1.y)/(p2.x - p1.x)
+		***********************************************/
+		var dX = p2.x - p1.x;
+		//console.log(p1+"", p2+"", dX);
+		if(!dX) return {constX:p2.x};
+		var a = (p2.y - p1.y)/dX;
+		return {a: a, b: p1.y - a*p1.x};
+	}
+
+	function Collision(sld1, sld2, direction, pos){
+		this.active = sld1;
+		this.passive = sld2;
+		this.direction = direction;
+		this.pos = pos;
+		//console.log(["collision", this.direction, this.pos].join(" "));
+		sld1.world.getScreen().circle(pos.x, pos.y, 2).attr({fill:"red"});
+	}
+	$.extend(Collision.prototype, {
+		activate: function(){
+			//console.log(["collision", this.direction, this.pos].join(" "));
+		}
+	});
+	$.extend(Collision, {
+		check: function(solid1, fMotion, pos0, pos, solid2){
+			if(!solid2.bbox) return;
+			var box = solid2.bbox;
+			var sides = {top: {y:box.y}, right: {x:box.x2}, bottom: {y:box.y2}, left: {x:box.x}};
+			for(var sideNm in sides){
+				side = sides[sideNm];
+				if(side.x!=null && !fMotion.constX && between(side.x, pos0.x, pos.x)){
+					var y = fMotion.a*side.x + fMotion.b;
+					if(between(y, box.y, box.y2)) return new Collision(solid1, solid2, sideNm, new Vector(side.x, y));
+				}
+				if(side.y!=null && between(side.y, pos0.y, pos.y)){
+					var x = fMotion.constX || (side.y - fMotion.b)/fMotion.a;
+					if(between(x, box.x, box.x2)) return new Collision(solid1, solid2, sideNm, new Vector(x, side.y));
+				}
+			}
+		}
+	});
 	
 	function Solid(world, pos, param){
 		var options = {};
