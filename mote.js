@@ -66,9 +66,13 @@
 				var state = solid.fallState,
 					dt = now - state.time;
 				state.time = now;
+					
+				function terminate(){
+					fallingSolids.splice(i--, 1); // TERMINATE FALLING
+					solid.icon.attr({transform:solid.transformation});
+					solid.updateBBox();
+				}
 				
-				//var pos0 = new Vector(solid.transformation.T);
-				//console.log("pos0: "+pos0);
 				var d = new Vector(state.velocity).mul(dt);
 				solid.transformation.shift(d.x, d.y);
 				solid.bbox.x+=d.x; solid.bbox.x2+=d.x; solid.bbox.cx+=d.x; 
@@ -92,6 +96,7 @@
 					if(collision) break;
 				}
 				if(collision){
+					terminate();
 					collision.activate();
 				}
 				else{
@@ -100,12 +105,6 @@
 					var screenWidth = solid.world.getScreen().width;
 					
 					var absPos = new Vector(solid.transformation.T).add(0, solid.bbox.height);
-					
-					function terminate(){
-						fallingSolids.splice(i--, 1); // TERMINATE FALLING
-						solid.icon.attr({transform:solid.transformation});
-						solid.updateBBox();
-					}
 					
 					var clipField = 10;
 					if(absPos.y>=ground-clipField && solid.velocity.y>0){
@@ -352,11 +351,21 @@
 		this.direction = direction;
 		this.pos = pos;
 		//console.log(["collision", this.direction, this.pos].join(" "));
-		sld1.world.getScreen().circle(pos.x, pos.y, 2).attr({fill:"red"});
+		//sld1.world.getScreen().circle(pos.x, pos.y, 2).attr({fill:"red"});
 	}
 	$.extend(Collision.prototype, {
-		activate: function(){
-			//console.log(["collision", this.direction, this.pos].join(" "));
+		activate: function(){var _=this;
+			var decrement;
+			if(_.direction=="right" || _.direction=="left"){
+				_.active.velocity.x*=-1;
+				decrement = .8;
+			}
+			else {
+				_.active.velocity.y*=-1;
+				decrement = .6;
+			}
+			_.active.velocity.mul(decrement);
+			_.active.fall();
 		}
 	});
 	$.extend(Collision, {
