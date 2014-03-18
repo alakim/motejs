@@ -49,11 +49,24 @@
 				}
 			})();
 			
-			Mote.solid(world, [1000, world.gravity.groundPosition - 220], {
+			Mote.solid(world, [1000, world.gravity.groundPosition - 320], {
 				static: true,
 				draggable: true,
 				template: function(screen){
-					return screen.rect(0, 0, 10, 120).attr({fill:"#ccc", stroke:"#888"});
+					return screen.rect(0, 0, 10, 220).attr({fill:"#ffc", stroke:"#888"});
+				},
+				onCollision: function(collision){var _=this;
+					var fill = _.icon.attr("fill");
+					_.icon.attr({fill:"#f88"});
+					
+					_.world.getScreen().circle(
+						collision.active.velocity.x<0?_.bbox.x:_.bbox.x2, 
+						collision.pos.y, 3
+					).attr({fill:"#f00", "stroke-width":0})
+					
+					setTimeout(function(){
+						_.icon.attr({fill:fill});
+					}, 500);
 				}
 			});
 			

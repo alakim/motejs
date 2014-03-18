@@ -308,6 +308,8 @@
 			else{
 				_.active.fall();
 			}
+			_.active.onCollision(_);
+			if(_.passive) _.passive.onCollision(_);
 		}
 	});
 	$.extend(Collision, {
@@ -405,6 +407,7 @@
 			accept: function(solid){
 				// console.log([this.id, " accepts ", solid.id]);
 			},
+			onCollision: options.onCollision,
 			drag:{
 				start: function(){},
 				move: function(){},
@@ -418,7 +421,10 @@
 		"static": false,
 		mass: 1,
 		decrement: .8,
-		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});}
+		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});},
+		onCollision: function(collision){
+			//console.log(solid, activeMode);
+		}
 	};
 
 	return {
