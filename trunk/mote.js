@@ -286,14 +286,17 @@
 	$.extend(Collision.prototype, {
 		activate: function(){var _=this;
 			var minVelocity = .1,
-				decrement = .8;
-			if(_.direction=="right" || _.direction=="left"){
+				borderMode = !_.passive,
+				decrement = borderMode?_.direction=="top"?.4:1:.6;
+			
+			if(_.active.decrement<decrement) decrement = _.active.decrement;
+			if(_.passive && (_.passive.decrement<decrement)) decrement = _.passive.decrement;
+			
+			if(_.direction=="right" || _.direction=="left")
 				_.active.velocity.x*=-1;
-			}
-			else {
+			else 
 				_.active.velocity.y*=-1;
-				decrement = .4;
-			}
+			
 			_.active.velocity.mul(decrement);
 			if(_.direction=="top"){
 				_.active.transformation.T.y = _.pos.y - _.active.bbox.height;
@@ -356,6 +359,7 @@
 		var solidInstance = {
 			id: getUID(),
 			mass: options.mass,
+			decrement: options.decrement,
 			transformation: new Transformation(pos.x, pos.y),
 			getPosition: function(){
 				return {
@@ -413,6 +417,7 @@
 		draggable: true,
 		"static": false,
 		mass: 1,
+		decrement: .8,
 		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});}
 	};
 
