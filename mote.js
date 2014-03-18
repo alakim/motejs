@@ -86,7 +86,8 @@
 					solid.updateBBox();
 				}
 				
-				if(absPos.y>=ground && solid.velocity.y>0){
+				var clipField = 10;
+				if(absPos.y>=ground-clipField && solid.velocity.y>0){
 					solid.transformation.T.y = ground - solid.bbox.height;
 					terminate();
 				}
@@ -349,7 +350,7 @@
 					groundY = _.world.gravity.groundPosition;
 				for(var sld,C=_.world.solids,i=0; sld=C[i],i<C.length; i++){
 					if(sld===_ || !sld.bbox) continue;
-					if(cx>sld.bbox.x && cx<sld.bbox.x2){
+					if(cx>sld.bbox.x && cx<sld.bbox.x2 && _.bbox.y2<sld.bbox.y){
 						if(sld.bbox.y<groundY)
 							groundY = sld.bbox.y;
 					}
