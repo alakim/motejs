@@ -443,6 +443,7 @@
 		getUID: getUID,
 		Transformation: Transformation,
 		Vector: Vector,
+		FallState: FallState,
 		requestAnimFrame: function(){return requestAnimFrame;}
 	};
 })(jQuery, Html, Raphael);
