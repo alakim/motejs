@@ -73,6 +73,7 @@
 			
 			Mote.solid(world, [225, 85], {
 				mass: 8,
+				velocity:[.3, 0],
 				template: function(screen){
 					var d = 10;
 					return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});

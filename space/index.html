@@ -15,16 +15,18 @@
 			));
 			
 			var world = Mote.world($("#screen"), function(world, screen){
-				var ground = world.gravity.groundPosition = 700;
+				var ground = world.gravity.groundPosition = screen.height;
 				var width = screen.width;
 				var grad = "r#008-#002";
 				screen.rect(0, 0, screen.width, screen.height).attr({fill:"#002"});
 				screen.circle(screen.width/2, screen.height/2, screen.width/2)
 					.attr({fill:grad, "stroke-width":0});
 			});
+			world.trace.falling = true;
 			
 			var star = Mote.solid(world, [700, 400], {
-				mass: 5e3,
+				mass: 60,
+				decrement: .3,
 				static: true,
 				template: function(screen){
 					return screen.circle(0, 0, 80).attr({fill:"r(.3,.4)#aa8-0ac", stroke:"#0af"});
@@ -35,6 +37,7 @@
 			
 			Mote.solid(world, [200, 200], {
 				mass: 5,
+				velocity:[.3, -.3],
 				template: function(screen){
 					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
 				}

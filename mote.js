@@ -53,7 +53,9 @@
 		this.solid = solid;
 		this.baseTransform = solid.transformation;
 		this.velocity = velocity || solid.velocity || new Vector();
-		this.acceleration = solid.world.gravity.acceleration(/*height*/);
+		this.acceleration = function(){
+			return solid.world.gravity.acceleration(solid);
+		}
 	}
 	
 	var Gravity = (function(){
@@ -79,7 +81,10 @@
 					state.velocity.y>0? solid.transformation.T.y+solid.bbox.height: solid.transformation.T.y
 				);
 				
-				state.velocity.add(0, state.acceleration*dt);
+				var accel = state.acceleration();
+				state.velocity.x += accel.x * dt;
+				state.velocity.y += accel.y * dt;
+				//state.velocity.add(state.acceleration().mul(dt));
 				
 				var posD = new Vector(pos0).add(d);
 				var fMotion = linearFunction(pos0, posD);
@@ -112,8 +117,10 @@
 			fallingSolids.length && requestAnimFrame(animationStep);
 		}
 		
+		var defaultAcceleration = new Vector(0, .001);
+		
 		return {
-			acceleration: function(height){return .001;},
+			acceleration: function(solid){return defaultAcceleration;},
 			groundPosition: 450,
 			fall: function(solid){
 				if(solid.static) return;
@@ -378,7 +385,7 @@
 					x: this.transformation.T.y
 				};
 			},
-			velocity: new Vector(),
+			velocity: new Vector(options.velocity),
 			template: options.template,
 			fallState: null,
 			icon:null,
@@ -396,6 +403,7 @@
 					x: b.x,
 					x2: b.x2,
 					cx: (b.x2+b.x)/2,
+					cy: (b.y2+b.y)/2,
 					y: b.y,
 					y2: b.y2,
 					width: b.width,
@@ -430,6 +438,7 @@
 		"static": false,
 		mass: 1,
 		decrement: .8,
+		velocity: [0, 0],
 		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});},
 		onCollision: function(collision){
 			//console.log(solid, activeMode);
@@ -437,12 +446,13 @@
 	};
 
 	return {
-		version:"3.4",
+		version:"3.5",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
 		Transformation: Transformation,
 		Vector: Vector,
+		Gravity: Gravity,
 		FallState: FallState,
 		requestAnimFrame: function(){return requestAnimFrame;}
 	};
