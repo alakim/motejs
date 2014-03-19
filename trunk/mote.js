@@ -82,7 +82,7 @@
 				state.velocity.add(0, state.acceleration*dt);
 				
 				var posD = new Vector(pos0).add(d);
-				var fMotion = getSegmentFunc(pos0, posD);
+				var fMotion = linearFunction(pos0, posD);
 				
 				if(solid.world.trace.falling){
 					solid.world.getScreen().path(["M",pos0.x, pos0.y, "L", posD.x, posD.y]).attr({stroke:"green"});
@@ -180,7 +180,7 @@
 		var worldInstance = {
 			getScreen: function(){return screen;},
 			solids: [],
-			reflect:{top:1, left:1, right:1},
+			reflect:{top:1, left:1, right:1, bottom:1},
 			add: function(solid){
 				var icon = solid.template(screen);
 				icon.transform(solid.transformation);
@@ -263,20 +263,12 @@
 		}
 	});
 	
-	function between(x, a, b){
+	function between(x, a, b){ // возвращает true, если значение x лежит между a и b 
 		var arr = [a, x, b];
 		arr = arr.sort(function(x1,x2){return x1==x2?0:x1<x2?-1:1;});
 		return arr[1]===x;
 	}	
-	function getSegmentFunc(p1, p2){
-		/**********************************************
-			y = ax+b
-			p1.y = a*p1.x+b
-			p2.y = a*p2[0]+b
-			b = p1.y - a*p1.x = p2.y - a*p2.x
-			a*(p2.x - p1.x) = p2.y - p1.y
-			a = (p2.y - p1.y)/(p2.x - p1.x)
-		***********************************************/
+	function linearFunction(p1, p2){ // линейная функция y = ax+b, проходящая через точки p1 и p2
 		var dX = p2.x - p1.x;
 		if(!dX) return {constX:p2.x};
 		var a = (p2.y - p1.y)/dX;
@@ -324,7 +316,14 @@
 		check: function(solid1, fMotion, pos0, pos, solid2){
 			if(!solid2.bbox) return;
 			var box = solid2.bbox;
-			var sides = {top: {y:box.y}, right: {x:box.x2}, bottom: {y:box.y2}, left: {x:box.x}};
+			var sides = {};
+			
+			if(solid1.velocity.x>0) sides.left = {x:box.x};
+			else if(solid1.velocity.x<0) sides.right = {x:box.x2};
+			
+			if(solid1.velocity.y>0) sides.top = {y:box.y};
+			else if(solid1.velocity.y<0) sides.bottom = {y:box.y2};
+			
 			for(var sideNm in sides){
 				var side = sides[sideNm];
 				if(side.x!=null && !fMotion.constX && between(side.x, pos0.x, pos.x)){
@@ -338,12 +337,14 @@
 			}
 		},
 		checkBorders: function(solid, fMotion, pos0, pos){
-			var sides = {
-				top: {y: solid.world.gravity.groundPosition}
-			};
-			if(solid.world.reflect.top) sides.bottom = {y:0};
-			if(solid.world.reflect.left) sides.right = {x:0};
-			if(solid.world.reflect.right) sides.left = {x:solid.world.getScreen().width};
+			var sides = {};
+			
+			if(solid.velocity.x>0 && solid.world.reflect.right) sides.left = {x:solid.world.getScreen().width};
+			else if(solid.velocity.x<0 && solid.world.reflect.left) sides.right = {x:0};
+			
+			if(solid.velocity.y>0 && solid.world.reflect.bottom) sides.top = {y:solid.world.gravity.groundPosition};
+			else if(solid.velocity.y<0 && solid.world.reflect.top) sides.bottom = {y:0};
+
 			for(var sideNm in sides){
 				var side = sides[sideNm];
 				if(side.x!=null && !fMotion.constX && between(side.x, pos0.x, pos.x)){
