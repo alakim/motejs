@@ -37,9 +37,9 @@
 			
 			world.gravity = new Space.Gravity(star);
 			
-			Mote.solid(world, [490, 400], {
+			Mote.solid(world, [400, 400], {
 				mass: 5,
-				velocity:[-.1, -1.1],
+				velocity:[-.01, -.85],
 				template: function(screen){
 					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
 				}
