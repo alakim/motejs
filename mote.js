@@ -60,13 +60,14 @@
 	
 	var Gravity = (function(){
 		var fallingSolids = [];
+		var delay = 0;
 		
 		function animationStep(){
 			var now = +new Date;
 			
 			for(var solid,C=fallingSolids,i=0; solid=C[i],i<C.length; i++){
 				var state = solid.fallState,
-					dt = now - state.time;
+					dt = now - state.time - delay;
 				state.time = now;
 					
 				function terminate(){
@@ -93,6 +94,11 @@
 					solid.world.getScreen().path(["M",pos0.x, pos0.y, "L", posD.x, posD.y]).attr({stroke:"green"});
 					solid.world.getScreen().circle(posD.x, posD.y, 2).attr({fill:"green", "stroke-width":0});
 				}
+				if(solid.world.trace.acceleration){
+					var rate = 700;
+					solid.world.getScreen().path(["M",pos0.x, pos0.y, "l", accel.x*rate, accel.y*rate]).attr({stroke:"#ffa"});
+					solid.world.getScreen().circle(pos0.x, pos0.y, 2).attr({fill:"#ffa", "stroke-width":0});
+				}
 				
 				var collision;
 				for(var sld,All=solid.world.solids,j=0; sld=All[j],j<All.length; j++){
@@ -114,7 +120,16 @@
 					solid.icon.attr({transform:solid.transformation});
 				};
 			}
-			fallingSolids.length && requestAnimFrame(animationStep);
+			
+			if(fallingSolids.length){
+				delay = fallingSolids[0].world.gravity.delay || 0;
+				if(delay)
+					setTimeout(function(){
+						requestAnimFrame(animationStep);
+					}, delay);
+				else
+					requestAnimFrame(animationStep);
+			}
 		}
 		
 		var defaultAcceleration = new Vector(0, .001);
@@ -122,6 +137,7 @@
 		return {
 			acceleration: function(solid){return defaultAcceleration;},
 			groundPosition: 450,
+			delay: 0,
 			fall: function(solid){
 				if(solid.static) return;
 				solid.fallState = new FallState(solid);
@@ -203,7 +219,8 @@
 			gravity: Gravity,
 			trace:{
 				falling: false,
-				collisions: false
+				collisions: false,
+				acceleration: false
 			}
 		};
 		template(worldInstance, screen);

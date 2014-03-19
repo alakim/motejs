@@ -23,10 +23,12 @@
 					.attr({fill:grad, "stroke-width":0});
 			});
 			world.trace.falling = true;
+			world.trace.acceleration = true;
+			//world.gravity.delay = 500;
 			
 			var star = Mote.solid(world, [700, 400], {
-				mass: 60,
-				decrement: .3,
+				mass: 70,
+				decrement: .1,
 				static: true,
 				template: function(screen){
 					return screen.circle(0, 0, 80).attr({fill:"r(.3,.4)#aa8-0ac", stroke:"#0af"});
@@ -35,9 +37,9 @@
 			
 			world.gravity = new Space.Gravity(star);
 			
-			Mote.solid(world, [200, 200], {
+			Mote.solid(world, [490, 400], {
 				mass: 5,
-				velocity:[.3, -.3],
+				velocity:[-.1, -1.1],
 				template: function(screen){
 					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
 				}
