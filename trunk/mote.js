@@ -60,12 +60,15 @@
 	
 	var Gravity = (function(){
 		var fallingSolids = [];
-		var delay = 0;
+		var delay = 0,
+			minVelocity = 1e-2,
+			minAcceleration = 1e-4;
 		
 		function animationStep(){
 			var now = +new Date;
 			
 			for(var solid,C=fallingSolids,i=0; solid=C[i],i<C.length; i++){
+				if(!solid) continue;
 				var state = solid.fallState,
 					dt = now - state.time - delay;
 				state.time = now;
@@ -86,6 +89,7 @@
 				state.velocity.x += accel.x * dt;
 				state.velocity.y += accel.y * dt;
 				//state.velocity.add(state.acceleration().mul(dt));
+				
 				
 				var posD = new Vector(pos0).add(d);
 				var fMotion = linearFunction(pos0, posD);
@@ -119,6 +123,10 @@
 					solid.bbox.y+=d.y; solid.bbox.y2+=d.y; 
 					solid.icon.attr({transform:solid.transformation});
 				};
+				
+				if(state.velocity.getLength()<minVelocity && accel.getLength()<minAcceleration){
+					terminate();
+				}
 			}
 			
 			if(fallingSolids.length){
@@ -309,7 +317,7 @@
 	}
 	$.extend(Collision.prototype, {
 		activate: function(){var _=this;
-			var minVelocity = .1,
+			var minVelocity = 1e-2,
 				borderMode = !_.passive,
 				decrement = borderMode?_.direction=="top"?.4:1:.6;
 			
@@ -463,7 +471,7 @@
 	};
 
 	return {
-		version:"3.5",
+		version:"3.6",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
