@@ -21,10 +21,13 @@
 				screen.rect(0, 0, screen.width, screen.height).attr({fill:"#fffaee"});
 			});
 			
-			world.debug.animationLimit = 1000;
+			//world.debug.animationLimit = 1000;
 			world.trace.tensions = true;
 			//world.gravity.delay = 500;
-			world.gravity.acceleration = function(){return new Mote.Vector()};
+			
+			world.gravity.acceleration = function(solid){
+				return new Mote.Vector(solid.velocity).mul(-1e-3).add(0, .001);
+			};
 
 			var pin1 = Mote.solid(world, [300, 100],{
 				static: true,
