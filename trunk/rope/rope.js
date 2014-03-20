@@ -5,7 +5,7 @@
 	function Rope(settings){var _=this;
 		_.settings = {
 			color: "#008",
-			elasticModulus: 3e-9
+			elasticModulus: 3e-5
 		};
 		$.extend(_.settings, settings);
 
@@ -40,22 +40,20 @@
 			_.icon.attr({path: path});
 			
 			var newLength = _.icon.getTotalLength(),
-				vectE = new Vector([path[1][1], path[1][2]])
-						.add(new Vector([path[0][1], path[0][2]])).mul(-1);
+				vectE = new Vector([path[0][1], path[0][2]]).mul(-1).add([path[1][1], path[1][2]]).mul(1/newLength);
 			
 			_.tension = vectE.mul((newLength - _.initLength) * _.settings.elasticModulus);
-			//console.log("tension "+_.tension+" E:"+vectE);
 			
 			if(_.world.trace.tensions) _.drawTension();
 		},
 		drawTension: function(){var _=this;
 			if(!_.world.trace.tensions) return;
-			var rate = 1e5;
+			var rate = 1e4;
 			var path = _.icon.attr("path"),
-				p0 = new Vector(path[0][1], path[0][2]),
-				p1 = new Vector(p0).add(new Vector(_.tension).mul(rate));
+				p0 = new Vector(path[1][1], path[1][2]),
+				p1 = new Vector(_.tension).mul(-rate).add(p0);
 			//console.log("path: "+p0+","+p1);
-			var tensionPath = ["M", p0.x, p0.y, "L", p1.x, p1.y];
+			var tensionPath = ["M", p1.x, p1.y, "L", p0.x, p0.y];
 			
 			if(!_.tensionIcon)
 				_.tensionIcon = _.world.getScreen().path(tensionPath).attr({stroke:"#f80", "stroke-width":4});
