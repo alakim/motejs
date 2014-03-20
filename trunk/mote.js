@@ -100,11 +100,9 @@
 				);
 				
 				var accel = state.acceleration();
-				//console.log("a0 "+accel);
 				for(var rope,j=0; rope=solid.ropes[j],j<solid.ropes.length; j++){
 					accel.add(rope.tension.mul(-1/solid.mass));
 				}
-				//console.log("a1 "+accel);
 				
 				state.velocity.x += accel.x * dt;
 				state.velocity.y += accel.y * dt;
@@ -365,7 +363,8 @@
 					_.active.fall();
 			}
 			else{
-				_.active.fall();
+				if(_.active.velocity.getLength()>minVelocity)
+					_.active.fall();
 			}
 			_.active.onCollision(_);
 			if(_.passive) _.passive.onCollision(_);
