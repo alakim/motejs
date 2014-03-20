@@ -36,8 +36,8 @@
 				}
 			});
 			
-			var moon = Mote.solid(world, [200, 100], {
-				mass: 20,
+			var moon = Mote.solid(world, [50, 50], {
+				mass: 8,
 				decrement: .1,
 				static: true,
 				template: function(screen){
@@ -45,7 +45,14 @@
 				}
 			});
 			
-			world.gravity = new Space.Gravity(star);
+			/*************************************************
+				ОПИСАНИЕ ГРАВИТАЦИИ
+				Можно создать поле с одним центром тяготения:
+				    world.gravity = new Space.Gravity(star);
+				или передать массив центров тяготения:
+				    world.gravity = new Space.Gravity([star, moon]);
+			*************************************************/
+			world.gravity = new Space.Gravity([star, moon]);
 			
 			Mote.solid(world, [400, 400], {
 				mass: 1,
