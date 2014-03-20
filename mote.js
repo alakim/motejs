@@ -64,6 +64,8 @@
 			minVelocity = 1e-2,
 			minAcceleration = 1e-4;
 			
+		var prevDT;
+			
 		function animationStep(){
 			var now = +new Date;
 			
@@ -78,6 +80,12 @@
 				var state = solid.fallState,
 					dt = now - state.time - delay;
 				state.time = now;
+				
+				
+				if(dt>0){
+					if(dt>prevDT*100) dt = prevDT;
+					prevDT = dt;
+				}
 					
 				function terminate(){
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
