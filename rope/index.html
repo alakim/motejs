@@ -21,8 +21,10 @@
 				screen.rect(0, 0, screen.width, screen.height).attr({fill:"#fffaee"});
 			});
 			
-			world.debug.animationLimit = 100;
+			world.debug.animationLimit = 1000;
 			world.trace.tensions = true;
+			//world.gravity.delay = 500;
+			world.gravity.acceleration = function(){return new Mote.Vector()};
 
 			var pin1 = Mote.solid(world, [300, 100],{
 				static: true,
@@ -40,7 +42,7 @@
 				}
 			});
 
-			var pin3 = Mote.solid(world, [400, 530],{
+			var pin3 = Mote.solid(world, [250, 530],{
 				static: true,
 				draggable: false,
 				template: function(screen){
@@ -50,6 +52,7 @@
 			
 			var ball = Mote.solid(world, [400, 400], {
 				mass: 5,
+				velocity:[.1, 0],
 				static: true,
 				draggable: true,
 				template: function(screen){

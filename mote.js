@@ -63,7 +63,7 @@
 		var delay = 0,
 			minVelocity = 1e-2,
 			minAcceleration = 1e-4;
-		
+			
 		function animationStep(){
 			var now = +new Date;
 			
@@ -94,7 +94,7 @@
 				var accel = state.acceleration();
 				//console.log("a0 "+accel);
 				for(var rope,j=0; rope=solid.ropes[j],j<solid.ropes.length; j++){
-					accel.add(rope.tension.mul(1/solid.mass));
+					accel.add(rope.tension.mul(-1/solid.mass));
 				}
 				//console.log("a1 "+accel);
 				
