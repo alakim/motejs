@@ -52,8 +52,26 @@
 					return screen.circle(0, 0, 4).attr({fill:"#008"});
 				}
 			});
+
+			var pin4 = Mote.solid(world, [850, 130],{
+				static: true,
+				draggable: false,
+				template: function(screen){
+					return screen.circle(0, 0, 4).attr({fill:"#008"});
+				}
+			});
 			
-			var ball = Mote.solid(world, [400, 400], {
+			var ball1 = Mote.solid(world, [400, 400], {
+				mass: 5,
+				velocity:[.1, 0],
+				static: true,
+				draggable: true,
+				template: function(screen){
+					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
+				}
+			});
+			
+			var ball2 = Mote.solid(world, [850, 300], {
 				mass: 5,
 				velocity:[.1, 0],
 				static: true,
@@ -65,21 +83,43 @@
 			
 			new Rope({
 				from:{solid:pin1, offset:new Mote.Vector(2, 2)},
-				to:{solid:ball, offset:new Mote.Vector(-2, -7)}
+				to:{solid:ball1, offset:new Mote.Vector(-2, -7)}
 			});
 			
 			new Rope({
 				from:{solid:pin2, offset:new Mote.Vector(2, 2)},
-				to:{solid:ball, offset:new Mote.Vector(2, -7)}
+				to:{solid:ball1, offset:new Mote.Vector(2, -7)}
 			});
 			
 			new Rope({
 				from:{solid:pin3, offset:new Mote.Vector(-1, -2)},
-				to:{solid:ball, offset:new Mote.Vector(2, 7)}
+				to:{solid:ball1, offset:new Mote.Vector(2, 7)}
 			});
 			
-			ball.static = false;
-			ball.fall();
+			new Rope({
+				from:{solid:pin4, offset:new Mote.Vector(2, 2)},
+				to:{solid:ball2, offset:new Mote.Vector(-2, -7)},
+				elasticModulus: 8e-5
+			});
+
+			$.each([ball1, ball2], function(i, ball){
+				ball.static = false;
+				ball.fall();
+			});
+			
+			/***************************************************************************
+					О ПРОБЛЕМАХ АНИМАЦИИ
+			  Если упругость связей достаточно большая, то возникают проблемы анимации,
+			связанные с самовозбуждением системы связанных объектов.
+			  Поскольку расчет положения объектов и их ускорений производится 
+			в дискретные моменты времени, при возникновении достаточно больших отклонений
+			объектов от равновесного состояния, возникают достаточно большие силы, 
+			стремящиеся возвратить объект в равновесие. Рассчитанные ускорения
+			действуют неизменно до следующего момента расчета, и если они достаточно большие,
+			объект успевает пройти точку равновесия, и удалиться в обратную сторону на 
+			еще большее расстояние, и таким образом, ускорения, рассчитанные в следующий
+			момент времени будут еще больше. Возникает эффект положительной обратной связи.
+			****************************************************************************/
 			
 		});
 	</script>
