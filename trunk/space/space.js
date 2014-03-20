@@ -4,9 +4,9 @@
 	
 	function Gravity(star){var _=this;
 		_.star = star;
-		_.G = 10;
+		_.G = 5e-2;
 		_.acceleration = function(solid){
-			if(counter++>1000) throw "Execution stopped by developer";
+			//if(counter++>1000) throw "Execution stopped by developer";
 			/*******************
 				F = m*a;
 				F = G*m1*m2/(r*r);

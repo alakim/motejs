@@ -22,26 +22,44 @@
 				screen.circle(screen.width/2, screen.height/2, screen.width/2)
 					.attr({fill:grad, "stroke-width":0});
 			});
-			world.trace.falling = true;
-			world.trace.acceleration = true;
+			world.trace.falling = false;
+			world.trace.acceleration = false;
 			//world.gravity.delay = 500;
+			world.reflect = {top:0, right:0, bottom:0, left:0};
 			
 			var star = Mote.solid(world, [700, 400], {
 				mass: 70,
 				decrement: .1,
 				static: true,
 				template: function(screen){
-					return screen.circle(0, 0, 80).attr({fill:"r(.3,.4)#aa8-0ac", stroke:"#0af"});
+					return screen.circle(0, 0, 80).attr({fill:"r(.3,.4)#aa8-#44a", stroke:"#0ac"});
+				}
+			});
+			
+			var moon = Mote.solid(world, [200, 100], {
+				mass: 20,
+				decrement: .1,
+				static: true,
+				template: function(screen){
+					return screen.circle(0, 0, 30).attr({fill:"r(.3,.4)#ccc-#555", stroke:"#444"});
 				}
 			});
 			
 			world.gravity = new Space.Gravity(star);
 			
 			Mote.solid(world, [400, 400], {
-				mass: 5,
-				velocity:[-.01, -.85],
+				mass: 1,
+				velocity:[-.001, -.085],
 				template: function(screen){
 					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
+				}
+			});
+			
+			Mote.solid(world, [1000, 380], {
+				mass: 1,
+				velocity:[-.001, .092],
+				template: function(screen){
+					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#eff-#77a"});
 				}
 			});
 			
