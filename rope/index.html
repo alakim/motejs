@@ -1,0 +1,85 @@
+﻿<html>
+<head>
+	<title>Rope Demo Page</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="../styles.css"/>
+	<script type="text/javascript" src="../lib/html.js"></script>
+	<script type="text/javascript" src="../lib/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../lib/raphael-min.js"></script>
+	<script type="text/javascript" src="../mote.js"></script>
+	<script type="text/javascript" src="rope.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("h1").after(Html.div({style:"font-style:italic; color:#ccc;"}, 
+				"Powered by MoteJS v.", Mote.version, ", Rope v.", Rope.version
+			));
+			
+			var world = Mote.world($("#screen"), function(world, screen){
+				var ground = world.gravity.groundPosition = screen.height;
+				var width = screen.width;
+				var grad = "r#008-#002";
+				screen.rect(0, 0, screen.width, screen.height).attr({fill:"#fffaee"});
+			});
+			
+			world.debug.animationLimit = 100;
+			world.trace.tensions = true;
+
+			var pin1 = Mote.solid(world, [300, 100],{
+				static: true,
+				draggable: false,
+				template: function(screen){
+					return screen.circle(0, 0, 4).attr({fill:"#008"});
+				}
+			});
+
+			var pin2 = Mote.solid(world, [600, 130],{
+				static: true,
+				draggable: false,
+				template: function(screen){
+					return screen.circle(0, 0, 4).attr({fill:"#008"});
+				}
+			});
+
+			var pin3 = Mote.solid(world, [400, 530],{
+				static: true,
+				draggable: false,
+				template: function(screen){
+					return screen.circle(0, 0, 4).attr({fill:"#008"});
+				}
+			});
+			
+			var ball = Mote.solid(world, [400, 400], {
+				mass: 5,
+				static: true,
+				draggable: true,
+				template: function(screen){
+					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
+				}
+			});
+			
+			new Rope({
+				from:{solid:pin1, offset:new Mote.Vector(2, 2)},
+				to:{solid:ball, offset:new Mote.Vector(-2, -7)}
+			});
+			
+			new Rope({
+				from:{solid:pin2, offset:new Mote.Vector(2, 2)},
+				to:{solid:ball, offset:new Mote.Vector(2, -7)}
+			});
+			
+			new Rope({
+				from:{solid:pin3, offset:new Mote.Vector(-1, -2)},
+				to:{solid:ball, offset:new Mote.Vector(2, 7)}
+			});
+			
+			ball.static = false;
+			ball.fall();
+			
+		});
+	</script>
+</head>
+<body>
+	<h1>Rope Demo Page</h1>
+	<div id="screen" style="border:1px solid #ccc; margin:5px; width:1400px; height:600px;"></div>
+</body>
+</html>
