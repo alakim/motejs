@@ -69,6 +69,12 @@
 			
 			for(var solid,C=fallingSolids,i=0; solid=C[i],i<C.length; i++){
 				if(!solid) continue;
+				if(solid.world.debug.animationLimit != null){
+					if(solid.world.debug.animationLimit--<=0){
+						throw "Debug animation limit exceeded";
+					}
+				}
+				
 				var state = solid.fallState,
 					dt = now - state.time - delay;
 				state.time = now;
@@ -86,6 +92,12 @@
 				);
 				
 				var accel = state.acceleration();
+				//console.log("a0 "+accel);
+				for(var rope,j=0; rope=solid.ropes[j],j<solid.ropes.length; j++){
+					accel.add(rope.tension.mul(1/solid.mass));
+				}
+				//console.log("a1 "+accel);
+				
 				state.velocity.x += accel.x * dt;
 				state.velocity.y += accel.y * dt;
 				//state.velocity.add(state.acceleration().mul(dt));
@@ -122,6 +134,7 @@
 					solid.bbox.x+=d.x; solid.bbox.x2+=d.x; solid.bbox.cx+=d.x; 
 					solid.bbox.y+=d.y; solid.bbox.y2+=d.y; 
 					solid.icon.attr({transform:solid.transformation});
+					solid.redrawRopes();
 				};
 				
 				if(state.velocity.getLength()<minVelocity && accel.getLength()<minAcceleration){
@@ -176,6 +189,7 @@
 					(solid.transformation.T.x - x0)*rate/dt,
 					(solid.transformation.T.y - y0)*rate/dt
 				);
+				solid.redrawRopes();
 				solid.drag.move.call(solid.icon, dx, dy, x, y, e);
 			},
 			start:function(x, y, e) {
@@ -197,6 +211,7 @@
 						sld.accept(solid);
 					}
 				}
+				solid.redrawRopes();
 				solid.drag.end.call(solid.icon, e);
 				solid.fall();
 			}
@@ -228,7 +243,11 @@
 			trace:{
 				falling: false,
 				collisions: false,
-				acceleration: false
+				acceleration: false,
+				tensions: false
+			},
+			debug:{
+				animationLimit: null
 			}
 		};
 		template(worldInstance, screen);
@@ -449,6 +468,12 @@
 			accept: function(solid){
 				// console.log([this.id, " accepts ", solid.id]);
 			},
+			ropes:[],
+			redrawRopes: function(){
+				for(var rope,i=0; rope=this.ropes[i],i<this.ropes.length; i++){
+					rope.redraw(this);
+				}
+			},
 			onCollision: options.onCollision,
 			drag:{
 				start: function(){},
@@ -471,7 +496,7 @@
 	};
 
 	return {
-		version:"3.6",
+		version:"3.7",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
