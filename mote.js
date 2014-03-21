@@ -89,6 +89,8 @@
 					
 				function terminate(){
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
+					solid.fallState = null;
+					//console.log("delete fallState");
 					solid.icon.attr({transform:solid.transformation});
 					solid.updateBBox();
 				}
@@ -166,8 +168,9 @@
 			acceleration: function(solid){return defaultAcceleration;},
 			groundPosition: 450,
 			delay: 0,
-			fall: function(solid){
-				if(solid.static) return;
+			fall: function(solid, force){
+				if(solid.static && !force) return; 
+				//console.log("new fallState");
 				solid.fallState = new FallState(solid);
 				solid.updateBBox();
 				fallingSolids.push(solid);
@@ -221,7 +224,8 @@
 				}
 				solid.redrawRopes();
 				solid.drag.end.call(solid.icon, e);
-				solid.fall();
+				if(!solid.static)
+					solid.fall();
 			}
 		};
 		solid.icon.drag(drag.move, drag.start, drag.end);
@@ -463,10 +467,12 @@
 			bbox:null,
 			static: options.static,
 			draggable: options.draggable,
-			falling: true,
-			fall: function(){
-				if(!this.falling) return;
-				this.world.gravity.fall(this);
+			//falling: true,
+			fall: function(force){
+				//if(!this.falling) return;
+				if(this.fallState) return;
+				console.log("fall"); // СЛИШКОМ ЧАСТО ВЫЗЫВАЕТСЯ ПРИ РАБОТЕ С Rope (см. пример)!!! НАДО ЧТО-ТО СДЕЛАТЬ
+				this.world.gravity.fall(this, force);
 			},
 			updateBBox: function(){
 				var b = this.icon.getBBox();
