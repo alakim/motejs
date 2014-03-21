@@ -18,14 +18,14 @@
 		}
 		var m = 1,
 			a = tension/m,
-			d = new $M.Vector(velocity).mul(dt),
+			d = new $M.Vector(velocity).Mul(dt),
 			dV = new $M.Vector(
 				a*dt*Math.cos(angleRad),
 				a*dt*Math.sin(angleRad)
 			),
 			targetPoint = basketIcon.data("targetPoint");
 			
-		velocity.add(dV);
+		velocity.Add(dV);
 		var tapePath = tape.attr("path");
 		
 		tapePath[1][1] += d.x;
@@ -48,7 +48,7 @@
 			basket.updateBBox();
 			if(basket.accepted){with(basket){
 				var v = icon.data("maxTension")*m*50;
-				accepted.velocity.set(v*Math.cos(angleRad), v*Math.sin(angleRad));
+				accepted.velocity.Set(v*Math.cos(angleRad), v*Math.sin(angleRad));
 				accepted.falling = true;
 				accepted.fall();
 				accepted = null;

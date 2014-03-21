@@ -22,7 +22,7 @@
 			var count = 0;
 			world.gravity.acceleration = function(solid){
 				//if(count++>100) throw "Execution stopped by developer";
-				var a = new Mote.Vector(solid.velocity).mul(-1e-4);
+				var a = new Mote.Vector(solid.velocity).Mul(-1e-4);
 				return a;
 			};
 			

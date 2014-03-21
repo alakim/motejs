@@ -20,7 +20,7 @@
 	}
 	$.extend(Transformation.prototype, {
 		shift: function(dx, dy){
-			this.T.add(dx, dy);
+			this.T.Add(dx, dy);
 			return this;
 		},
 		clone: function(){return new Transformation(this.T.x, this.T.y, this.R)},
@@ -93,7 +93,7 @@
 					solid.updateBBox();
 				}
 				
-				var d = new Vector(state.velocity).mul(dt);
+				var d = state.velocity.mul(dt);
 				var pos0 = new Vector(
 					state.velocity.x>0? solid.transformation.T.x+solid.bbox.width: solid.transformation.T.x,
 					state.velocity.y>0? solid.transformation.T.y+solid.bbox.height: solid.transformation.T.y
@@ -101,15 +101,15 @@
 				
 				var accel = state.acceleration();
 				for(var rope,j=0; rope=solid.ropes[j],j<solid.ropes.length; j++){
-					accel.add(rope.tension.mul(-1/solid.mass));
+					accel.Add(rope.tension.Mul(-1/solid.mass));
 				}
 				
 				state.velocity.x += accel.x * dt;
 				state.velocity.y += accel.y * dt;
 				//state.velocity.add(state.acceleration().mul(dt));
 				
+				var posD = pos0.add(d);
 				
-				var posD = new Vector(pos0).add(d);
 				var fMotion = linearFunction(pos0, posD);
 				
 				if(solid.world.trace.falling){
@@ -191,7 +191,7 @@
 				solid.transformation = solid.drag.state.baseTransform.clone().shift(dx, dy);
 				solid.icon.attr({transform: solid.transformation});
 
-				solid.velocity.set(
+				solid.velocity.Set(
 					(solid.transformation.T.x - x0)*rate/dt,
 					(solid.transformation.T.y - y0)*rate/dt
 				);
@@ -276,15 +276,22 @@
 		scalarProd: function(v1, v2){return v1.x*v2.x + v1.y*v2.y;}
 	});
 	$.extend(Vector.prototype, {
-		add: function(x, y){
-			if(arguments.length==1){
-				if(x instanceof Array){this.x+=x[0]; this.y+=x[1];}
-				else if(x instanceof Vector){this.x+=x.x; this.y+=x.y;}
-			}
+		Add: function(x, y){
+			if(x instanceof Array){this.x+=x[0]; this.y+=x[1];}
+			else if(x instanceof Vector){this.x+=x.x; this.y+=x.y;}
 			else{this.x+=x; this.y+=y;}
 			return this;
 		},
-		mul: function(rate){this.x*=rate;this.y*=rate; return this;},
+		add: function(x, y){return (new Vector(this)).Add(x, y);},
+		Mul: function(rate){this.x*=rate;this.y*=rate; return this;},
+		mul: function(rate){return (new Vector(this)).Mul(rate);},
+		Norm: function(){var _=this;
+			var lng = Math.sqrt(_.x*_.x+_.y*_.y);
+			return _.Mul(1/lng);
+		},
+		norm: function(){
+			return (new Vector(this)).Norm();
+		},
 		getAngle: function(degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
 			var angle = Math.atan(this.y/this.x);
@@ -298,7 +305,7 @@
 				angle:this.getAngle(degreeMode)
 			};
 		},
-		set: function(x, y){
+		Set: function(x, y){
 			if(arguments.length==1){
 				if(x instanceof Array){this.x = x[0]; this.y = x[1];}
 				else if(x instanceof Vector){this.x = x.x; this.y = x.y}
@@ -308,7 +315,7 @@
 			}
 			return this;
 		},
-		setPolar: function(mod, angle, degreeMode){
+		SetPolar: function(mod, angle, degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
 			if(degreeMode) angle = angle/180*Math.PI;
 			this.x = Math.cos(angle)*mod;
@@ -354,7 +361,7 @@
 			else 
 				_.active.velocity.y*=-1;
 			
-			_.active.velocity.mul(decrement);
+			_.active.velocity.Mul(decrement);
 			if(_.direction=="top"){
 				_.active.transformation.T.y = _.pos.y - _.active.bbox.height;
 				_.active.icon.attr({transform:_.active.transformation});
@@ -503,7 +510,7 @@
 	};
 
 	return {
-		version:"3.7",
+		version:"3.8",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
