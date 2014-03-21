@@ -46,6 +46,15 @@
 			_.tension = vectE.Mul((newLength - _.initLength) * _.settings.elasticModulus);
 			
 			if(_.world.trace.tensions) _.drawTension();
+			
+			var other = _.solid1===initiator?_.solid2:_.solid1;
+			//console.log("check fallState", other.fallState);
+			if(!other.fallState){ // выводим объект на другом конце из состояния покоя
+				//other.static = false;
+				other.fall(); // СЛИШКОМ ЧАСТО ВЫЗЫВАЕТСЯ!! НАДО ЧТО-ТО СДЕЛАТЬ
+			}
+			//else console.log("already falling");
+			
 		},
 		drawTension: function(){var _=this;
 			if(!_.world.trace.tensions) return;
