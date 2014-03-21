@@ -55,9 +55,9 @@
 
 			var pin4 = Mote.solid(world, [850, 130],{
 				static: true,
-				draggable: false,
+				draggable: true,
 				template: function(screen){
-					return screen.circle(0, 0, 4).attr({fill:"#008"});
+					return screen.circle(0, 0, 4).attr({fill:"#0f0"});
 				}
 			});
 			
@@ -126,6 +126,7 @@
 </head>
 <body>
 	<h1>Rope Demo Page</h1>
+	<p>Green pin is draggable.</p>
 	<div id="screen" style="border:1px solid #ccc; margin:5px; width:1400px; height:600px;"></div>
 </body>
 </html>
