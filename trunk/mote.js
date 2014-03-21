@@ -137,6 +137,7 @@
 				}
 				else{
 					solid.transformation.shift(d.x, d.y);
+					solid.applyRestrictions();
 					solid.bbox.x+=d.x; solid.bbox.x2+=d.x; solid.bbox.cx+=d.x; 
 					solid.bbox.y+=d.y; solid.bbox.y2+=d.y; 
 					solid.icon.attr({transform:solid.transformation});
@@ -189,6 +190,7 @@
 					y0 = solid.transformation.T.y;
 				
 				solid.transformation = solid.drag.state.baseTransform.clone().shift(dx, dy);
+				solid.applyRestrictions();
 				solid.icon.attr({transform: solid.transformation});
 
 				solid.velocity.Set(
@@ -424,6 +426,17 @@
 		}
 	});
 	
+	function applyRestrictions(solid){
+		for(var restr,RC=solid.restrictions,i=0; restr=solid.restrictions[i],i<solid.restrictions.length; i++){
+			if(restr.constX) solid.transformation.T.x = restr.constX;
+			if(restr.constY) solid.transformation.T.y = restr.constY;
+			if(restr.minX && solid.transformation.T.x < restr.minX) solid.transformation.T.x = restr.minX;
+			if(restr.maxX && solid.transformation.T.x > restr.maxX) solid.transformation.T.x = restr.maxX;
+			if(restr.minY && solid.transformation.T.y < restr.minY) solid.transformation.T.y = restr.minY;
+			if(restr.maxY && solid.transformation.T.y > restr.maxY) solid.transformation.T.y = restr.maxY;
+		}
+	}
+	
 	function Solid(world, pos, param){
 		var options = {};
 		$.extend(options, Solid.defaultOptions);
@@ -468,6 +481,8 @@
 					height: b.height
 				}
 			},
+			restrictions: options.restrictions,
+			applyRestrictions: function(){applyRestrictions(this);},
 			traceBBox: function(color){var _=this;
 				var box = _.bbox,
 					color = color || "#f00",
@@ -503,6 +518,7 @@
 		mass: 1,
 		decrement: .8,
 		velocity: [0, 0],
+		restrictions: [],
 		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});},
 		onCollision: function(collision){
 			//console.log(solid, activeMode);
@@ -510,7 +526,7 @@
 	};
 
 	return {
-		version:"3.8",
+		version:"3.9",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
