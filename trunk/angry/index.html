@@ -34,7 +34,7 @@
 				mass: 8,
 				template: function(screen){
 					var d = 10;
-					return screen.circle(d, d, d).attr({fill:"#faa", stroke:"#8cc"});
+					return screen.circle(d, d, d).attr({fill:"r(.3,.4)#fee-#faa", stroke:"#e99"});
 				}
 			});
 			
@@ -43,7 +43,7 @@
 				for(var i=0; i<4; i++){
 					Mote.solid(world, [290+i*(r*2+2), 100], {
 						template: function(screen){
-							return screen.circle(r, r, r).attr({fill:"#888"});
+							return screen.circle(r, r, r).attr({fill:"r(.3,.4)#ccc-#555"});
 						}
 					});
 				}

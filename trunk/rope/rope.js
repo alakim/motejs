@@ -2,6 +2,16 @@
 	
 	var Vector = $M.Vector;
 	
+	function draw(rope){var _=rope;
+		var screen = _.world.getScreen();
+		var p1 = _.solid1.transformation.T.add(_.settings.from.offset),
+			p2 = _.solid2.transformation.T.add(_.settings.to.offset);
+			
+		_.icon = screen.path(["M", p1.x, p1.y, "L", p2.x, p2.y])
+			.attr({fill:_.settings.color});
+		_.initLength = _.icon.getTotalLength();
+	}
+	
 	function Rope(settings){var _=this;
 		_.settings = {
 			color: "#008",
@@ -16,18 +26,9 @@
 		
 		_.solid1.ropes.push(_);
 		_.solid2.ropes.push(_);
-		_.draw();
+		draw(_);
 	}
 	$.extend(Rope.prototype, {
-		draw: function(){var _=this;
-			var screen = _.world.getScreen();
-			var p1 = _.solid1.transformation.T.add(_.settings.from.offset),
-				p2 = _.solid2.transformation.T.add(_.settings.to.offset);
-				
-			_.icon = screen.path(["M", p1.x, p1.y, "L", p2.x, p2.y])
-				.attr({fill:_.settings.color});
-			_.initLength = _.icon.getTotalLength();
-		},
 		redraw: function(initiator){var _=this;
 			var path = _.icon.attr("path"),
 				ptIdx = _.solid1===initiator?0:1,
