@@ -21,8 +21,8 @@
 	$.extend(Rope.prototype, {
 		draw: function(){var _=this;
 			var screen = _.world.getScreen();
-			var p1 = new Vector(_.solid1.transformation.T).add(_.settings.from.offset),
-				p2 = new Vector(_.solid2.transformation.T).add(_.settings.to.offset);
+			var p1 = _.solid1.transformation.T.add(_.settings.from.offset),
+				p2 = _.solid2.transformation.T.add(_.settings.to.offset);
 				
 			_.icon = screen.path(["M", p1.x, p1.y, "L", p2.x, p2.y])
 				.attr({fill:_.settings.color});
@@ -33,16 +33,16 @@
 				ptIdx = _.solid1===initiator?0:1,
 				pt = path[ptIdx],
 				ptSettings = ptIdx?_.settings.to:_.settings.from;
-				pos = new Vector(initiator.transformation.T).add(ptSettings.offset);
+				pos = initiator.transformation.T.add(ptSettings.offset);
 			
 			pt[1] = pos.x;
 			pt[2] = pos.y;
 			_.icon.attr({path: path});
 			
 			var newLength = _.icon.getTotalLength(),
-				vectE = new Vector([path[0][1], path[0][2]]).mul(-1).add([path[1][1], path[1][2]]).mul(1/newLength);
+				vectE = new Vector([path[0][1], path[0][2]]).Mul(-1).Add([path[1][1], path[1][2]]).Mul(1/newLength);
 			
-			_.tension = vectE.mul((newLength - _.initLength) * _.settings.elasticModulus);
+			_.tension = vectE.Mul((newLength - _.initLength) * _.settings.elasticModulus);
 			
 			if(_.world.trace.tensions) _.drawTension();
 		},
@@ -51,7 +51,7 @@
 			var rate = 1e4;
 			var path = _.icon.attr("path"),
 				p0 = new Vector(path[1][1], path[1][2]),
-				p1 = new Vector(_.tension).mul(-rate).add(p0);
+				p1 = _.tension.mul(-rate).Add(p0);
 			//console.log("path: "+p0+","+p1);
 			var tensionPath = ["M", p1.x, p1.y, "L", p0.x, p0.y];
 			

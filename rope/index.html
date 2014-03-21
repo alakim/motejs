@@ -26,7 +26,7 @@
 			//world.gravity.delay = 500;
 			
 			world.gravity.acceleration = function(solid){
-				return new Mote.Vector(solid.velocity).mul(-1e-3).add(0, .001);
+				return new Mote.Vector(solid.velocity).Mul(-1e-3).Add(0, .001);
 			};
 
 			var pin1 = Mote.solid(world, [300, 100],{

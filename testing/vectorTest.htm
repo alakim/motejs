@@ -31,32 +31,57 @@ new JSUnit.Test("From Vector", "Construction").run = function(){
 	this.assert(v.y, 3);
 }
 
-new JSUnit.Test("Basic", "Addition").run = function(){
+new JSUnit.Test("Basic 1", "Addition").run = function(){
 	var v = new Mote.Vector(2, 3);
-	v.add(1, 3);
+	v.Add(1, 3);
 	this.assert(v.x, 3);
 	this.assert(v.y, 6);
 }
 
+new JSUnit.Test("Basic 2", "Addition").run = function(){
+	var v = new Mote.Vector(2, 3);
+	var v1 = v.add(1, 3);
+	this.assert(v.x, 2);
+	this.assert(v.y, 3);
+	this.assert(v1.x, 3);
+	this.assert(v1.y, 6);
+}
+
+new JSUnit.Test("Basic 3", "Addition").run = function(){
+	var v = new Mote.Vector(2, 3);
+	var d = new Mote.Vector(1, 3);
+	var v1 = v.add(d);
+	this.assert(v.x, 2);
+	this.assert(v.y, 3);
+	this.assert(v1.x, 3);
+	this.assert(v1.y, 6);
+}
+
 new JSUnit.Test("With Array", "Addition").run = function(){
 	var v = new Mote.Vector(2, 3);
-	v.add([1, 3]);
+	v.Add([1, 3]);
 	this.assert(v.x, 3);
 	this.assert(v.y, 6);
 }
 
 new JSUnit.Test("With Vector", "Addition").run = function(){
 	var v = new Mote.Vector(2, 3);
-	v.add(new Mote.Vector(1, 3));
+	v.Add(new Mote.Vector(1, 3));
 	this.assert(v.x, 3);
 	this.assert(v.y, 6);
 }
 
 new JSUnit.Test("Multiplication", "Simple Operations").run = function(){
 	var v = new Mote.Vector(2, 3);
-	v.mul(2);
+	v.Mul(2);
 	this.assert(v.x, 4);
 	this.assert(v.y, 6);
+	
+	var v1 = v.mul(2);
+	this.assert(v.x, 4);
+	this.assert(v.y, 6);
+	this.assert(v1.x, 8);
+	this.assert(v1.y, 12);
 }
 
 new JSUnit.Test("Scalar Product", "Simple Operations").run = function(){
@@ -95,20 +120,46 @@ new JSUnit.Test("Get 4", "Polar System").run = function(){
 
 new JSUnit.Test("Set 1", "Polar System").run = function(){
 	var v = new Mote.Vector();
-	v.setPolar(2, 0);
+	v.SetPolar(2, 0);
 	this.assert(v.x, 2, "Bad x");
 	this.assert(v.y, 0, "Bad y");
 }
 
 new JSUnit.Test("Set 2", "Polar System").run = function(){
 	var v = new Mote.Vector();
-	v.setPolar(2, 45);
+	v.SetPolar(2, 45);
 	this.assert(Math.abs(v.x-v.y)<1e5, true, "Not equal");
 }
 
 new JSUnit.Test("Test 1", "Formatting").run = function(){
 	var v = new Mote.Vector(2, 3);
-	this.assert(v.toString(), "2,3");
+	this.assert(v.toString(), "(2,3)");
+}
+
+new JSUnit.Test("Test 1", "Normalization").run = function(){
+	this.assert(new Mote.Vector(2, 0).Norm().toString(), "(1,0)");
+	this.assert(new Mote.Vector(0, 2).Norm().toString(), "(0,1)");
+}
+
+new JSUnit.Test("Test 2", "Normalization").run = function(){
+	var v = new Mote.Vector(2, 0);
+	var v1 = v.norm();
+	this.assert(v.toString(), "(2,0)");
+	this.assert(v1.toString(), "(1,0)");
+}
+
+new JSUnit.Test("Test 3", "Normalization").run = function(){
+	var v = new Mote.Vector(2, 3),
+		pol = v.getPolar(),
+		pol1 = v.norm().getPolar();
+	
+	this.assert(pol.mod!=pol1.mod, true);
+	this.assert(pol1.mod, 1);
+	this.assert(pol1.angle, pol.angle);
+	
+	v.Norm();
+	this.assert(v.getPolar().angle, pol.angle);
+	this.assert(v.getPolar().mod, 1);
 }
 
 

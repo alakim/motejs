@@ -10,9 +10,9 @@
 		********************/
 		var solPos = new $M.Vector(solid.transformation.T.x, solid.transformation.T.y),
 			stPos = new $M.Vector(star.transformation.T.x, star.transformation.T.y),
-			distance = stPos.add(solPos.mul(-1))
+			distance = stPos.Add(solPos.Mul(-1))
 			L = distance.getLength();
-		return new $M.Vector(distance).mul(1/L).mul(G*star.mass/(L*L));
+		return distance.mul(1/L).Mul(G*star.mass/(L*L));
 	}
 	
 	function Gravity(star){var _=this;
@@ -23,7 +23,7 @@
 			if(_.star instanceof Array){
 				var a = new $M.Vector();
 				for(var s,i=0; s=_.star[i],i<_.star.length; i++){
-					a.add(getAcceleration(s, solid, _.G));
+					a.Add(getAcceleration(s, solid, _.G));
 				}
 				return a;
 			}
