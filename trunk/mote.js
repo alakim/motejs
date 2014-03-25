@@ -467,11 +467,8 @@
 			bbox:null,
 			static: options.static,
 			draggable: options.draggable,
-			//falling: true,
 			fall: function(force){
-				//if(!this.falling) return;
-				if(this.fallState) return;
-				console.log("fall"); // СЛИШКОМ ЧАСТО ВЫЗЫВАЕТСЯ ПРИ РАБОТЕ С Rope (см. пример)!!! НАДО ЧТО-ТО СДЕЛАТЬ
+				if(this.fallState || this.static) return;
 				this.world.gravity.fall(this, force);
 			},
 			updateBBox: function(){
