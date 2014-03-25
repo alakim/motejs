@@ -48,12 +48,9 @@
 			if(_.world.trace.tensions) _.drawTension();
 			
 			var other = _.solid1===initiator?_.solid2:_.solid1;
-			//console.log("check fallState", other.fallState);
 			if(!other.fallState){ // выводим объект на другом конце из состояния покоя
-				//other.static = false;
-				other.fall(); // СЛИШКОМ ЧАСТО ВЫЗЫВАЕТСЯ!! НАДО ЧТО-ТО СДЕЛАТЬ
+				other.fall();
 			}
-			//else console.log("already falling");
 			
 		},
 		drawTension: function(){var _=this;
@@ -62,7 +59,6 @@
 			var path = _.icon.attr("path"),
 				p0 = new Vector(path[1][1], path[1][2]),
 				p1 = _.tension.mul(-rate).Add(p0);
-			//console.log("path: "+p0+","+p1);
 			var tensionPath = ["M", p1.x, p1.y, "L", p0.x, p0.y];
 			
 			if(!_.tensionIcon)
