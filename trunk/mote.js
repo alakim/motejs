@@ -90,7 +90,6 @@
 				function terminate(){
 					fallingSolids.splice(i--, 1); // TERMINATE FALLING
 					solid.fallState = null;
-					//console.log("delete fallState");
 					solid.icon.attr({transform:solid.transformation});
 					solid.updateBBox();
 				}
@@ -106,9 +105,8 @@
 					accel.Add(rope.tension.Mul(-1/solid.mass));
 				}
 				
-				state.velocity.x += accel.x * dt;
-				state.velocity.y += accel.y * dt;
-				//state.velocity.add(state.acceleration().mul(dt));
+				// ***** state.velocity.add(state.acceleration().mul(dt));
+				state.velocity.x += accel.x * dt; state.velocity.y += accel.y * dt;
 				
 				var posD = pos0.add(d);
 				
@@ -170,7 +168,6 @@
 			delay: 0,
 			fall: function(solid, force){
 				if(solid.static && !force) return; 
-				//console.log("new fallState");
 				solid.fallState = new FallState(solid);
 				solid.updateBBox();
 				fallingSolids.push(solid);
@@ -300,7 +297,7 @@
 		},
 		getAngle: function(degreeMode){
 			degreeMode = degreeMode==null?true:degreeMode;
-			var angle = Math.atan(this.y/this.x);
+			var angle = Math.atan2(this.y, this.x);
 			return degreeMode?angle/Math.PI*180:angle;
 		},
 		getLength: function(){return Math.sqrt(this.x*this.x + this.y*this.y);},
@@ -449,10 +446,11 @@
 		if(!pos) pos = {x:0, y:0};
 		else if(pos instanceof Array) pos = {x:pos[0], y:pos[1]};
 		
-		var solidInstance = {
+		var solidInstance = {};
+		$.extend(solidInstance, options);
+		
+		$.extend(solidInstance, {
 			id: getUID(),
-			mass: options.mass,
-			decrement: options.decrement,
 			transformation: new Transformation(pos.x, pos.y),
 			getPosition: function(){
 				return {
@@ -461,12 +459,9 @@
 				};
 			},
 			velocity: new Vector(options.velocity),
-			template: options.template,
 			fallState: null,
 			icon:null,
 			bbox:null,
-			static: options.static,
-			draggable: options.draggable,
 			fall: function(force){
 				if(this.fallState || this.static) return;
 				this.world.gravity.fall(this, force);
@@ -484,7 +479,6 @@
 					height: b.height
 				}
 			},
-			restrictions: options.restrictions,
 			applyRestrictions: function(){applyRestrictions(this);},
 			traceBBox: function(color){var _=this;
 				var box = _.bbox,
@@ -506,13 +500,12 @@
 					rope.redraw(this);
 				}
 			},
-			onCollision: options.onCollision,
 			drag:{
 				start: function(){},
 				move: function(){},
 				end: function(){}
 			}
-		};
+		});
 		return world.add(solidInstance);
 	}
 	Solid.defaultOptions = {
@@ -525,6 +518,22 @@
 		template: function(screen){return screen.rect(0, 0, 10, 10).attr({fill:"#ffc", stroke:"#448"});},
 		onCollision: function(collision){
 			//console.log(solid, activeMode);
+		},
+		surface: function(direction){ // возвращает точку поверхности, определяемой направлением (direction)
+			// возвращает положение точки пересечения вектора direction с поверхностью объекта
+			// положение точки отсчитывается как расстояние от центра объекта вдоль направления, заданного вектором direction
+			
+			// по умолчанию - bbox
+			var pol = direction.getPolar();
+			//console.log(pol.angle); return;
+			//return this.bbox.width * Math.sin(pol.angle);
+			//console.log(pol);
+			if(pol.angle>=0 && pol.angle<=20){
+				//console.log(pol.angle);
+				return 35;
+			}
+			else
+				return 10;
 		}
 	};
 

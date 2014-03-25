@@ -131,6 +131,36 @@ new JSUnit.Test("Set 2", "Polar System").run = function(){
 	this.assert(Math.abs(v.x-v.y)<1e5, true, "Not equal");
 }
 
+new JSUnit.Test("Set directions", "Polar System").run = function(){
+	var v = new Mote.Vector();
+	v.SetPolar(2, 45); this.assert(v.x>0 && v.y>0, true, "1-st quadrant error");
+	v.SetPolar(2, 135); this.assert(v.x<0 && v.y>0, true, "2-nd quadrant error");
+	v.SetPolar(2, 225); this.assert(v.x<0 && v.y<0, true, "3-rd quadrant error");
+	v.SetPolar(2, 315); this.assert(v.x>0 && v.y<0, true, "4-th quadrant error");
+}
+
+new JSUnit.Test("Get directions", "Polar System").run = function(){
+	var v = new Mote.Vector(), pol;
+	pol = v.Set(1, 1).getPolar(); this.assert(pol.angle, 45, "1-st quadrant error");
+	pol = v.Set(-1, 1).getPolar(); this.assert(pol.angle, 135, "2-nd quadrant error");
+	pol = v.Set(-1, -1).getPolar(); this.assert(pol.angle, -135, "3-rd quadrant error");
+	pol = v.Set(1, -1).getPolar(); this.assert(pol.angle, -45, "4-th quadrant error");
+}
+
+new JSUnit.Test("Set & Get", "Polar System").run = function(){var _=this;
+	function checkAngle(ang){
+		var v = new Mote.Vector();
+		v.SetPolar(2, ang);
+		var pol = v.getPolar();
+		_.assert(Math.abs(pol.mod - 2)<.01, true, "Error checking angle "+ang+". Bad mod value="+pol.mod);
+		_.assert(Math.abs(pol.angle - ang)<.01, true, "Error checking angle "+ang+". Bad angle value="+pol.angle);
+	}
+	
+	for(var i=0; i<18; i++) checkAngle(i*10);
+	for(var i=0; i<-18; i--) checkAngle(i*10);
+	
+}
+
 new JSUnit.Test("Test 1", "Formatting").run = function(){
 	var v = new Mote.Vector(2, 3);
 	this.assert(v.toString(), "(2,3)");
