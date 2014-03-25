@@ -1,0 +1,73 @@
+﻿<html>
+<head>
+	<title>MoteJS Surfaces Demo Page</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script type="text/javascript" src="lib/html.js"></script>
+	<script type="text/javascript" src="lib/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="lib/raphael-min.js"></script>
+	<script type="text/javascript" src="mote.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("h1").after(Html.div({style:"font-style:italic; color:#ccc;"}, "Powered by MoteJS v.", Mote.version));
+			
+			var Vector = Mote.Vector;
+			
+			var world = Mote.world($("#screen"), function(world, screen){
+				var ground = world.gravity.groundPosition;
+				var width = screen.width;
+				screen.rect(0, 0, screen.width, ground).attr({fill:"90-#eef-#cde", "stroke-width":0});
+				screen.rect(0, ground, screen.width, screen.height-ground).attr({fill:"90-#8a4-#aba", "stroke-width":0});
+				screen.path(["M0,",ground,"L",width,",",ground]);
+			});
+			
+			
+			var sol1 = Mote.solid(world, [125, 200], {
+				mass: 50,
+				static: true,
+				draggable: false,
+				template: function(screen){
+					var size = 50;
+					return screen.rect(0, -size, size, size).attr({fill:"#ccc", stroke:"#888"});
+				}
+			});
+			
+			var sol2 = Mote.solid(world, [325, 200], {
+				mass: 50,
+				static: true,
+				draggable: false,
+				size: 50,
+				template: function(screen){
+					//console.log(this);
+					return screen.circle(0, 0, this.size).attr({fill:"#ccc", stroke:"#888"});
+				},
+				surface: function(dir){
+					return this.size; // поверхность - круг
+				}
+			});
+			
+			function drawSurface(solid){
+				var screen = solid.world.getScreen(),
+					ptAttr = {fill:"red", "stroke-width":0};
+				
+				var center = new Vector(solid.bbox.cx, solid.bbox.cy);
+				screen.circle(center.x, center.y, 3).attr(ptAttr);
+				
+				for(var i=0; i<18; i++){
+					var v = new Vector().SetPolar(1, i*20);
+					var srf = solid.surface(v);
+					var vv = v.Mul(srf).Add(center);
+					screen.circle(vv.x, vv.y, 2).attr(ptAttr);
+				}
+			}
+			
+			drawSurface(sol1);
+			drawSurface(sol2);
+		});
+	</script>
+</head>
+<body>
+	<h1>MoteJS Surfaces Demo Page</h1>
+	<div id="screen" style="border:1px solid #ccc; margin:5px; width:900px; height:500px;"></div>
+</body>
+</html>
