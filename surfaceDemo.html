@@ -20,6 +20,7 @@
 				screen.rect(0, ground, screen.width, screen.height-ground).attr({fill:"90-#8a4-#aba", "stroke-width":0});
 				screen.path(["M0,",ground,"L",width,",",ground]);
 			});
+			world.trace.collisions = true;
 			
 			
 			var sol1 = Mote.solid(world, [125, 200], {
@@ -27,8 +28,11 @@
 				static: true,
 				draggable: false,
 				template: function(screen){
-					var size = 50;
-					return screen.rect(0, -size, size, size).attr({fill:"#ccc", stroke:"#888"});
+					var size = 90;
+					return screen.set(
+						screen.rect(0, 0, size, size).attr({fill:"#ccc", stroke:"#888"}),
+						screen.text(40, 45, this.id)
+					);
 				}
 			});
 			
@@ -36,33 +40,25 @@
 				mass: 50,
 				static: true,
 				draggable: false,
-				size: 50,
+				size: 80,
 				template: function(screen){
-					//console.log(this);
-					return screen.circle(0, 0, this.size).attr({fill:"#ccc", stroke:"#888"});
+					return screen.set(
+						screen.circle(this.size, this.size, this.size).attr({fill:"#ccc", stroke:"#888"}),
+						screen.text(40, 45, this.id)
+					);
 				},
-				surface: function(dir){
-					return this.size; // поверхность - круг
-				}
+				surface: {sphere:80}
 			});
 			
-			function drawSurface(solid){
-				var screen = solid.world.getScreen(),
-					ptAttr = {fill:"red", "stroke-width":0};
-				
-				var center = new Vector(solid.bbox.cx, solid.bbox.cy);
-				screen.circle(center.x, center.y, 3).attr(ptAttr);
-				
-				for(var i=0; i<18; i++){
-					var v = new Vector().SetPolar(1, i*20);
-					var srf = solid.surface(v);
-					var vv = v.Mul(srf).Add(center);
-					screen.circle(vv.x, vv.y, 2).attr(ptAttr);
-				}
-			}
-			
-			drawSurface(sol1);
-			drawSurface(sol2);
+			Mote.solid(world, [380, 100], {
+				template: function(screen){
+					return screen.set(
+						screen.circle(10, 10, 10).attr({fill:"r(.3,.4)#ffe-#886", "stroke-width":0}),
+						screen.text(10, 10, this.id)
+					);
+				},
+				surface: {sphere:10}
+			});
 		});
 	</script>
 </head>

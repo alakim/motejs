@@ -286,7 +286,15 @@
 			return this;
 		},
 		add: function(x, y){return (new Vector(this)).Add(x, y);},
-		Mul: function(rate){this.x*=rate;this.y*=rate; return this;},
+		Mul: function(rate){
+			if(rate instanceof Vector){
+				this.x*=rate.x; this.y*=rate.y;
+			}
+			else {
+				this.x*=rate;this.y*=rate;
+			}
+			return this;
+		},
 		mul: function(rate){return (new Vector(this)).Mul(rate);},
 		Norm: function(){var _=this;
 			var lng = Math.sqrt(_.x*_.x+_.y*_.y);
@@ -343,6 +351,7 @@
 	}
 
 	function Collision(sld1, sld2, direction, pos){
+		//console.log("Collision! ");
 		this.active = sld1;
 		this.passive = sld2;
 		this.direction = direction;
@@ -359,13 +368,20 @@
 			if(_.active.decrement<decrement) decrement = _.active.decrement;
 			if(_.passive && (_.passive.decrement<decrement)) decrement = _.passive.decrement;
 			
-			if(_.direction=="right" || _.direction=="left")
+			if(_.direction instanceof Vector){
+				_.active.velocity.Mul(_.direction).Mul(-1);
+			}
+			else if(_.direction=="right" || _.direction=="left")
 				_.active.velocity.x*=-1;
 			else 
 				_.active.velocity.y*=-1;
 			
 			_.active.velocity.Mul(decrement);
-			if(_.direction=="top"){
+			if(_.direction instanceof Vector){
+				if(_.active.velocity.getLength()>minVelocity)
+					_.active.fall();
+			}
+			else if(_.direction=="top"){
 				_.active.transformation.T.y = _.pos.y - _.active.bbox.height;
 				_.active.icon.attr({transform:_.active.transformation});
 				
@@ -380,27 +396,47 @@
 			if(_.passive) _.passive.onCollision(_);
 		}
 	});
+	
 	$.extend(Collision, {
 		check: function(solid1, fMotion, pos0, pos, solid2){
 			if(!solid2.bbox) return;
-			var box = solid2.bbox;
-			var sides = {};
-			
-			if(solid1.velocity.x>0) sides.left = {x:box.x};
-			else if(solid1.velocity.x<0) sides.right = {x:box.x2};
-			
-			if(solid1.velocity.y>0) sides.top = {y:box.y};
-			else if(solid1.velocity.y<0) sides.bottom = {y:box.y2};
-			
-			for(var sideNm in sides){
-				var side = sides[sideNm];
-				if(side.x!=null && !fMotion.constX && between(side.x, pos0.x, pos.x)){
-					var y = fMotion.a*side.x + fMotion.b;
-					if(between(y, box.y, box.y2)) return new Collision(solid1, solid2, sideNm, new Vector(side.x, y));
+			if(solid1.surface.sphere && solid2.surface.sphere){
+				var b1 = solid1.bbox, b2 = solid2.bbox;
+				var d = pos.add(pos0.mul(-1)),
+					v1 = new Vector(b1.cx, b1.cy),
+					d1 = v1.add(pos.mul(-1)),
+					v2 = new Vector(b2.cx, b2.cy);
+				
+				var vDistance = pos.mul(-1).Add(v2),
+					rPos = pos.mul(-1).Add(pos0).getLength();
+				
+				if(vDistance.getLength()<(solid1.bbox.width*0+solid2.surface.sphere)){
+					var sideNm = b1.cy>b2.cy?"top":"bottom";
+					var norm = vDistance.Norm();
+					return new Collision(solid1, solid2, norm, v2.add(norm.mul(-solid2.surface.sphere)));
 				}
-				if(side.y!=null && between(side.y, pos0.y, pos.y)){
-					var x = fMotion.constX || (side.y - fMotion.b)/fMotion.a;
-					if(between(x, box.x, box.x2)) return new Collision(solid1, solid2, sideNm, new Vector(x, side.y));
+				return;
+			}
+			else{
+				var box = solid2.bbox;
+				var sides = {};
+				
+				if(solid1.velocity.x>0) sides.left = {x:box.x};
+				else if(solid1.velocity.x<0) sides.right = {x:box.x2};
+				
+				if(solid1.velocity.y>0) sides.top = {y:box.y};
+				else if(solid1.velocity.y<0) sides.bottom = {y:box.y2};
+				
+				for(var sideNm in sides){
+					var side = sides[sideNm];
+					if(side.x!=null && !fMotion.constX && between(side.x, pos0.x, pos.x)){
+						var y = fMotion.a*side.x + fMotion.b;
+						if(between(y, box.y, box.y2)) return new Collision(solid1, solid2, sideNm, new Vector(side.x, y));
+					}
+					if(side.y!=null && between(side.y, pos0.y, pos.y)){
+						var x = fMotion.constX || (side.y - fMotion.b)/fMotion.a;
+						if(between(x, box.x, box.x2)) return new Collision(solid1, solid2, sideNm, new Vector(x, side.y));
+					}
 				}
 			}
 		},
@@ -428,13 +464,14 @@
 	});
 	
 	function applyRestrictions(solid){
-		for(var restr,RC=solid.restrictions,i=0; restr=solid.restrictions[i],i<solid.restrictions.length; i++){
-			if(restr.constX) solid.transformation.T.x = restr.constX;
-			if(restr.constY) solid.transformation.T.y = restr.constY;
-			if(restr.minX && solid.transformation.T.x < restr.minX) solid.transformation.T.x = restr.minX;
-			if(restr.maxX && solid.transformation.T.x > restr.maxX) solid.transformation.T.x = restr.maxX;
-			if(restr.minY && solid.transformation.T.y < restr.minY) solid.transformation.T.y = restr.minY;
-			if(restr.maxY && solid.transformation.T.y > restr.maxY) solid.transformation.T.y = restr.maxY;
+		var t = solid.transformation.T;
+		for(var r,RC=solid.restrictions,i=0; r=RC[i],i<RC.length; i++){
+			if(r.constX) t.x = r.constX;
+			if(r.constY) t.y = r.constY;
+			if(r.minX && t.x < r.minX) t.x = r.minX;
+			if(r.maxX && t.x > r.maxX) t.x = r.maxX;
+			if(r.minY && t.y < r.minY) t.y = r.minY;
+			if(r.maxY && t.y > r.maxY) t.y = r.maxY;
 		}
 	}
 	
@@ -519,26 +556,11 @@
 		onCollision: function(collision){
 			//console.log(solid, activeMode);
 		},
-		surface: function(direction){ // возвращает точку поверхности, определяемой направлением (direction)
-			// возвращает положение точки пересечения вектора direction с поверхностью объекта
-			// положение точки отсчитывается как расстояние от центра объекта вдоль направления, заданного вектором direction
-			
-			// по умолчанию - bbox
-			var pol = direction.getPolar();
-			//console.log(pol.angle); return;
-			//return this.bbox.width * Math.sin(pol.angle);
-			//console.log(pol);
-			if(pol.angle>=0 && pol.angle<=20){
-				//console.log(pol.angle);
-				return 35;
-			}
-			else
-				return 10;
-		}
+		surface:"bbox"
 	};
 
 	return {
-		version:"3.9",
+		version:"3.10",
 		world: World,
 		solid: Solid,
 		getUID: getUID,
