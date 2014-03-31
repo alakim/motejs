@@ -33,7 +33,8 @@
 				static: true,
 				template: function(screen){
 					return screen.circle(0, 0, 80).attr({fill:"r(.3,.4)#aa8-#44a", stroke:"#0ac"});
-				}
+				},
+				surface: {sphere:80}
 			});
 			
 			var moon = Mote.solid(world, [50, 50], {
@@ -42,7 +43,8 @@
 				static: true,
 				template: function(screen){
 					return screen.circle(0, 0, 30).attr({fill:"r(.3,.4)#ccc-#555", stroke:"#444"});
-				}
+				},
+				surface: {sphere:30}
 			});
 			
 			/*************************************************
@@ -58,16 +60,18 @@
 				mass: 1,
 				velocity:[-.001, -.085],
 				template: function(screen){
-					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffe-#888"});
-				}
+					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#ffd-#886"});
+				},
+				surface: {sphere:5}
 			});
 			
 			Mote.solid(world, [1000, 380], {
 				mass: 1,
 				velocity:[-.001, .092],
 				template: function(screen){
-					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#eff-#77a"});
-				}
+					return screen.circle(0, 0, 10).attr({fill:"r(.3,.4)#dff-#77a"});
+				},
+				surface: {sphere:5}
 			});
 			
 			
