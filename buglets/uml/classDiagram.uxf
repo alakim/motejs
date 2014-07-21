@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
-  <zoom_level>8</zoom_level>
+  <zoom_level>9</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>192</x>
-      <y>128</y>
-      <w>80</w>
-      <h>64</h>
+      <x>180</x>
+      <y>234</y>
+      <w>90</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>/Buglet/
 --
@@ -18,10 +18,10 @@ name
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>384</x>
-      <y>40</y>
-      <w>152</w>
-      <h>48</h>
+      <x>603</x>
+      <y>162</y>
+      <w>171</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>ControlPanel
 //Пульт управления
@@ -34,10 +34,10 @@ selectBuglet()
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>192</x>
-      <y>240</y>
-      <w>128</w>
-      <h>64</h>
+      <x>180</x>
+      <y>360</y>
+      <w>144</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>Scheme
 --
@@ -52,22 +52,22 @@ addCommand(cmd)
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>208</x>
-      <y>168</y>
-      <w>40</w>
-      <h>88</h>
+      <x>198</x>
+      <y>279</y>
+      <w>45</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 m2=1</panel_attributes>
-    <additional_attributes>24;24;24;72</additional_attributes>
+    <additional_attributes>27;27;27;81</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>424</x>
-      <y>224</y>
-      <w>80</w>
-      <h>24</h>
+      <x>441</x>
+      <y>342</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>/Switch/</panel_attributes>
     <additional_attributes/>
@@ -75,10 +75,10 @@ m2=1</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>400</x>
-      <y>320</y>
-      <w>80</w>
-      <h>24</h>
+      <x>414</x>
+      <y>450</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>LoopSwitch
 // выполняет команды в цикле</panel_attributes>
@@ -87,10 +87,10 @@ m2=1</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>504</x>
-      <y>320</y>
-      <w>112</w>
-      <h>24</h>
+      <x>531</x>
+      <y>450</y>
+      <w>126</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>ControlSwitch
 
@@ -100,45 +100,45 @@ m2=1</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>440</x>
-      <y>224</y>
-      <w>136</w>
-      <h>112</h>
+      <x>459</x>
+      <y>342</y>
+      <w>152</w>
+      <h>125</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;24;120;96</additional_attributes>
+    <additional_attributes>27;27;135;108</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>424</x>
-      <y>224</y>
-      <w>48</w>
-      <h>112</h>
+      <x>441</x>
+      <y>342</y>
+      <w>44</w>
+      <h>125</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>32;24;24;96</additional_attributes>
+    <additional_attributes>27;27;27;108</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>296</x>
-      <y>208</y>
-      <w>144</w>
-      <h>56</h>
+      <x>297</x>
+      <y>324</y>
+      <w>161</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 m2=1
 r2=switch</panel_attributes>
-    <additional_attributes>24;40;128;24</additional_attributes>
+    <additional_attributes>27;81;144;27</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>408</x>
-      <y>456</y>
-      <w>80</w>
-      <h>40</h>
+      <x>423</x>
+      <y>603</y>
+      <w>90</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>/Command/
 --
@@ -149,23 +149,23 @@ execute()</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>296</x>
-      <y>264</y>
-      <w>168</w>
-      <h>208</h>
+      <x>297</x>
+      <y>387</y>
+      <w>188</w>
+      <h>233</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 m2=2..8
 r2=commands</panel_attributes>
-    <additional_attributes>24;24;152;192</additional_attributes>
+    <additional_attributes>27;27;171;216</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>296</x>
-      <y>568</y>
-      <w>128</w>
-      <h>24</h>
+      <x>297</x>
+      <y>729</y>
+      <w>144</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>ForwardCommand</panel_attributes>
     <additional_attributes/>
@@ -173,21 +173,21 @@ r2=commands</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>360</x>
-      <y>472</y>
-      <w>96</w>
-      <h>112</h>
+      <x>369</x>
+      <y>621</y>
+      <w>107</w>
+      <h>125</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80;24;24;96</additional_attributes>
+    <additional_attributes>90;27;27;108</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>440</x>
-      <y>568</y>
-      <w>128</w>
-      <h>24</h>
+      <x>459</x>
+      <y>729</y>
+      <w>144</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>AttackCommand</panel_attributes>
     <additional_attributes/>
@@ -195,33 +195,33 @@ r2=commands</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>432</x>
-      <y>472</y>
-      <w>88</w>
-      <h>112</h>
+      <x>450</x>
+      <y>621</y>
+      <w>98</w>
+      <h>125</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>24;24;72;96</additional_attributes>
+    <additional_attributes>27;27;81;108</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>440</x>
-      <y>64</y>
-      <w>48</w>
-      <h>176</h>
+      <x>468</x>
+      <y>189</y>
+      <w>242</w>
+      <h>170</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1</panel_attributes>
-    <additional_attributes>32;160;24;24</additional_attributes>
+    <additional_attributes>27;153;225;27</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>184</x>
-      <y>448</y>
-      <w>128</w>
-      <h>24</h>
+      <x>171</x>
+      <y>594</y>
+      <w>144</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>SchemeEditor
 //Редактор узоров
@@ -232,23 +232,23 @@ m1=1</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>208</x>
-      <y>280</y>
-      <w>62</w>
-      <h>184</h>
+      <x>198</x>
+      <y>405</y>
+      <w>63</w>
+      <h>207</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=1
 r2=editor</panel_attributes>
-    <additional_attributes>24;24;40;168</additional_attributes>
+    <additional_attributes>27;27;45;189</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>160</y>
-      <w>80</w>
-      <h>40</h>
+      <x>0</x>
+      <y>270</y>
+      <w>90</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>RedBuglet
 --
@@ -262,10 +262,10 @@ attack()
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>216</y>
-      <w>80</w>
-      <h>40</h>
+      <x>0</x>
+      <y>333</y>
+      <w>90</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>BlueBuglet
 --
@@ -279,10 +279,10 @@ attack()
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>32</x>
-      <y>280</y>
-      <w>80</w>
-      <h>48</h>
+      <x>0</x>
+      <y>405</y>
+      <w>90</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>YellowBuglet
 --
@@ -296,43 +296,43 @@ attack()
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>88</x>
-      <y>136</y>
-      <w>120</w>
-      <h>48</h>
+      <x>63</x>
+      <y>243</y>
+      <w>126</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>104;24;24;32</additional_attributes>
+    <additional_attributes>117;27;27;36</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>88</x>
-      <y>152</y>
-      <w>120</w>
-      <h>96</h>
+      <x>63</x>
+      <y>261</y>
+      <w>126</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>104;24;24;80</additional_attributes>
+    <additional_attributes>117;27;27;90</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>88</x>
-      <y>168</y>
-      <w>120</w>
-      <h>144</h>
+      <x>63</x>
+      <y>279</y>
+      <w>126</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>104;24;24;128</additional_attributes>
+    <additional_attributes>117;27;27;144</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>528</x>
-      <y>488</y>
-      <w>136</w>
-      <h>40</h>
+      <x>486</x>
+      <y>522</y>
+      <w>153</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>Видов команд 
 может быть много
@@ -342,12 +342,93 @@ bg=white</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>464</x>
-      <y>208</y>
-      <w>344</w>
-      <h>272</h>
+      <x>486</x>
+      <y>324</y>
+      <w>386</w>
+      <h>296</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>24;256;328;248;320;40;40;24</additional_attributes>
+    <additional_attributes>27;279;369;279;360;45;45;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>225</x>
+      <y>54</y>
+      <w>90</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>Item
+
+// отображаемая сущность</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>387</x>
+      <y>9</y>
+      <w>90</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Raphael&gt;&gt;
+ItemView</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>288</x>
+      <y>0</y>
+      <w>116</w>
+      <h>89</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>27;72;99;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>198</x>
+      <y>54</y>
+      <w>72</w>
+      <h>198</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>54;27;27;180</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>243</x>
+      <y>54</y>
+      <w>80</w>
+      <h>323</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;63;306</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>261</x>
+      <y>54</y>
+      <w>215</w>
+      <h>305</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;198;288</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>279</x>
+      <y>54</y>
+      <w>629</w>
+      <h>602</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;468;90;576;108;612;585;234;576</additional_attributes>
   </element>
 </diagram>
