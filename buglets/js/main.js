@@ -12,7 +12,9 @@
 	}
 });
 
-requirejs(["jquery", "html"], function($, $H) {
-	$("#out").html("OK!");
+requirejs(["jquery", "html", "buglet"], function($, $H, Buglet) {
+	var bg1 = new Buglet("Our First Buglet");
+	bg1.show($("#out"));
+	//$("#out").html("OK!");
 	
 });
