@@ -1,0 +1,22 @@
+﻿body{
+	font-family: Arial, Verdana, Tahoma, Sans-serif;
+	margin:3px;
+}
+th, td{border:1px solid #ddd;}
+IMG{border:0;}
+P{margin:0;}
+A{text-decoration:none;color:black;}
+A:active{text-decoration:none;color:black;}
+A:link{text-decoration:none;color:black;}
+A:visited{color:black}
+A:hover{color:#cc0000;}
+
+h1, h2{
+	margin:10px;
+}
+h1{font-size:18px;}
+h2{font-size:16px;}
+
+#propPanel{
+	margin:10px;
+}
