@@ -9,12 +9,18 @@
 	
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
-			_.icon = _.field.screen.rect(_.pos.x, _.pos.y, 20, 20).attr({fill:"#0f0"});
+			_.icon = _.field.screen.set();
+			
+ 			_.icon.push(_.field.screen.path("M 10.6875 0.40625 L 1.1875 12.21875 L 1.1875 47.75 L 11.53125 37.875 L 19.8125 47.75 L 19.8125 12.21875 L 10.6875 0.40625 z "));
+			_.icon.push(_.field.screen.rect(5, 12, 10, 15).attr({fill:"#0f0"}));
+			
+			_.icon.transform("T" + _.pos.x + ","+ _.pos.y);
+			
 			_.scheme.exec();
 		},
 		move: function(newPos){var _=this;
 			$.extend(_.pos, newPos);
-			_.icon.attr({x:_.pos.x, y:_.pos.y});
+			_.icon.transform(_.icon.transform()+'T'+_.pos.x+','+_.pos.y);
 		}
 	});
 	
