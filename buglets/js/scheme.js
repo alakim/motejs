@@ -1,7 +1,7 @@
-﻿define(["jquery"], function($){
+﻿define(["jquery", "switch"], function($, Switch){
 	
-	function Scheme(sw){var _=this;
-		_.switch = sw;
+ 	function Scheme(){var _=this;
+		_.switch = new Switch();
 		_.commands = [];
 	}
 

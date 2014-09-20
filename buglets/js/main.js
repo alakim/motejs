@@ -12,9 +12,10 @@
 	}
 });
 
-requirejs(["jquery", "html", "buglet"], function($, $H, Buglet) {
-	var bg1 = new Buglet("Our First Buglet");
-	bg1.show($("#out"));
-	//$("#out").html("OK!");
+requirejs(["jquery", "html", "buglet", "field"], function($, $H, Buglet, Field) {
+	var field = new Field("out");
+	
+	var bg1 = new Buglet("Our First Buglet", field);
+	bg1.show();
 	
 });

@@ -1,13 +1,13 @@
-﻿define(["jquery", "html", "scheme", "switch"], function($, $H, Scheme, Switch){
-	function Buglet(name){var _=this;
+﻿define(["jquery", "html", "scheme"], function($, $H, Scheme){
+	function Buglet(name, field){var _=this;
 		_.name = name;
-		var sw = new Switch();
-		_.scheme = new Scheme(sw);
+		_.field = field;
+		_.scheme = new Scheme();
 	}
 	
 	$.extend(Buglet.prototype, {
-		show: function(pnl){
-			$(pnl).append($H.div(this.name));
+		show: function(){var _=this;
+			_.field.screen.rect(10, 10, 20, 20).attr({fill:"#0f0"});
 		}
 	});
 	
