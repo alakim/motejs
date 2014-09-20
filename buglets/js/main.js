@@ -15,8 +15,10 @@
 requirejs(["jquery", "html", "buglet", "field", "commands"], function($, $H, Buglet, Field, Cmd) {
 	var field = new Field("out");
 	
+	// создание баглета
 	var bg1 = new Buglet("Our First Buglet", field, {x:25, y:55});
 	
+	// тестовый список команд
 	// как-то не красиво вызываются конструкторы команд
 	bg1.scheme.addCommand(new Cmd.MoveCmd({x:59, y:68}, bg1.scheme));
 	bg1.scheme.addCommand(new Cmd.MoveCmd({x:59, y:88}, bg1.scheme));
