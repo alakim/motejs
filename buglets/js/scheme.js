@@ -5,25 +5,29 @@
 		_.buglet = buglet;
 		_.commands = [];
 	}
+	
+	var delay = 2000;
 
 	
 	$.extend(Scheme.prototype, {
 		exec: function(){var _=this;
-			var delay = 500;
 			var i = 0;
 			function step(){
 				if(i>=_.commands.length) return;
 				_.commands[i++].exec();
 				setTimeout(step, delay);
 			}
-			setTimeout(function(){
-				step();
-			}, delay);
+			step();
 		},
 		addCommand: function(cmd){
 			this.commands.push(cmd);
 		}
 	});
+	
+	Scheme.delay = function(v){
+		if(v==null) return delay;
+		delay = v;
+	}
 	
 	
 	return Scheme;
