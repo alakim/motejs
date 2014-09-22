@@ -1,5 +1,4 @@
 ﻿define(["jquery", "html", "scheme", "vector"], function($, $H, Scheme, Vector){
-	var rotation = 0;
 	
 	function Buglet(name, field, pos, direction){var _=this;
 		_.name = name;
@@ -27,41 +26,60 @@
 		var len = path.getTotalLength();
 		var point = path.getPointAtLength(v * len);
 
-		var alpha = point.alpha + rotation;
+		var alpha = point.alpha;
+		//if(alpha>360) alpha = alpha%360;
+		// console.log(alpha);
 		
-		buglet.direction = alpha;
+		buglet.direction = alpha>90?alpha-180:alpha>180?360-alpha:alpha;
+		console.log(alpha, buglet.direction);
+		
 		buglet.pos.x = point.x;
 		buglet.pos.y = point.y;
+		buglet.dirLabel.attr({text:Math.round(buglet.direction)});
 		
 		return {
 			transform: "t" + (point.x + offset.x) + "," + (point.y + offset.y) + 
-			"r" + alpha
+			"r" + posDirection(buglet.direction)
 		};
 	};
+	
+	function posDirection(direction){
+		return direction;
+		return direction>180?-direction-180:direction;
+		return direction<=0?180-direction:direction;
+	}
 	
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
 			_.icon = _.field.screen.set();
 			
 			// отрисовка пиктухи (относительно нуля)
- 			_.icon.push(_.field.screen.path("M 10.6875 0.40625 L 1.1875 12.21875 L 1.1875 47.75 L 11.53125 37.875 L 19.8125 47.75 L 19.8125 12.21875 L 10.6875 0.40625 z ").attr({fill:"#fff"}));
+ 			_.icon.push(_.field.screen.path([
+				"M", -20, -10,
+				"L", 10, -10,
+				"L", 20, 0,
+				"L", 10, 10,
+				"L", -20, 10,
+				"L", -10, 0,
+				"z"
+			]).attr({fill:"#fff"}));
 			_.icon.push(_.field.screen.rect(5, 12, 10, 15).attr({fill:"#0f0"}));
+			_.icon.push(_.dirLabel = _.field.screen.text(0, 35, _.direction).attr({"font-size":20}));
 			
 			// позиционирование пиктухи
-			_.icon.transform(["T", _.pos.x, _.pos.y, "R", _.direction+rotation]);
+			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction)]);
 			_.scheme.exec();
 		},
 		
 		move: function(newPos){var _=this;
-			var lng = Vector.length(_.pos.x, _.pos.y, newPos.x, newPos.y)/2,
-				vertex = Vector.point(_.pos, _.direction+rotation, lng);
+			var vertex = Vector.point(_.pos, _.direction, Vector.length(_.pos.x, _.pos.y, newPos.x, newPos.y)/2);
 			
 			var trace = _.field.screen.path(["M", _.pos.x, _.pos.y, "Q", vertex.x, vertex.y, newPos.x, newPos.y]).attr({stroke:"#f00"});
 			
 			_.icon.data("mypath", trace);
 			_.icon.data("buglet", _);
 			_.icon.attr("progress", 0);
-			_.icon.animate({ progress: 1 }, Scheme.delay()*.98);
+			_.icon.animate({ progress: 1 }, Scheme.delay() - 50/* небольшая пауза перед запуском следующей команды */);
 		}
 	});
 	
