@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "scheme"], function($, $H, Scheme){
+﻿define(["jquery", "html", "scheme", "vector"], function($, $H, Scheme, Vector){
 	var rotation = 0;
 	
 	function Buglet(name, field, pos, direction){var _=this;
@@ -27,10 +27,9 @@
 		var len = path.getTotalLength();
 		var point = path.getPointAtLength(v * len);
 
-		//var alpha = (point.alpha < 180 ? point.alpha + 180 : point.alpha)+rotation;
 		var alpha = point.alpha + rotation;
 		
-		buglet.direction = alpha - 90;
+		buglet.direction = alpha;
 		buglet.pos.x = point.x;
 		buglet.pos.y = point.y;
 		
@@ -38,12 +37,6 @@
 			transform: "t" + (point.x + offset.x) + "," + (point.y + offset.y) + 
 			"r" + alpha
 		};
-	};
-	
-	var Vector = {
-		length: function(x1, y1, x2, y2){
-			return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-		}
 	};
 	
 	$.extend(Buglet.prototype, {
@@ -61,29 +54,14 @@
 		
 		move: function(newPos){var _=this;
 			var lng = Vector.length(_.pos.x, _.pos.y, newPos.x, newPos.y)/2,
-				vertex = {
-// 					x: (_.direction+rotation>90?-1:1) * lng*Math.cos(_.direction+rotation) + _.pos.x,
-// 					y: (_.direction+rotation>180?-1:1) * lng*Math.sin(_.direction+rotation) + _.pos.y
-					x: lng*Math.cos(_.direction+rotation) + _.pos.x,
-					y: lng*Math.sin(_.direction+rotation) + _.pos.y
-				};
+				vertex = Vector.point(_.pos, _.direction+rotation, lng);
 			
 			var trace = _.field.screen.path(["M", _.pos.x, _.pos.y, "Q", vertex.x, vertex.y, newPos.x, newPos.y]).attr({stroke:"#f00"});
-			// визуализация узла и направления для отладки
-			_.field.screen.circle(vertex.x, vertex.y, 3).attr({fill:"#f00"});
-			_.field.screen.path(["M", _.pos.x, _.pos.y, "L", Math.cos(_.direction+rotation)*25+_.pos.x, Math.sin(_.direction+rotation)*25+_.pos.y]);
 			
 			_.icon.data("mypath", trace);
 			_.icon.data("buglet", _);
 			_.icon.attr("progress", 0);
-			_.icon.animate({ progress: 1 }, Scheme.delay()*.98, function(){
-				// визуализация направления для отладки
-				_.field.screen.path(["M", _.pos.x, _.pos.y, "L", Math.cos(_.direction+rotation)*25+_.pos.x, Math.sin(_.direction+rotation)*25+_.pos.y]).attr({stroke:"#00f"});
-			});
-
-			
-			//$.extend(_.pos, newPos);
-			//_.icon.transform(["T", _.pos.x, _.pos.y, "R", _.direction+rotation]);
+			_.icon.animate({ progress: 1 }, Scheme.delay()*.98);
 		}
 	});
 	
