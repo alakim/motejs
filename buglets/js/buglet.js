@@ -27,15 +27,15 @@
 		var point = path.getPointAtLength(v * len);
 
 		var alpha = point.alpha;
-		//if(alpha>360) alpha = alpha%360;
-		// console.log(alpha);
+		alpha = alpha%360;
 		
-		buglet.direction = alpha>90?alpha-180:alpha>180?360-alpha:alpha;
-		console.log(alpha, buglet.direction);
+		var prevDir = buglet.direction;
+		buglet.direction = Math.abs(buglet.direction - alpha)>340?alpha:
+						Math.abs(buglet.direction - alpha)>120?alpha-180:
+						alpha;
 		
 		buglet.pos.x = point.x;
 		buglet.pos.y = point.y;
-		buglet.dirLabel.attr({text:Math.round(buglet.direction)});
 		
 		return {
 			transform: "t" + (point.x + offset.x) + "," + (point.y + offset.y) + 
@@ -64,7 +64,6 @@
 				"z"
 			]).attr({fill:"#fff"}));
 			_.icon.push(_.field.screen.rect(5, 12, 10, 15).attr({fill:"#0f0"}));
-			_.icon.push(_.dirLabel = _.field.screen.text(0, 35, _.direction).attr({"font-size":20}));
 			
 			// позиционирование пиктухи
 			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction)]);
