@@ -38,8 +38,8 @@
 		buglet.pos.y = point.y;
 		
 		return {
-			transform: "t" + (point.x + offset.x) + "," + (point.y + offset.y) + 
-			"r" + posDirection(buglet.direction)
+			transform: "t " + (point.x + offset.x) + "," + (point.y + offset.y) + 
+			" r " + [posDirection(buglet.direction), -offset.x, -offset.y].join(",")
 		};
 	};
 	
@@ -52,6 +52,10 @@
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
 			_.icon = _.field.screen.set();
+			var iconSize = {
+				w: 40,
+				h: 20
+			};
 			
 			// отрисовка пиктухи (относительно нуля)
  			_.icon.push(_.field.screen.path([
@@ -63,7 +67,7 @@
 				"L", -10, 0,
 				"z"
 			]).attr({fill:"#fff"}));
-			_.icon.push(_.field.screen.rect(5, 12, 10, 15).attr({fill:"#0f0"}));
+			_.icon.push(_.field.screen.rect(5, 12-iconSize.h/2-2, 10, 15).attr({fill:"#0f0"}));
 			
 			// позиционирование пиктухи
 			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction)]);
