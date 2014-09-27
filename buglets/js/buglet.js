@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "scheme", "vector"], function($, $H, Scheme, Vector){
+﻿define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, Scheme, Vector){
 	
 	function Buglet(name, field, pos, direction){var _=this;
 		_.name = name;
@@ -77,12 +77,17 @@
 		move: function(newPos){var _=this;
 			var vertex = Vector.point(_.pos, _.direction, Vector.length(_.pos.x, _.pos.y, newPos.x, newPos.y)/2);
 			
-			var trace = _.field.screen.path(["M", _.pos.x, _.pos.y, "Q", vertex.x, vertex.y, newPos.x, newPos.y]).attr({stroke:"#f00"});
+			var trace = _.field.screen.path(["M", _.pos.x, _.pos.y, "Q", vertex.x, vertex.y, newPos.x, newPos.y])
+				.attr({stroke:"#f00", "stroke-width": $S.showPath?1:0});
 			
 			_.icon.data("mypath", trace);
 			_.icon.data("buglet", _);
 			_.icon.attr("progress", 0);
-			_.icon.animate({ progress: 1 }, Scheme.delay() - 50/* небольшая пауза перед запуском следующей команды */);
+			_.icon.animate(
+				{ progress: 1 }, 
+				Scheme.delay() - 50, /* небольшая пауза перед запуском следующей команды */
+				function(){if($S.deleteOldPath) trace.remove();}
+			);
 		}
 	});
 	

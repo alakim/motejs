@@ -12,7 +12,10 @@
 	}
 });
 
-requirejs(["jquery", "html", "buglet", "field", "commands"], function($, $H, Buglet, Field, Cmd) {
+requirejs(["jquery", "html", "settings", "buglet", "field", "commands"], function($, $H, $S, Buglet, Field, Cmd) {
+	// $S.showPath = true;
+	// $S.deleteOldPath = false;
+	
 	var field = new Field("out");
 	
 	(function(){ 
