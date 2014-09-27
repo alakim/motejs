@@ -12,13 +12,15 @@
 	}
 });
 
-requirejs(["jquery", "html", "settings", "buglet", "field", "commands"], function($, $H, $S, Buglet, Field, Cmd) {
+requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"], function($, $H, $S, CPanel, Buglet, Field, Cmd) {
 	// $S.showPath = true;
 	// $S.deleteOldPath = false;
 	
 	var field = new Field("out");
 	
 	(function(){ 
+		var cpnl = new CPanel("cpanel");
+		
 		// создание баглета
 		var bg1 = new Buglet("Our First Buglet", field, {x:25, y:55}, -50);
 		

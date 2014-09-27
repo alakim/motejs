@@ -7,6 +7,7 @@
 		_.pos = pos;
 		_.direction = direction;
 		_.icon = null;
+		Buglet.instances.push(_);
 	}
 	
 	// процесс анимации движения баглета
@@ -49,6 +50,8 @@
 		return direction<=0?180-direction:direction;
 	}
 	
+	Buglet.instances = [];
+	
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
 			_.icon = _.field.screen.set();
@@ -71,9 +74,11 @@
 			
 			// позиционирование пиктухи
 			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction)]);
+			
+		},
+		start: function(){var _=this;
 			_.scheme.exec();
 		},
-		
 		move: function(newPos){var _=this;
 			var vertex = Vector.point(_.pos, _.direction, Vector.length(_.pos.x, _.pos.y, newPos.x, newPos.y)/2);
 			
