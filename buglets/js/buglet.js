@@ -1,6 +1,7 @@
 ﻿define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, Scheme, Vector){
 	
 	function Buglet(name, field, pos, direction){var _=this;
+		_.index = Buglet.instances.length;
 		_.name = name;
 		_.field = field;
 		_.scheme = new Scheme(_);

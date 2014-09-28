@@ -19,7 +19,6 @@ requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"
 	var field = new Field("out");
 	
 	(function(){ 
-		var cpnl = new CPanel("cpanel");
 		
 		// создание баглета
 		var bg1 = new Buglet("Our First Buglet", field, {x:25, y:55}, -50);
@@ -40,6 +39,10 @@ requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"
 		var bg2 = new Buglet("Our Second Buglet", field, {x:325, y:55}, 130);
 		bg2.scheme.addCommand(new Cmd.MoveCmd({x:359, y:568}, bg2.scheme));
 		bg2.show();
+		
+		
+		var cpnl = new CPanel("cpanel"); // после создания всех баглетов
+
 	})();
 	
 });
