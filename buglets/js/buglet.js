@@ -14,16 +14,11 @@
 	// процесс анимации движения баглета
 	Buglet.animationProgress = function (v) {
 		var path = this.data("mypath"),
-			attrs = this.attr(),
-			offset = { x: 0, y: 0 },
-			buglet = this.data("buglet");
+			buglet = this.data("buglet"),
+			offset = {x:buglet.iconSize.w/2, y:buglet.iconSize.h/2};
 
 		if (!path) return{transform: "t0,0"};
-		
-		if (attrs.hasOwnProperty("width")) {
-			offset.x = -this.attr("width") / 2;
-			offset.y = -this.attr("height") / 2;
-		}
+
 		
 		var len = path.getTotalLength();
 		var point = path.getPointAtLength(v * len);
@@ -39,8 +34,9 @@
 		buglet.pos.x = point.x;
 		buglet.pos.y = point.y;
 		
+		
 		return {
-			transform: "t " + (point.x + offset.x) + "," + (point.y + offset.y) + 
+			transform: "t " + point.x + "," + point.y + 
 			" r " + [posDirection(buglet.direction), -offset.x, -offset.y].join(",")
 		};
 	};
@@ -56,7 +52,7 @@
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
 			_.icon = _.field.screen.set();
-			var iconSize = {
+			_.iconSize = {
 				w: 40,
 				h: 20
 			};
@@ -71,10 +67,10 @@
 				"L", -10, 0,
 				"z"
 			]).attr({fill:"#fff"}));
-			_.icon.push(_.field.screen.rect(5, 12-iconSize.h/2-2, 10, 15).attr({fill:"#0f0"}));
+			_.icon.push(_.field.screen.rect(-4, 2.5-_.iconSize.h/2, 10, 15).attr({fill:"#0f0"}));
 			
 			// позиционирование пиктухи
-			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction)]);
+			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
 			
 		},
 		start: function(){var _=this;
