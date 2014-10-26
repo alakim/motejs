@@ -51,6 +51,7 @@
 	
 	$.extend(Buglet.prototype, {
 		show: function(){var _=this;
+			console.log("show ", this.name);
 			_.icon = _.field.screen.set();
 			_.iconSize = {
 				w: 40,

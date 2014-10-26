@@ -12,7 +12,7 @@
 	}
 });
 
-requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"], function($, $H, $S, CPanel, Buglet, Field, Cmd) {
+requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands", "simplebuglet"], function($, $H, $S, CPanel, Buglet, Field, Cmd, SimpleBuglet) {
 	// $S.showPath = true;
 	// $S.deleteOldPath = false;
 	
@@ -39,6 +39,13 @@ requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"
 		var bg2 = new Buglet("Our Second Buglet", field, {x:325, y:55}, 130);
 		bg2.scheme.addCommand(new Cmd.MoveCmd({x:359, y:568}, bg2.scheme));
 		bg2.show();
+		
+		var bg3 = new SimpleBuglet("Our Third Buglet", field, {x:425, y:255}, 30);
+		bg3.scheme.addCommand(new Cmd.MoveCmd({x:59, y:368}, bg3.scheme));
+		bg3.show();
+		
+		bg3.test2();
+		bg3.test();
 		
 		
 		var cpnl = new CPanel("cpanel"); // после создания всех баглетов

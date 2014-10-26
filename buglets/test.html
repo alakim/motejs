@@ -1,0 +1,74 @@
+﻿<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+	<title>Inheritance Test</title>
+	<link rel="stylesheet" href="reset.css"/>
+	<link rel="stylesheet" href="styles.css"/>
+	<script type="text/javascript">
+
+	function inherit(Child, Parent) {
+		var F = function(){};
+		F.prototype = Parent.prototype;
+		Child.prototype = new F();
+		Child.prototype.constructor = Child;
+		Child.superclass = Parent.prototype;
+	}
+	
+	
+	// копирует все свойства из src в dst,
+	// включая те, что в цепочке прототипов src до Object
+	function mixin(dst, src){
+		// tobj - вспомогательный объект для фильтрации свойств,
+		// которые есть у объекта Object и его прототипа
+		var tobj = {}
+		for(var x in src){
+			// копируем в dst свойства src, кроме тех, которые унаследованы от Object
+			if((typeof tobj[x] == "undefined") || (tobj[x] != src[x])){
+				dst[x] = src[x];
+			}
+		}
+		// В IE пользовательский метод toString отсутствует в for..in
+		if(document.all && !document.isOpera){
+			var p = src.toString;
+			if(typeof p == "function" && p != dst.toString && p != tobj.toString &&
+			p != "\nfunction toString() {\n    [native code]\n}\n"){
+				dst.toString = src.toString;
+			}
+		}
+	}
+
+	function Animal(name){
+		this.name = name;
+	}
+	Animal.prototype.show = function(){
+		console.log("Animal "+ this.name);
+	}
+
+	function Rabbit(name){
+		this.name = name;
+	}
+
+	inherit(Rabbit, Animal);
+
+	mixin(Rabbit.prototype, {
+		show: function(){
+			Rabbit.superclass.show.apply(this);
+			console.log("Rabbit "+this.name);
+		}
+	});
+
+	var animal1 = new Animal("my elephant");
+	animal1.show();
+
+	var rab1 = new Rabbit("White Rabbit");
+	rab1.show();
+
+
+	</script>
+</head>
+<body>
+	<h1>Inheritance Test</h1>
+	
+	
+</body>
+</html>
