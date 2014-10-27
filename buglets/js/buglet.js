@@ -1,14 +1,7 @@
 ﻿define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, Scheme, Vector){
 	
-	function Buglet(name, field, pos, direction){var _=this;
-		_.index = Buglet.instances.length;
-		_.name = name;
-		_.field = field;
-		_.scheme = new Scheme(_);
-		_.pos = pos;
-		_.direction = direction;
-		_.icon = null;
-		Buglet.instances.push(_);
+	function Buglet(name, field, pos, direction){
+		this.init(name, field, pos, direction);
 	}
 	
 	// процесс анимации движения баглета
@@ -37,21 +30,30 @@
 		
 		return {
 			transform: "t " + point.x + "," + point.y + 
-			" r " + [posDirection(buglet.direction), -offset.x, -offset.y].join(",")
+			" r " + [buglet.posDirection(buglet.direction), -offset.x, -offset.y].join(",")
 		};
 	};
 	
-	function posDirection(direction){
-		return direction;
-		return direction>180?-direction-180:direction;
-		return direction<=0?180-direction:direction;
-	}
 	
 	Buglet.instances = [];
 	
 	$.extend(Buglet.prototype, {
+		init: function(name, field, pos, direction){var _=this;
+			_.index = Buglet.instances.length;
+			_.name = name;
+			_.field = field;
+			_.scheme = new Scheme(_);
+			_.pos = pos;
+			_.direction = direction;
+			_.icon = null;
+			Buglet.instances.push(_);
+		},
+		posDirection:function(direction){
+			return direction;
+			return direction>180?-direction-180:direction;
+			return direction<=0?180-direction:direction;
+		},
 		show: function(){var _=this;
-			console.log("show ", this.name);
 			_.icon = _.field.screen.set();
 			_.iconSize = {
 				w: 40,
@@ -71,7 +73,7 @@
 			_.icon.push(_.field.screen.rect(-4, 2.5-_.iconSize.h/2, 10, 15).attr({fill:"#0f0"}));
 			
 			// позиционирование пиктухи
-			_.icon.transform(["t", _.pos.x, _.pos.y, "r", posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
+			_.icon.transform(["t", _.pos.x, _.pos.y, "r", _.posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
 			
 		},
 		start: function(){var _=this;
