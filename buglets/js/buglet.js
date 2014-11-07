@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, Scheme, Vector){
+define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, Scheme, Vector){
 	
 	function Buglet(name, field, pos, direction){
 		this.init(name, field, pos, direction);
@@ -93,7 +93,8 @@
 				Scheme.delay() - 50, /* небольшая пауза перед запуском следующей команды */
 				function(){if($S.deleteOldPath) trace.remove();}
 			);
-		}
+		},
+		hurt:function(){}
 	});
 	
 	

@@ -1,4 +1,4 @@
-﻿define(["jquery", "html", "settings", "buglet"], function($, $H, $S, Buglet){
+define(["jquery", "html", "settings", "buglet"], function($, $H, $S, Buglet){
 	
 	var templates = {
 		main: function(){with($H){
@@ -19,6 +19,9 @@
 						td("X:", input({type:"text", "class":"tbMoveX", value:0})),
 						td("Y:", input({type:"text", "class":"tbMoveY", value:0}))
 					)
+				),
+				div(
+					input({type:"button", value:"Hurt", "class":"btHurt"})
 				)
 			);
 		}},
@@ -66,6 +69,15 @@
 						y = +$(".cmdMove .tbMoveY").val();
 					buglet.move({x:x, y:y});
 				}
+			});
+		});
+		$(".btHurt").click(function(){
+			$.each(Buglet.instances, function(i, buglet){
+				var chBox = $(".bugletSelector input[bugletIndex="+buglet.index+"]"),
+				   checked = chBox[0].checked;
+				if(checked){
+					buglet.hurt();
+				}				
 			});
 		});
 	}

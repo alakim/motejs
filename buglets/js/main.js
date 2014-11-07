@@ -48,10 +48,6 @@ requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"
 		bg3.scheme.addCommand(new Cmd.MoveCmd({x:59, y:368}, bg3.scheme));
 		bg3.show();
 		
-		setTimeout(function(){
-			bg3.setHealth(.5);
-		}, 1500);
-		
 		var cpnl = new CPanel("cpanel"); // после создания всех баглетов
 
 	})();

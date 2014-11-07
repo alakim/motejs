@@ -1,16 +1,26 @@
 define(["jquery", "html", "oop", "buglet"], function($, $H, $OOP, Buglet){
 	
-
+	var maxHealth = 10;
 	
-	function SimpleBuglet(name, field, pos, direction){
-		this.init(name, field, pos, direction);
+	function SimpleBuglet(name, field, pos, direction){var _=this;
+		_.init(name, field, pos, direction);
+		var health = 10;
+		_.getHealth = function(){return health;};
+		_.setHealth = function(val){var _=this;
+			if(val<0) val = 0;
+			health = val;
+			_.healthPoint.attr({path:_.hpPath(val)});
+		};
+		
 	}
 	
 	$OOP.inherit(SimpleBuglet, Buglet);
 
 	$OOP.mixin(SimpleBuglet.prototype, {
 		hpPath: function(val){var _=this;
-			val = val || 1;
+			val = val==null?maxHealth:val;
+			
+			var reVal = val/maxHealth; // относительное значение
 
 			var 	h2 = _.iconSize.h/2,
 				s = h2, // ширина скоса
@@ -19,7 +29,7 @@ define(["jquery", "html", "oop", "buglet"], function($, $H, $OOP, Buglet){
 				mrg = 1; // margin - отступ от края
 			
 			var	pL = -_.iconSize.w/2+hL,
-				pR = pL+(_.iconSize.w-hL-s)*val,
+				pR = pL+(_.iconSize.w-hL-s)*reVal,
 				pU = -h2+mrg,
 				pB = pU + hw;
 			return [
@@ -70,8 +80,11 @@ define(["jquery", "html", "oop", "buglet"], function($, $H, $OOP, Buglet){
 			_.icon.transform(["t", _.pos.x, _.pos.y, "r", _.posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
 			
 		},
-		setHealth: function(val){var _=this;
-			_.healthPoint.attr({path:_.hpPath(val)});
+		hurt:function(){var _=this;
+			_.setHealth(_.getHealth() - 1);
+			if(_.getHealth()==0){
+				alert("Баглет умер.");
+			}
 		}
 	});
 	
