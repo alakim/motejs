@@ -47,6 +47,7 @@ define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, S
 			_.direction = direction;
 			_.icon = null;
 			Buglet.instances.push(_);
+			_.spawnPos = {pos:{x:pos.x, y:pos.y}, direction:direction};
 		},
 		posDirection:function(direction){
 			return direction;
@@ -72,9 +73,11 @@ define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, S
 			]).attr({fill:"#fff"}));
 			_.icon.push(_.field.screen.rect(-4, 2.5-_.iconSize.h/2, 10, 15).attr({fill:"#0f0"}));
 			
+			_.setPos(_.pos, _.direction);
+		},
+		setPos: function(pos, direction){var _=this;
 			// позиционирование пиктухи
-			_.icon.transform(["t", _.pos.x, _.pos.y, "r", _.posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
-			
+			_.icon.transform(["t", pos.x, pos.y, "r", _.posDirection(direction), -_.iconSize.w/2, -_.iconSize.h/2]);
 		},
 		start: function(){var _=this;
 			_.scheme.exec();
@@ -93,6 +96,9 @@ define(["jquery", "html", "settings", "scheme", "vector"], function($, $H, $S, S
 				Scheme.delay() - 50, /* небольшая пауза перед запуском следующей команды */
 				function(){if($S.deleteOldPath) trace.remove();}
 			);
+		},
+		respawn: function(){ // при респавне должны сохраняться кое-какие характеристики баглета
+			this.setPos(this.spawnPos.pos, this.spawnPos.direction);
 		},
 		hurt:function(){}
 	});

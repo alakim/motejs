@@ -80,10 +80,14 @@ define(["jquery", "html", "oop", "buglet"], function($, $H, $OOP, Buglet){
 			_.icon.transform(["t", _.pos.x, _.pos.y, "r", _.posDirection(_.direction), -_.iconSize.w/2, -_.iconSize.h/2]);
 			
 		},
+		respawn: function(){ // при респавне должны сохраняться кое-какие характеристики баглета
+			this.setHealth(maxHealth);
+			this.setPos(this.spawnPos.pos, this.spawnPos.direction);
+		},
 		hurt:function(){var _=this;
 			_.setHealth(_.getHealth() - 1);
 			if(_.getHealth()==0){
-				alert("Баглет умер.");
+				_.respawn();
 			}
 		}
 	});
