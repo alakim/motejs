@@ -12,11 +12,22 @@ requirejs.config({
 	}
 });
 
-requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands", "simplebuglet"], function($, $H, $S, CPanel, Buglet, Field, Cmd, SimpleBuglet) {
+requirejs([
+	"jquery", "html", "settings", 
+	"cpanel", "buglet", "field", 
+	"commands", "simplebuglet",
+	"scheme_editor"
+], function(
+	$, $H, $S, 
+	CPanel, Buglet, Field, 
+	Cmd, SimpleBuglet,
+	SchemeEditor
+) {
 	// $S.showPath = true;
 	// $S.deleteOldPath = false;
 	
 	var field = new Field("out");
+	var schemeEditor = new SchemeEditor("editPnl");
 	
 	(function(){ 
 		
@@ -49,6 +60,7 @@ requirejs(["jquery", "html", "settings", "cpanel", "buglet", "field", "commands"
 		bg3.show();
 		
 		var cpnl = new CPanel("cpanel"); // после создания всех баглетов
+		schemeEditor.view();
 
 	})();
 	
