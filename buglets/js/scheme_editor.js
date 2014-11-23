@@ -1,4 +1,4 @@
-define(["jquery", "html", "raphael", "buglet"], function($, $H, $R, Buglet){
+define(["jquery", "html", "raphael", "buglet", "commands"], function($, $H, $R, Buglet, commands){
 	
  	function SchemeEditor(panelOrID){var _=this;
 		_.panel = typeof(panelOrID)=="string"?$("#"+panelOrID):$(panelOrID);
@@ -29,6 +29,13 @@ define(["jquery", "html", "raphael", "buglet"], function($, $H, $R, Buglet){
 							td({width:25, valign:"middle", "class":"btDelCmd"})
 						);
 					})
+				),
+				div(
+					input({type:"button", value:"Add command", "class":"btAddCmd"}),
+					select({"class":"selCmdType"},
+						option({value:"MoveCmd"}, "Move")
+					),
+					div({"class":"pnlCmdDialog"})
 				)
 			);
 		}}
@@ -48,7 +55,10 @@ define(["jquery", "html", "raphael", "buglet"], function($, $H, $R, Buglet){
 				}
 			});
 		});
-
+		$(".schemeView .btAddCmd").click(function(){
+			var cmdType = $(".selCmdType").val();
+			commands[cmdType].viewDialog($(".schemeView .pnlCmdDialog"));
+		});
 	}
 	
 	$.extend(SchemeEditor.prototype, {
