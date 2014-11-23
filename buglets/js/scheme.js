@@ -1,4 +1,4 @@
-﻿define(["jquery", "switch"], function($, Switch){
+define(["jquery", "switch"], function($, Switch){
 	
  	function Scheme(buglet){var _=this;
 		_.switch = new Switch();
@@ -21,6 +21,9 @@
 		},
 		addCommand: function(cmd){
 			this.commands.push(cmd);
+		},
+		delCommand: function(cmdIdx){
+			this.commands.splice(cmdIdx, 1);
 		}
 	});
 	

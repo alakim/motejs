@@ -33,7 +33,23 @@ define(["jquery", "html", "raphael", "buglet"], function($, $H, $R, Buglet){
 			);
 		}}
 	};
+	
+	function buildView(buglet){
+		$(".schemeView").html(templates.schemeView(buglet));
+		$(".schemeView .btDelCmd").each(function(i, el){
+			var cmdIdx = i;
+			$R(el).path("M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z")
+			.attr({fill:"#f00", cursor:"pointer", title:"Delete", cmdIdx:i})
+			.transform("s0.5t-3,-8")
+			.click(function(){
+				if(confirm("Удалить эту команду №"+(cmdIdx+1)+"?\n")){
+					buglet.scheme.delCommand(cmdIdx);
+					buildView(buglet);
+				}
+			});
+		});
 
+	}
 	
 	$.extend(SchemeEditor.prototype, {
 		view: function(){var _=this;
@@ -45,10 +61,7 @@ define(["jquery", "html", "raphael", "buglet"], function($, $H, $R, Buglet){
 					return;
 				}
 				_.selectedBuglet = Buglet.instances[bgIdx];
-				$(".schemeView").html(templates.schemeView(_.selectedBuglet));
-				$(".schemeView .btDelCmd").each(function(i, el){
-					$R(el).path("M24.778,21.419 19.276,15.917 24.777,10.415 21.949,7.585 16.447,13.087 10.945,7.585 8.117,10.415 13.618,15.917 8.116,21.419 10.946,24.248 16.447,18.746 21.948,24.248z").attr({fill:"#f00"});
-				});
+				buildView(_.selectedBuglet);
 			});
 		}
 	});
