@@ -57,7 +57,12 @@ define(["jquery", "html", "raphael", "buglet", "commands"], function($, $H, $R, 
 		});
 		$(".schemeView .btAddCmd").click(function(){
 			var cmdType = $(".selCmdType").val();
-			commands[cmdType].viewDialog($(".schemeView .pnlCmdDialog"));
+			commands[cmdType].viewDialog(
+				$(".schemeView .pnlCmdDialog"), buglet.scheme, null, 
+				function(){
+					buildView(buglet);
+				}
+			);
 		});
 	}
 	

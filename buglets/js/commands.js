@@ -13,15 +13,30 @@ define(["jquery", "html"], function($, $H){
 		}
 	});
 	$.extend(MoveCmd, {
-		viewDialog: function(pnl, cmd){
+		viewDialog: function(pnl, scheme, cmd, onOK){
 			function template(cmd){with($H){
 				return div(
-					div("X: ", input({type:"text"})),
-					div("Y: ", input({type:"text"})),
-					div(input({type:"button", value:"OK"}))
+					div("X: ", input({"class":"tbX", type:"text", value:cmd.pos.x})),
+					div("Y: ", input({"class":"tbY", type:"text", value:cmd.pos.y})),
+					div(
+						input({type:"button", "class":"btOk", value:"OK"}),
+						input({type:"button", "class":"btCancel", value:"Cancel"})
+					)
 				);
 			}}
+			var newMode = !cmd;
+			cmd = cmd || new MoveCmd({x:0, y:0}, scheme);
 			pnl.html(template(cmd));
+			pnl.find(".btOk").click(function(){
+				cmd.pos.x = +pnl.find(".tbX").val();
+				cmd.pos.y = +pnl.find(".tbY").val();
+				if(newMode) scheme.addCommand(cmd);
+				pnl.html("");
+				onOK();
+			});
+			pnl.find(".btCancel").click(function(){
+				pnl.html("");
+			});
 		}
 	});
 	
